@@ -1,12 +1,12 @@
 {
-  "name": "portfolio-saas-lms",
+  "name": "ft-jithin-designz",
   "version": "1.0.0",
+  "description": "FT JITHIN DESIGNZ — Personal Creative Portfolio & Studio",
   "private": true,
   "scripts": {
-    "build": "echo Static build complete"
+    "build": "echo 'Static build complete'"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.2"
   }
 }

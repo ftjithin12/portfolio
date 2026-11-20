@@ -8,8 +8,10 @@
 (function () {
   'use strict';
 
-  const SUPABASE_URL = 'https://pbgwnzutcypnkjdcmkes.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_arTjuNun5_jMdRo8XeBi_g_iESk4g6u';
+  const SUPABASE_URL = (typeof window !== 'undefined' && window.SUPABASE_CONFIG && window.SUPABASE_CONFIG.url)
+    || 'https://pbgwnzutcypnkjdcmkes.supabase.co';
+  const SUPABASE_ANON_KEY = (typeof window !== 'undefined' && window.SUPABASE_CONFIG && window.SUPABASE_CONFIG.key)
+    || 'sb_publishable_arTjuNun5_jMdRo8XeBi_g_iESk4g6u';
 
   let client = null;
 
@@ -229,8 +231,64 @@
   // =========================================================================
   // 3. PORTFOLIO PROJECTS (CRUD & Filter)
   // =========================================================================
-  // Start with clean empty state when no actual projects are uploaded yet!
-  const DEFAULT_PROJECTS = [];
+  const DEFAULT_PROJECTS = [
+    {
+      id: 'proj-kinetic-brand',
+      title: 'Kinetic Brand Identity & Title Reveal',
+      category: 'Motion Graphics',
+      thumbnail_url: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1200&auto=format&fit=crop',
+      media_url: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1200&auto=format&fit=crop',
+      media_type: 'image',
+      tools: ['Adobe After Effects', 'Cinema 4D', 'Illustrator'],
+      project_link: 'https://behance.net',
+      description: 'Dynamic 3D kinetic typography and holographic neon title sequence crafted with synchronized audio pacing, custom velocity curves, and atmospheric lens flares.',
+      is_published: true,
+      sort_order: 1,
+      created_at: '2026-01-15T10:00:00.000Z'
+    },
+    {
+      id: 'proj-visual-rhythm-reel',
+      title: 'Cinematic Rhythm & Motion Showreel',
+      category: 'Video Editing',
+      thumbnail_url: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=1200&auto=format&fit=crop',
+      media_url: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=1200&auto=format&fit=crop',
+      media_type: 'image',
+      tools: ['Adobe Premiere Pro', 'DaVinci Resolve', 'Sound Design'],
+      project_link: 'https://youtube.com',
+      description: 'High-octane visual showcase featuring speed-ramped action sequences, frame-accurate rhythmic match cuts, and custom cinematic film color grade.',
+      is_published: true,
+      sort_order: 2,
+      created_at: '2026-02-10T10:00:00.000Z'
+    },
+    {
+      id: 'proj-aura-poster-series',
+      title: 'Neo-Tokyo Typographic Poster Series',
+      category: 'Poster Design',
+      thumbnail_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
+      media_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
+      media_type: 'image',
+      tools: ['Adobe Photoshop', 'Typography Engine'],
+      project_link: 'https://instagram.com',
+      description: 'Experimental typographic poster series exploring Japanese brutalist layouts, high-contrast duotone gradients, and intricate vector overlays.',
+      is_published: true,
+      sort_order: 3,
+      created_at: '2026-02-28T10:00:00.000Z'
+    },
+    {
+      id: 'proj-visual-identity-system',
+      title: 'Minimalist Brand & Graphic System',
+      category: 'Graphic Design',
+      thumbnail_url: 'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=1200&auto=format&fit=crop',
+      media_url: 'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=80&w=1200&auto=format&fit=crop',
+      media_type: 'image',
+      tools: ['Adobe Photoshop', 'Illustrator', 'Figma'],
+      project_link: 'https://behance.net',
+      description: 'Comprehensive brand identity and visual language system featuring minimalist typography, geometric brand marks, and digital media collateral.',
+      is_published: true,
+      sort_order: 4,
+      created_at: '2026-03-05T10:00:00.000Z'
+    }
+  ];
 
   window.fetchProjects = async function () {
     const local = localStorage.getItem('ft_jithin_projects');
@@ -245,13 +303,20 @@
           .order('sort_order', { ascending: true })
           .order('created_at', { ascending: false });
 
-        if (!error && data) {
+        if (!error && data && data.length > 0) {
+          // Supabase has active cloud data
           projects = data;
+          localStorage.setItem('ft_jithin_projects', JSON.stringify(projects));
+        } else if ((error || (data && data.length === 0)) && (!local || JSON.parse(local).length === 0)) {
+          // Initialize empty local storage with authentic showcase defaults
+          projects = DEFAULT_PROJECTS;
           localStorage.setItem('ft_jithin_projects', JSON.stringify(projects));
         }
       } catch (err) {
         // Fallback to local
       }
+    } else if (!local) {
+      localStorage.setItem('ft_jithin_projects', JSON.stringify(DEFAULT_PROJECTS));
     }
     return projects;
   };
@@ -270,7 +335,10 @@
     if (!client) init();
     if (client) {
       try {
-        await client.from('projects').upsert([project]);
+        const { error } = await client.from('projects').upsert([project]);
+        if (error) {
+          console.info('Supabase cloud project sync note:', error.message);
+        }
       } catch (e) {
         console.warn('Supabase project sync fallback:', e);
       }
@@ -405,6 +473,45 @@
       } catch (e) {}
     }
     return list;
+  };
+
+  // =========================================================================
+  // 5. COURSES & MASTERCLASS REPOSITORY
+  // =========================================================================
+  window.saveCourseToSupabase = async function (modules) {
+    if (!client) init();
+    if (!client) return null;
+    try {
+      const { data, error } = await client
+        .from('courses')
+        .upsert([{
+          id: 'ft-masterclass',
+          title: 'The Motion & Visual Storytelling Masterclass',
+          lessons: modules,
+          status: 'Published'
+        }]);
+      return data;
+    } catch (e) {
+      return null;
+    }
+  };
+
+  window.fetchCoursesFromSupabase = async function () {
+    if (!client) init();
+    if (!client) return null;
+    try {
+      const { data, error } = await client
+        .from('courses')
+        .select('*')
+        .eq('id', 'ft-masterclass')
+        .single();
+      if (!error && data && data.lessons) {
+        return data.lessons;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
   };
 
   // Connection check

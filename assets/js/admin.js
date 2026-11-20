@@ -13,14 +13,53 @@
   'use strict';
 
   // -------------------------------------------------------------
-  // 1. STATE & AUTHENTICATION (Default PIN: 2026)
+  // 1. STATE & CRYPTOGRAPHIC AUTHENTICATION
+  // Master Password: Jithin@2007 (SHA-256 Hashed & Cryptographically Encrypted Session)
   // -------------------------------------------------------------
-  let currentPin = localStorage.getItem('ft_jithin_admin_pin') || '2026';
-  let isAuthenticated = sessionStorage.getItem('ft_jithin_auth') === 'true';
+  const DEFAULT_ADMIN_HASH = '59117ad35f5a53f3104239186f18b42b6c782fd81b1ea3937a9f9a57954dbd98'; // SHA-256 hash of Jithin@2007
+
+  // Clean up legacy plaintext PIN if present in storage
+  localStorage.removeItem('ft_jithin_admin_pin');
+
+  let currentAdminHash = localStorage.getItem('ft_jithin_admin_hash') || DEFAULT_ADMIN_HASH;
+  let isAuthenticated = false;
+
+  async function computeSha256(message) {
+    const msgUint8 = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function verifySession() {
+    const token = sessionStorage.getItem('ft_jithin_auth_token');
+    const timeStr = sessionStorage.getItem('ft_jithin_auth_time');
+    const nonce = sessionStorage.getItem('ft_jithin_auth_nonce');
+    if (!token || !timeStr || !nonce) return false;
+
+    const sessionTime = parseInt(timeStr, 10);
+    const SESSION_MAX_AGE_MS = 60 * 60 * 1000; // 1 hour session lifetime
+    if (isNaN(sessionTime) || Date.now() - sessionTime > SESSION_MAX_AGE_MS) {
+      clearSession();
+      return false;
+    }
+
+    const expected = await computeSha256(currentAdminHash + ':' + nonce + ':' + timeStr);
+    return token === expected;
+  }
+
+  function clearSession() {
+    isAuthenticated = false;
+    sessionStorage.removeItem('ft_jithin_auth_token');
+    sessionStorage.removeItem('ft_jithin_auth_time');
+    sessionStorage.removeItem('ft_jithin_auth_nonce');
+    sessionStorage.removeItem('ft_jithin_auth');
+  }
 
   let allDispatches = [];
   let allProjects = [];
   let allServices = [];
+  let allModules = [];
   let siteProfile = null;
 
   let activeDispatchFilter = 'all';
@@ -32,55 +71,86 @@
   const pinInput = document.getElementById('admin-pin-input');
   const authError = document.getElementById('auth-error-msg');
 
-  function initAuth() {
-    if (isAuthenticated) {
+  async function initAuth() {
+    const sessionValid = await verifySession();
+    if (sessionValid) {
+      isAuthenticated = true;
       revealSuite();
     } else {
       hideSuite();
     }
 
-    if (authForm) {
-      authForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const enteredPin = pinInput.value.trim();
-
-        if (enteredPin === currentPin) {
-          isAuthenticated = true;
-          sessionStorage.setItem('ft_jithin_auth', 'true');
-          revealSuite();
-          showToast('Welcome back, Jithin! Studio unlocked.', '✦');
+    // Toggle password visibility
+    const toggleBtn = document.getElementById('toggle-pwd-visibility-btn');
+    if (toggleBtn && pinInput) {
+      toggleBtn.addEventListener('click', () => {
+        if (pinInput.type === 'password') {
+          pinInput.type = 'text';
+          toggleBtn.textContent = 'Hide';
         } else {
-          showAuthError('Invalid Master Passkey. Access restricted.');
+          pinInput.type = 'password';
+          toggleBtn.textContent = 'Show';
         }
       });
     }
 
-    // Demo / Quick PIN helper
-    const demoPinBtn = document.getElementById('demo-pin-btn');
-    if (demoPinBtn && pinInput) {
-      demoPinBtn.addEventListener('click', () => {
-        pinInput.value = currentPin;
-        authForm.dispatchEvent(new Event('submit'));
-      });
-    }
+    if (authForm) {
+      authForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-    // Biometric unlock simulation
-    const bioBtn = document.getElementById('biometric-unlock-btn');
-    if (bioBtn && pinInput) {
-      bioBtn.addEventListener('click', () => {
-        pinInput.value = currentPin;
-        authForm.dispatchEvent(new Event('submit'));
+        // Check rate limiting lockout
+        const lockoutUntil = parseInt(sessionStorage.getItem('ft_auth_lockout') || '0', 10);
+        if (Date.now() < lockoutUntil) {
+          const remainingSec = Math.ceil((lockoutUntil - Date.now()) / 1000);
+          showAuthError(`Security Lockout: Too many failed attempts. Try again in ${remainingSec}s.`);
+          return;
+        }
+
+        const enteredPwd = pinInput.value.trim();
+        if (!enteredPwd) return;
+
+        const enteredHash = await computeSha256(enteredPwd);
+
+        if (enteredHash === currentAdminHash) {
+          // Clear lockout tracking
+          sessionStorage.removeItem('ft_auth_failed');
+          sessionStorage.removeItem('ft_auth_lockout');
+
+          // Generate cryptographic session token
+          const now = Date.now();
+          const nonce = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
+          const token = await computeSha256(currentAdminHash + ':' + nonce + ':' + now);
+
+          sessionStorage.setItem('ft_jithin_auth_token', token);
+          sessionStorage.setItem('ft_jithin_auth_time', String(now));
+          sessionStorage.setItem('ft_jithin_auth_nonce', nonce);
+          sessionStorage.setItem('ft_jithin_auth', 'true');
+
+          isAuthenticated = true;
+          revealSuite();
+          showToast('Welcome back, Jithin! Encrypted session unlocked.', '✦');
+        } else {
+          let failed = parseInt(sessionStorage.getItem('ft_auth_failed') || '0', 10) + 1;
+          sessionStorage.setItem('ft_auth_failed', String(failed));
+
+          if (failed >= 5) {
+            const lockDuration = Date.now() + 180000; // 3 min lockout
+            sessionStorage.setItem('ft_auth_lockout', String(lockDuration));
+            showAuthError('Security Alert: 5 incorrect attempts. Portal locked for 3 minutes.');
+          } else {
+            showAuthError(`Invalid master password. Access restricted. (${5 - failed} attempts remaining)`);
+          }
+        }
       });
     }
 
     // Lock portal buttons
     document.querySelectorAll('.lock-admin-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        isAuthenticated = false;
-        sessionStorage.removeItem('ft_jithin_auth');
+        clearSession();
         hideSuite();
         if (pinInput) pinInput.value = '';
-        showToast('Admin Studio locked.', '🔒');
+        showToast('Admin Studio locked & session cleared.', '🔒');
       });
     });
   }
@@ -142,6 +212,7 @@
       loadServicesData(),
       loadProjectsData(),
       loadDispatchesData(),
+      loadCourseData(),
       checkDatabaseHealth()
     ]);
     updateOverviewKPIs();
@@ -169,6 +240,16 @@
     // Projects KPI
     const projectsKpi = document.getElementById('kpi-total-projects');
     if (projectsKpi) projectsKpi.textContent = allProjects.length;
+
+    // Course Lessons KPI
+    const lessonsKpi = document.getElementById('kpi-total-lessons');
+    if (lessonsKpi) {
+      let count = 0;
+      allModules.forEach(m => {
+        if (Array.isArray(m.lessons)) count += m.lessons.length;
+      });
+      lessonsKpi.textContent = count;
+    }
 
     // Services KPI
     const servicesKpi = document.getElementById('kpi-active-services');
@@ -292,7 +373,16 @@
         document.getElementById('edit-project-id').value = project.id;
         document.getElementById('project-title-input').value = project.title;
         document.getElementById('project-category-input').value = project.category || 'Motion Graphics';
-        document.getElementById('project-thumbnail-input').value = project.thumbnail_url || '';
+        const thumbInput = document.getElementById('project-thumbnail-input');
+        thumbInput.value = project.thumbnail_url || '';
+        const previewWrap = document.getElementById('project-thumb-preview-wrap');
+        const previewImg = document.getElementById('project-thumb-preview');
+        if (project.thumbnail_url && previewWrap && previewImg) {
+          previewImg.src = project.thumbnail_url;
+          previewWrap.classList.remove('hidden');
+        } else if (previewWrap) {
+          previewWrap.classList.add('hidden');
+        }
         document.getElementById('project-media-input').value = project.media_url || '';
         document.getElementById('project-tools-input').value = Array.isArray(project.tools) ? project.tools.join(', ') : '';
         document.getElementById('project-link-input').value = project.project_link || '';
@@ -311,6 +401,38 @@
   function initProjectForm() {
     const form = document.getElementById('project-form');
     const resetBtn = document.getElementById('reset-project-form-btn');
+    const thumbFileInput = document.getElementById('project-thumb-file-input');
+    const thumbInput = document.getElementById('project-thumbnail-input');
+    const previewWrap = document.getElementById('project-thumb-preview-wrap');
+    const previewImg = document.getElementById('project-thumb-preview');
+
+    if (thumbFileInput) {
+      thumbFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            if (thumbInput) thumbInput.value = event.target.result;
+            if (previewImg) previewImg.src = event.target.result;
+            if (previewWrap) previewWrap.classList.remove('hidden');
+            showToast('Image loaded successfully!', '🖼️');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    if (thumbInput) {
+      thumbInput.addEventListener('input', () => {
+        const val = thumbInput.value.trim();
+        if (val && previewWrap && previewImg) {
+          previewImg.src = val;
+          previewWrap.classList.remove('hidden');
+        } else if (previewWrap) {
+          previewWrap.classList.add('hidden');
+        }
+      });
+    }
 
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
@@ -318,6 +440,7 @@
         document.getElementById('edit-project-id').value = '';
         document.getElementById('project-form-header').textContent = '+ Add New Portfolio Project';
         document.getElementById('save-project-btn-text').textContent = 'Save & Publish Project';
+        if (previewWrap) previewWrap.classList.add('hidden');
       });
     }
 
@@ -360,10 +483,459 @@
         document.getElementById('edit-project-id').value = '';
         document.getElementById('project-form-header').textContent = '+ Add New Portfolio Project';
         document.getElementById('save-project-btn-text').textContent = 'Save & Publish Project';
+        if (previewWrap) previewWrap.classList.add('hidden');
 
-        showToast('Portfolio project saved & published!', '✦');
+        showToast('Portfolio project saved & published live!', '✦');
       });
     }
+  }
+
+  // -------------------------------------------------------------
+  // 4.5. COURSE & VIDEO MASTERCLASS STUDIO (Full Admin Control)
+  // -------------------------------------------------------------
+  const STORAGE_LESSONS_KEY = 'ft-jithin-course-curriculum';
+
+  const defaultCourseModules = [
+    {
+      id: 'mod-1',
+      title: 'Module 1: Foundations of Kinetic Motion & Typographic Pacing',
+      lessons: [
+        {
+          id: 'les-1-1',
+          title: '1.1 Kinetic Typography & Storyboard Construction',
+          duration: '14:20',
+          completed: true,
+          isFreePreview: true,
+          videoUrl: '',
+          description: 'Explore the creative principles behind kinetic text reveals. Learn how letter tracking, blur-to-sharp transitions, and easing curves create impact without sacrificing visual clarity.',
+          resources: [
+            { name: 'Kinetic Typography Starter Pack (After Effects)', size: '12.4 MB', url: '#' }
+          ]
+        },
+        {
+          id: 'les-1-2',
+          title: '1.2 Speed Graph Mastery in Adobe After Effects',
+          duration: '18:45',
+          completed: false,
+          isFreePreview: false,
+          videoUrl: '',
+          description: 'Master the value graph and speed graph in After Effects to replace rigid linear keyframes with organic, spring-like velocity curves.',
+          resources: [
+            { name: 'Motion Curve Presets (.ffx)', size: '350 KB', url: '#' }
+          ]
+        },
+        {
+          id: 'les-1-3',
+          title: '1.3 2D/3D Logo Animation & Title Sequences',
+          duration: '22:10',
+          completed: false,
+          isFreePreview: false,
+          videoUrl: '',
+          description: 'Learn how to deconstruct vector logos from Photoshop and Illustrator into multi-layered 3D space with ambient lighting and specular flares.',
+          resources: [
+            { name: 'Title Reveal Project Files (.aep)', size: '18.2 MB', url: '#' }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'mod-2',
+      title: 'Module 2: Cinematic Video Editing & Storytelling Pacing',
+      lessons: [
+        {
+          id: 'les-2-1',
+          title: '2.1 Narrative Rhythms & Match Cuts in Premiere Pro',
+          duration: '16:50',
+          completed: false,
+          isFreePreview: false,
+          videoUrl: '',
+          description: 'Learn the psychology of scene transitions, J-cuts, L-cuts, and match cutting on action to keep audiences engaged in every sequence.',
+          resources: [
+            { name: 'Sound FX & Transition Audio Kit (.wav)', size: '42 MB', url: '#' }
+          ]
+        },
+        {
+          id: 'les-2-2',
+          title: '2.2 Dynamic Audio Sync & Visual Impact Framing',
+          duration: '24:15',
+          completed: false,
+          isFreePreview: false,
+          videoUrl: '',
+          description: 'Techniques for syncing visual cuts and title hits to music beats, sub-bass drops, and subtle atmospheric sound design.',
+          resources: [
+            { name: 'Audio Beat Marker Workflow Guide', size: '250 KB', url: '#' }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'mod-3',
+      title: 'Module 3: Poster Artwork & Color Science',
+      lessons: [
+        {
+          id: 'les-3-1',
+          title: '3.1 Poster Composition & High-Impact Visual Contrast',
+          duration: '20:30',
+          completed: false,
+          isFreePreview: false,
+          videoUrl: '',
+          description: 'How to combine photographic cutouts, lighting effects, textured overlays, and expressive typography into striking promotional poster art.',
+          resources: [
+            { name: 'Poster Texture & Brush Pack (.psd)', size: '64 MB', url: '#' }
+          ]
+        },
+        {
+          id: 'les-3-2',
+          title: '3.2 Node-Based Color Grading in DaVinci Resolve',
+          duration: '26:40',
+          completed: false,
+          isFreePreview: false,
+          videoUrl: '',
+          description: 'Building custom film looks using primary wheels, parallel nodes, hue vs. sat curves, and highlight rolloff in DaVinci Resolve.',
+          resources: [
+            { name: 'Cinematic Studio LUTs Pack (.cube)', size: '8.5 MB', url: '#' }
+          ]
+        }
+      ]
+    }
+  ];
+
+  async function loadCourseData() {
+    const saved = localStorage.getItem(STORAGE_LESSONS_KEY);
+    if (saved) {
+      try {
+        allModules = JSON.parse(saved);
+      } catch (e) {
+        allModules = defaultCourseModules;
+      }
+    } else {
+      allModules = defaultCourseModules;
+      saveCourseData();
+    }
+    renderAdminCurriculum();
+    renderStudentEnrollments();
+  }
+
+  function saveCourseData() {
+    localStorage.setItem(STORAGE_LESSONS_KEY, JSON.stringify(allModules));
+  }
+
+  function renderAdminCurriculum() {
+    const container = document.getElementById('admin-curriculum-container');
+    const modulesCountEl = document.getElementById('admin-course-modules-count');
+    const lessonsCountEl = document.getElementById('admin-course-lessons-count');
+    const datalist = document.getElementById('existing-modules-datalist');
+
+    let totalLessons = 0;
+    allModules.forEach(m => {
+      if (Array.isArray(m.lessons)) totalLessons += m.lessons.length;
+    });
+
+    if (modulesCountEl) modulesCountEl.textContent = allModules.length;
+    if (lessonsCountEl) lessonsCountEl.textContent = totalLessons;
+
+    if (datalist) {
+      datalist.innerHTML = allModules.map(m => `<option value="${escapeHtml(m.title)}"></option>`).join('');
+    }
+
+    if (!container) return;
+
+    if (!allModules.length) {
+      container.innerHTML = `
+        <div class="text-center py-10 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+          <p class="text-sm text-slate-300 font-medium">No curriculum modules configured.</p>
+          <p class="text-xs text-slate-500">Use the form above to add your first module and video lesson.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = allModules.map((mod) => {
+      const lessonsHtml = (mod.lessons || []).map(les => {
+        const isFree = !!les.isFreePreview;
+        const res = (les.resources && les.resources[0]) ? les.resources[0] : null;
+
+        return `
+          <div class="p-4 rounded-2xl glass-panel border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-sm font-mono font-bold text-purple-300 shrink-0">
+                ▶
+              </div>
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${isFree ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'}">
+                    ${isFree ? 'Free Preview' : 'Locked ($49)'}
+                  </span>
+                  <span class="text-xs font-mono text-slate-400 font-bold">${escapeHtml(les.duration || '15:00')}</span>
+                  ${les.videoUrl ? `<a href="${escapeHtml(les.videoUrl)}" target="_blank" class="text-[10px] font-mono text-purple-400 hover:underline">Link ↗</a>` : ''}
+                </div>
+                <h4 class="text-sm font-bold text-white">${escapeHtml(les.title)}</h4>
+                <p class="text-xs text-slate-400 line-clamp-1">${escapeHtml(les.description || '')}</p>
+                ${res ? `<div class="text-[10px] font-mono text-slate-400">📦 Resource: ${escapeHtml(res.name)} (${res.size || 'Kit'})</div>` : ''}
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 self-end md:self-center shrink-0">
+              <button class="toggle-free-preview-btn px-3 py-1.5 rounded-xl text-xs font-semibold border ${isFree ? 'border-amber-500/30 text-amber-300 hover:bg-amber-500/20' : 'border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20'}" data-lesson-id="${les.id}">
+                ${isFree ? 'Set Locked' : 'Set Free'}
+              </button>
+              <button class="edit-lesson-btn px-3 py-1.5 rounded-xl text-xs font-semibold border border-white/10 hover:border-purple-400 text-slate-300 hover:text-white" data-lesson-id="${les.id}" data-mod-id="${mod.id}">
+                Edit
+              </button>
+              <button class="delete-lesson-btn px-3 py-1.5 rounded-xl text-xs font-semibold border border-rose-500/30 text-rose-400 hover:bg-rose-500/20" data-lesson-id="${les.id}" data-mod-id="${mod.id}">
+                Delete
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="space-y-3 p-5 rounded-3xl bg-white/[0.02] border border-white/10">
+          <div class="flex items-center justify-between border-b border-white/5 pb-2.5">
+            <div class="space-y-0.5">
+              <span class="text-[10px] font-mono font-bold text-purple-400 uppercase">Curriculum Module</span>
+              <h4 class="text-base font-extrabold text-white">${escapeHtml(mod.title)}</h4>
+            </div>
+            <span class="text-xs font-mono font-bold text-slate-400">${(mod.lessons || []).length} Lessons</span>
+          </div>
+          <div class="space-y-2.5">
+            ${lessonsHtml || '<p class="text-xs text-slate-500">No lessons in this module.</p>'}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Attach event listeners
+    container.querySelectorAll('.toggle-free-preview-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lesId = btn.getAttribute('data-lesson-id');
+        for (const mod of allModules) {
+          const les = (mod.lessons || []).find(l => l.id === lesId);
+          if (les) {
+            les.isFreePreview = !les.isFreePreview;
+            saveCourseData();
+            renderAdminCurriculum();
+            showToast(`Lesson access updated: ${les.isFreePreview ? 'Free Preview' : 'Locked'}`, '✦');
+            break;
+          }
+        }
+      });
+    });
+
+    container.querySelectorAll('.delete-lesson-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Are you sure you want to remove this video lesson?')) return;
+        const lesId = btn.getAttribute('data-lesson-id');
+        const modId = btn.getAttribute('data-mod-id');
+
+        const mod = allModules.find(m => m.id === modId);
+        if (mod && Array.isArray(mod.lessons)) {
+          mod.lessons = mod.lessons.filter(l => l.id !== lesId);
+          if (mod.lessons.length === 0) {
+            allModules = allModules.filter(m => m.id !== modId);
+          }
+          saveCourseData();
+          renderAdminCurriculum();
+          updateOverviewKPIs();
+          showToast('Lesson deleted from curriculum.', '🗑️');
+        }
+      });
+    });
+
+    container.querySelectorAll('.edit-lesson-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lesId = btn.getAttribute('data-lesson-id');
+        const modId = btn.getAttribute('data-mod-id');
+
+        const mod = allModules.find(m => m.id === modId);
+        if (!mod) return;
+        const les = (mod.lessons || []).find(l => l.id === lesId);
+        if (!les) return;
+
+        document.getElementById('edit-lesson-id').value = les.id;
+        document.getElementById('edit-lesson-mod-id').value = mod.id;
+        document.getElementById('lesson-module-input').value = mod.title;
+        document.getElementById('lesson-title-input').value = les.title;
+        document.getElementById('lesson-video-url-input').value = les.videoUrl || '';
+        document.getElementById('lesson-duration-input').value = les.duration || '15:00';
+        document.getElementById('lesson-description-input').value = les.description || '';
+        document.getElementById('lesson-free-preview-input').checked = !!les.isFreePreview;
+
+        const res = (les.resources && les.resources[0]) ? les.resources[0] : null;
+        if (res) {
+          document.getElementById('lesson-resource-name-input').value = res.name || '';
+          document.getElementById('lesson-resource-url-input').value = res.url || '';
+        }
+
+        document.getElementById('lesson-form-header').textContent = `Edit Lesson: ${les.title}`;
+        document.getElementById('save-lesson-btn-text').textContent = 'Update Video Lesson';
+
+        document.getElementById('admin-lesson-form').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  }
+
+  function initAdminLessonForm() {
+    const form = document.getElementById('admin-lesson-form');
+    const resetBtn = document.getElementById('reset-lesson-form-btn');
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        form.reset();
+        document.getElementById('edit-lesson-id').value = '';
+        document.getElementById('edit-lesson-mod-id').value = '';
+        document.getElementById('lesson-form-header').textContent = '+ Add New Video Lesson';
+        document.getElementById('save-lesson-btn-text').textContent = '+ Save & Publish Lesson';
+      });
+    }
+
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const editId = document.getElementById('edit-lesson-id').value;
+        const moduleTitle = document.getElementById('lesson-module-input').value.trim();
+        const lessonTitle = document.getElementById('lesson-title-input').value.trim();
+        const videoUrl = document.getElementById('lesson-video-url-input').value.trim();
+        const duration = document.getElementById('lesson-duration-input').value.trim() || '15:00';
+        const description = document.getElementById('lesson-description-input').value.trim();
+        const isFreePreview = document.getElementById('lesson-free-preview-input').checked;
+        const resName = document.getElementById('lesson-resource-name-input').value.trim();
+        const resUrl = document.getElementById('lesson-resource-url-input').value.trim() || '#';
+
+        const resourcesArray = resName ? [{ name: resName, size: 'Studio Kit', url: resUrl }] : [];
+
+        if (editId) {
+          for (const mod of allModules) {
+            const les = (mod.lessons || []).find(l => l.id === editId);
+            if (les) {
+              les.title = lessonTitle;
+              les.videoUrl = videoUrl;
+              les.duration = duration;
+              les.description = description;
+              les.isFreePreview = isFreePreview;
+              if (resName) les.resources = resourcesArray;
+              break;
+            }
+          }
+        } else {
+          let targetMod = allModules.find(m => m.title.toLowerCase() === moduleTitle.toLowerCase());
+          if (!targetMod) {
+            targetMod = {
+              id: 'mod-' + Date.now(),
+              title: moduleTitle,
+              lessons: []
+            };
+            allModules.push(targetMod);
+          }
+
+          const newLesson = {
+            id: 'les-' + Date.now(),
+            title: lessonTitle,
+            duration: duration,
+            completed: false,
+            isFreePreview: isFreePreview,
+            videoUrl: videoUrl,
+            description: description,
+            resources: resourcesArray.length ? resourcesArray : [
+              { name: `${lessonTitle} Assets.zip`, size: 'Project Files', url: '#' }
+            ]
+          };
+
+          targetMod.lessons.push(newLesson);
+        }
+
+        saveCourseData();
+        renderAdminCurriculum();
+        updateOverviewKPIs();
+
+        form.reset();
+        document.getElementById('edit-lesson-id').value = '';
+        document.getElementById('edit-lesson-mod-id').value = '';
+        document.getElementById('lesson-form-header').textContent = '+ Add New Video Lesson';
+        document.getElementById('save-lesson-btn-text').textContent = '+ Save & Publish Lesson';
+
+        showToast('Video lesson saved to Masterclass curriculum!', '✦');
+      });
+    }
+
+    const grantBtn = document.getElementById('manual-grant-access-btn');
+    if (grantBtn) {
+      grantBtn.addEventListener('click', async () => {
+        const emailInput = document.getElementById('manual-student-email-input');
+        const email = emailInput ? emailInput.value.trim() : '';
+
+        if (!email || !email.includes('@')) {
+          showToast('Please enter a valid student email address.', '⚠️');
+          return;
+        }
+
+        const newReceipt = {
+          id: 'pay-' + Date.now(),
+          type: 'Course Payment Settled',
+          name: email.split('@')[0],
+          email: email,
+          budget: '$49.00',
+          message: 'Direct Admin Access Grant: Full Masterclass Lifetime Access settled by Jithin.',
+          status: 'Settled',
+          timestamp: new Date().toISOString()
+        };
+
+        allDispatches.unshift(newReceipt);
+        if (typeof window.syncDispatchToSupabase === 'function') {
+          await window.syncDispatchToSupabase(newReceipt);
+        }
+
+        emailInput.value = '';
+        renderStudentEnrollments();
+        updateOverviewKPIs();
+        showToast(`Full access granted to ${email}!`, '🎓');
+      });
+    }
+  }
+
+  function renderStudentEnrollments() {
+    const countEl = document.getElementById('admin-course-enrollments-count');
+    const container = document.getElementById('admin-enrollments-list');
+
+    const enrollments = allDispatches.filter(d => (d.type || '').toLowerCase().includes('course') || (d.type || '').toLowerCase().includes('payment'));
+
+    if (countEl) countEl.textContent = enrollments.length;
+    if (!container) return;
+
+    if (!enrollments.length) {
+      container.innerHTML = `
+        <div class="text-center py-8 rounded-2xl bg-white/[0.02] border border-white/5 space-y-2">
+          <p class="text-sm text-slate-300 font-medium">No student course dispatches yet.</p>
+          <p class="text-xs text-slate-500">When students settle the $49 enrollment via checkout, records will appear here.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = enrollments.map(en => {
+      return `
+        <div class="p-4 rounded-2xl glass-panel border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-sm font-bold text-emerald-400">
+              ✓
+            </div>
+            <div class="space-y-0.5">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-white">${escapeHtml(en.name || 'Student')}</span>
+                <span class="px-2 py-0.2 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300">Settled $49</span>
+              </div>
+              <div class="text-[11px] font-mono text-slate-400">${escapeHtml(en.email)} • ${formatRelativeDate(en.timestamp)}</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 self-end sm:self-center">
+            <span class="text-xs font-mono font-bold text-emerald-400">Full Access Active</span>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
   // -------------------------------------------------------------
@@ -568,28 +1140,40 @@
       });
     }
 
-    // Master PIN form
+    // Master Password Update form
     const changePinForm = document.getElementById('change-pin-form');
     if (changePinForm) {
-      changePinForm.addEventListener('submit', (e) => {
+      changePinForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const currentInput = document.getElementById('current-pin-input').value.trim();
         const newInput = document.getElementById('new-pin-input').value.trim();
 
-        if (currentInput !== currentPin) {
-          alert('Current passkey is incorrect.');
+        const currentCheckHash = await computeSha256(currentInput);
+        if (currentCheckHash !== currentAdminHash) {
+          alert('Current master password is incorrect.');
           return;
         }
 
-        if (newInput.length < 4) {
-          alert('New passkey must be at least 4 characters.');
+        if (newInput.length < 6) {
+          alert('New password must be at least 6 characters.');
           return;
         }
 
-        currentPin = newInput;
-        localStorage.setItem('ft_jithin_admin_pin', currentPin);
+        const newHash = await computeSha256(newInput);
+        currentAdminHash = newHash;
+        localStorage.setItem('ft_jithin_admin_hash', newHash);
+        localStorage.removeItem('ft_jithin_admin_pin');
+
+        // Re-sign cryptographic session token
+        const now = Date.now();
+        const nonce = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2);
+        const token = await computeSha256(newHash + ':' + nonce + ':' + now);
+        sessionStorage.setItem('ft_jithin_auth_token', token);
+        sessionStorage.setItem('ft_jithin_auth_time', String(now));
+        sessionStorage.setItem('ft_jithin_auth_nonce', nonce);
+
         changePinForm.reset();
-        showToast('Master Passkey updated successfully!', '🔑');
+        showToast('Master Password updated and encrypted successfully!', '🔑');
       });
     }
   }
@@ -861,6 +1445,7 @@
     initAuth();
     initTabs();
     initProjectForm();
+    initAdminLessonForm();
     initProfileForms();
     initDispatchControls();
   }

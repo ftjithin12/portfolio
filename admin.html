@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="format-detection" content="telephone=no" />
   <title>Admin Studio • FT JITHIN DESIGNZ | Restricted Access</title>
   <meta name="robots" content="noindex, nofollow" />
   <meta name="description" content="Administrative control center for FT JITHIN DESIGNZ. Manage projects, services, bio, contact details, and customer dispatches." />
@@ -27,10 +31,10 @@
     }
   </script>
 
-  <!-- Custom Styles (Curated Black & White with Light Minimal RGB Theme) -->
+  <!-- Custom Styles (Curated Clean Apple-Grade Light Theme) -->
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
-<body class="selection:bg-white selection:text-black">
+<body class="selection:bg-blue-600 selection:text-white">
 
   <!-- Top Scroll Progress Bar -->
   <div id="scroll-progress-bar"></div>
@@ -82,49 +86,47 @@
        1. AUTHENTICATION GATE SCREEN
        ============================================================== -->
   <section id="auth-gate" class="min-h-screen flex items-center justify-center p-4 pt-20 relative z-20">
-    <div class="max-w-md w-full glass-panel rounded-3xl p-8 border border-white/15 shadow-2xl relative space-y-6 text-center">
-      <div class="w-20 h-20 rounded-3xl p-[2px] bg-gradient-to-tr from-blue-500 via-sky-400 to-purple-500 mx-auto shadow-2xl shadow-blue-500/30 overflow-hidden">
+    <div class="max-w-md w-full glass-panel rounded-3xl p-8 border border-theme shadow-2xl relative space-y-6 text-center bg-white">
+      <div class="w-20 h-20 rounded-3xl p-[2px] bg-gradient-to-tr from-blue-500 via-sky-400 to-purple-500 mx-auto shadow-xl shadow-blue-500/20 overflow-hidden">
         <img src="assets/images/logo.png" alt="FT JITHIN DESIGNZ" class="w-full h-full object-cover rounded-[22px]" />
       </div>
 
-      <div class="space-y-1.5">
-        <h2 class="text-2xl font-extrabold text-white tracking-tight">Admin Passkey Verification</h2>
-        <p class="text-xs text-slate-400 leading-relaxed">
-          Restricted access for Jithin. Enter your master PIN to manage projects, services, profile, and client dispatches.
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-purple-50 text-purple-700 border border-purple-200">
+          <span>🔒 256-BIT SHA ENCRYPTED GATE</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Admin Studio Authentication</h2>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Restricted access for Jithin. Enter your master password to decrypt and unlock the studio dashboard.
         </p>
       </div>
 
       <form id="admin-auth-form" class="space-y-4 text-left">
         <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-slate-300">Master Passkey / PIN</label>
+          <div class="flex items-center justify-between">
+            <label class="block text-xs font-semibold text-slate-700">Master Password</label>
+            <button type="button" id="toggle-pwd-visibility-btn" class="text-[11px] font-semibold text-sky-600 hover:text-sky-700 transition-colors">Show</button>
+          </div>
           <div class="relative">
             <input 
               id="admin-pin-input" 
               type="password" 
               required 
-              placeholder="••••••••" 
-              class="w-full px-4 py-3 rounded-xl border border-white/15 bg-white/[0.04] text-white font-mono text-center tracking-widest text-lg focus:outline-none focus:border-purple-400"
+              placeholder="••••••••••••" 
+              autocomplete="current-password"
+              class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 font-mono tracking-wider text-base focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
             />
           </div>
-          <div id="auth-error-msg" class="hidden text-xs text-rose-400 font-semibold pt-1"></div>
+          <div id="auth-error-msg" class="hidden text-xs text-rose-600 font-semibold pt-1"></div>
         </div>
 
         <button type="submit" class="btn-primary w-full py-3 text-sm font-bold shadow-lg">
-          <span>Authenticate &amp; Enter Studio →</span>
+          <span>Decrypt &amp; Access Studio →</span>
         </button>
-
-        <div class="grid grid-cols-2 gap-2 pt-2">
-          <button type="button" id="biometric-unlock-btn" class="p-2.5 rounded-xl text-xs font-semibold border border-white/10 bg-white/[0.03] text-slate-300 hover:text-white hover:border-white/20 transition-all flex items-center justify-center gap-1.5">
-            <span>🧬 Touch ID</span>
-          </button>
-          <button type="button" id="demo-pin-btn" class="p-2.5 rounded-xl text-xs font-semibold border border-white/10 bg-white/[0.03] text-slate-300 hover:text-white hover:border-white/20 transition-all flex items-center justify-center gap-1.5">
-            <span>🔑 Master PIN (2026)</span>
-          </button>
-        </div>
       </form>
 
-      <div class="text-[11px] font-mono text-slate-500 pt-2 border-t border-white/5">
-        FT JITHIN DESIGNZ • Encrypted Studio Session
+      <div class="text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-200">
+        FT JITHIN DESIGNZ • Cryptographically Secured Session
       </div>
     </div>
   </section>
@@ -154,6 +156,9 @@
         <button class="admin-nav-tab px-3.5 py-2 rounded-xl text-slate-400 hover:text-white transition-all shrink-0" data-tab="projects">
           <span>🎬 Projects</span>
         </button>
+        <button class="admin-nav-tab px-3.5 py-2 rounded-xl text-slate-400 hover:text-white transition-all shrink-0" data-tab="course">
+          <span>🎓 Course Studio</span>
+        </button>
         <button class="admin-nav-tab px-3.5 py-2 rounded-xl text-slate-400 hover:text-white transition-all shrink-0" data-tab="services">
           <span>⚡ Services</span>
         </button>
@@ -174,73 +179,93 @@
          ============================================================== -->
     <section id="view-overview" class="admin-view space-y-8">
       <!-- KPI Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <div class="p-6 rounded-3xl glass-panel border border-white/10 space-y-2">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="p-5 rounded-3xl glass-panel border border-white/10 space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-mono font-bold text-slate-400 uppercase">Portfolio Projects</span>
             <span class="text-xs font-mono text-purple-400 font-bold">Published</span>
           </div>
-          <div id="kpi-total-projects" class="text-3xl sm:text-4xl font-extrabold text-white font-mono">0</div>
-          <p class="text-xs text-slate-400">Live creative pieces in vault</p>
+          <div id="kpi-total-projects" class="text-3xl font-extrabold text-white font-mono">0</div>
+          <p class="text-xs text-slate-400">Live creative pieces</p>
         </div>
 
-        <div class="p-6 rounded-3xl glass-panel border border-white/10 space-y-2">
+        <div class="p-5 rounded-3xl glass-panel border border-white/10 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-slate-400 uppercase">Course Studio</span>
+            <span class="text-xs font-mono text-purple-300 font-bold">Masterclass</span>
+          </div>
+          <div id="kpi-total-lessons" class="text-3xl font-extrabold text-white font-mono">7</div>
+          <p class="text-xs text-slate-400">Video lessons published</p>
+        </div>
+
+        <div class="p-5 rounded-3xl glass-panel border border-white/10 space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-mono font-bold text-slate-400 uppercase">Active Services</span>
             <span class="text-xs font-mono text-emerald-400 font-bold">Operational</span>
           </div>
-          <div id="kpi-active-services" class="text-3xl sm:text-4xl font-extrabold text-white font-mono">6</div>
-          <p class="text-xs text-slate-400">Graphic, Motion &amp; Video disciplines</p>
+          <div id="kpi-active-services" class="text-3xl font-extrabold text-white font-mono">6</div>
+          <p class="text-xs text-slate-400">Graphic &amp; Motion disciplines</p>
         </div>
 
-        <div class="p-6 rounded-3xl glass-panel border border-white/10 space-y-2">
+        <div class="p-5 rounded-3xl glass-panel border border-white/10 space-y-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-mono font-bold text-slate-400 uppercase">Client Dispatches</span>
+            <span class="text-xs font-mono font-bold text-slate-400 uppercase">Dispatches CRM</span>
             <span id="kpi-unread-badge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">0 New</span>
           </div>
-          <div id="kpi-total-dispatches" class="text-3xl sm:text-4xl font-extrabold text-white font-mono">0</div>
-          <p class="text-xs text-slate-400">Total inquiries &amp; consultations</p>
+          <div id="kpi-total-dispatches" class="text-3xl font-extrabold text-white font-mono">0</div>
+          <p class="text-xs text-slate-400">Total client dispatches</p>
         </div>
 
-        <div class="p-6 rounded-3xl glass-panel border border-white/10 space-y-2">
+        <div class="p-5 rounded-3xl glass-panel border border-white/10 space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-mono font-bold text-slate-400 uppercase">Supabase Cloud</span>
             <span id="kpi-db-status" class="text-xs font-mono text-emerald-400 font-bold">Online</span>
           </div>
-          <div class="text-3xl sm:text-4xl font-extrabold text-white font-mono">Synced</div>
+          <div class="text-3xl font-extrabold text-white font-mono">Synced</div>
           <p class="text-xs text-slate-400">Dual-layer persistent storage</p>
         </div>
       </div>
 
       <!-- Quick Action Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="p-6 rounded-3xl glass-panel border border-white/10 flex flex-col justify-between space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div class="p-5 rounded-3xl glass-panel border border-white/10 flex flex-col justify-between space-y-4">
           <div class="space-y-1">
             <span class="text-xs font-mono font-bold text-purple-400 uppercase">Creative Showcase</span>
-            <h3 class="text-lg font-bold text-white">+ Add Portfolio Project</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">Upload project thumbnails, video reels, tools used, and descriptions to your public gallery.</p>
+            <h3 class="text-base font-bold text-white">+ Add Portfolio Project</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Upload project thumbnails, video reels, tools, and descriptions.</p>
           </div>
           <button class="admin-nav-tab btn-primary py-2.5 px-4 text-xs font-bold w-full" data-tab="projects">
             Manage Projects →
           </button>
         </div>
 
-        <div class="p-6 rounded-3xl glass-panel border border-white/10 flex flex-col justify-between space-y-4">
+        <div class="p-5 rounded-3xl glass-panel border border-white/10 flex flex-col justify-between space-y-4">
           <div class="space-y-1">
-            <span class="text-xs font-mono font-bold text-sky-400 uppercase">Client Inquiries</span>
-            <h3 class="text-lg font-bold text-white">Review Inbound Dispatches</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">Respond to creative project inquiries, consultation bookings, and export leads to CSV.</p>
+            <span class="text-xs font-mono font-bold text-sky-400 uppercase">Video Education</span>
+            <h3 class="text-base font-bold text-white">+ Manage Video Courses</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Add video lessons, modules, set pricing ($49), and manage enrollments.</p>
           </div>
-          <button class="admin-nav-tab btn-secondary py-2.5 px-4 text-xs font-bold w-full" data-tab="contact">
-            Open Inquiries CRM →
+          <button class="admin-nav-tab btn-primary py-2.5 px-4 text-xs font-bold w-full" data-tab="course">
+            Open Course Studio →
           </button>
         </div>
 
-        <div class="p-6 rounded-3xl glass-panel border border-white/10 flex flex-col justify-between space-y-4">
+        <div class="p-5 rounded-3xl glass-panel border border-white/10 flex flex-col justify-between space-y-4">
           <div class="space-y-1">
-            <span class="text-xs font-mono font-bold text-emerald-400 uppercase">Brand Customization</span>
-            <h3 class="text-lg font-bold text-white">Edit Profile &amp; Bio</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">Update your biography, software proficiencies, contact details, and social media links.</p>
+            <span class="text-xs font-mono font-bold text-emerald-400 uppercase">Client CRM</span>
+            <h3 class="text-base font-bold text-white">Review Dispatches</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Respond to project inquiries, bookings, and export leads to CSV.</p>
+          </div>
+          <button class="admin-nav-tab btn-secondary py-2.5 px-4 text-xs font-bold w-full" data-tab="contact">
+            Open Dispatches CRM →
+          </button>
+        </div>
+
+        <div class="p-5 rounded-3xl glass-panel border border-white/10 flex flex-col justify-between space-y-4">
+          <div class="space-y-1">
+            <span class="text-xs font-mono font-bold text-amber-400 uppercase">Personal Identity</span>
+            <h3 class="text-base font-bold text-white">Edit Profile &amp; Bio</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Update your biography, software skills, contact, and social links.</p>
           </div>
           <button class="admin-nav-tab btn-secondary py-2.5 px-4 text-xs font-bold w-full" data-tab="profile">
             Edit Profile →
@@ -313,16 +338,25 @@
               </select>
             </div>
 
-            <!-- Thumbnail URL -->
+            <!-- Thumbnail URL & Local Image Selector -->
             <div class="space-y-1.5">
-              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Thumbnail Image URL</label>
-              <input 
-                id="project-thumbnail-input" 
-                type="url" 
-                placeholder="https://images.unsplash.com/... or uploaded image URL" 
-                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
-              />
-              <p class="text-[11px] text-slate-500">Image displayed in the grid card.</p>
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Thumbnail Image URL or File</label>
+              <div class="flex gap-2">
+                <input 
+                  id="project-thumbnail-input" 
+                  type="text" 
+                  placeholder="https://... or click Browse to upload image" 
+                  class="flex-1 px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+                />
+                <label class="px-3.5 py-2.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold cursor-pointer border border-purple-500/30 flex items-center gap-1 shrink-0 transition-colors">
+                  <span>📁 Browse</span>
+                  <input type="file" id="project-thumb-file-input" accept="image/*" class="hidden" />
+                </label>
+              </div>
+              <p class="text-[11px] text-slate-500">Image displayed in the gallery card. Web URL or local file upload.</p>
+              <div id="project-thumb-preview-wrap" class="hidden pt-1">
+                <img id="project-thumb-preview" src="" alt="Thumbnail Preview" class="w-20 h-20 rounded-xl object-cover border border-white/20 shadow-md" />
+              </div>
             </div>
 
             <!-- Media URL (Image or Video) -->
@@ -330,8 +364,8 @@
               <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Media URL (Video / Full Image)</label>
               <input 
                 id="project-media-input" 
-                type="url" 
-                placeholder="YouTube/Vimeo embed URL, MP4 link, or high-res image URL" 
+                type="text" 
+                placeholder="YouTube/Vimeo link, MP4 link, or high-res image URL" 
                 class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
               />
             </div>
@@ -353,7 +387,7 @@
               <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Project / Behance Link</label>
               <input 
                 id="project-link-input" 
-                type="url" 
+                type="text" 
                 placeholder="https://behance.net/gallery/... or YouTube link" 
                 class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
               />
@@ -400,6 +434,211 @@
           <!-- Populated by JS -->
         </div>
       </div>
+    </section>
+
+    <!-- ==============================================================
+         TAB 2.5: COURSE & VIDEO MASTERCLASS STUDIO
+         ============================================================== -->
+    <section id="view-course" class="admin-view hidden space-y-8">
+      
+      <!-- Studio Header & KPIs -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
+          <div class="space-y-1">
+            <span class="text-xs font-mono font-bold text-purple-400 uppercase">Video Education Studio</span>
+            <h2 class="text-2xl font-extrabold text-white">Motion &amp; Visual Storytelling Masterclass</h2>
+            <p class="text-xs text-slate-400">Full administrative control over curriculum modules, video lessons, pricing, and student access.</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <a href="course.html" target="_blank" class="px-4 py-2 rounded-full text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 transition-all flex items-center gap-1.5">
+              <span>Preview Student Hub ↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+            <span class="text-[10px] font-mono font-bold text-slate-400 uppercase">Total Modules</span>
+            <div id="admin-course-modules-count" class="text-2xl font-extrabold text-white font-mono">3</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+            <span class="text-[10px] font-mono font-bold text-slate-400 uppercase">Video Lessons</span>
+            <div id="admin-course-lessons-count" class="text-2xl font-extrabold text-white font-mono">7</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+            <span class="text-[10px] font-mono font-bold text-slate-400 uppercase">Masterclass Price</span>
+            <div class="text-2xl font-extrabold text-white font-mono">$49</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-1">
+            <span class="text-[10px] font-mono font-bold text-slate-400 uppercase">Settled Enrollments</span>
+            <div id="admin-course-enrollments-count" class="text-2xl font-extrabold text-emerald-400 font-mono">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add / Edit Video Lesson Form -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-4">
+          <div class="space-y-0.5">
+            <h3 id="lesson-form-header" class="text-xl font-bold text-white">+ Add New Video Lesson</h3>
+            <p class="text-xs text-slate-400">Add a video lesson to an existing module or create a new curriculum module.</p>
+          </div>
+          <button type="button" id="reset-lesson-form-btn" class="px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-400 hover:text-white transition-colors">
+            Clear Form
+          </button>
+        </div>
+
+        <form id="admin-lesson-form" class="space-y-6">
+          <input type="hidden" id="edit-lesson-id" value="" />
+          <input type="hidden" id="edit-lesson-mod-id" value="" />
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Module Title -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Module Title *</label>
+              <input 
+                id="lesson-module-input" 
+                type="text" 
+                required 
+                placeholder="e.g. Module 1: Foundations of Kinetic Motion & Typographic Pacing" 
+                list="existing-modules-datalist"
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+              />
+              <datalist id="existing-modules-datalist">
+                <!-- Populated by JS -->
+              </datalist>
+              <p class="text-[11px] text-slate-500">Pick an existing module or type a new one.</p>
+            </div>
+
+            <!-- Lesson Title -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Lesson Title *</label>
+              <input 
+                id="lesson-title-input" 
+                type="text" 
+                required 
+                placeholder="e.g. 1.4 DaVinci Resolve Fusion Title Transitions" 
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+              />
+            </div>
+
+            <!-- Video Stream / Embed URL -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Video URL (YouTube / Vimeo / MP4)</label>
+              <input 
+                id="lesson-video-url-input" 
+                type="url" 
+                placeholder="https://www.youtube.com/watch?v=... or direct MP4 link" 
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+              />
+            </div>
+
+            <!-- Duration -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Duration (MM:SS) *</label>
+              <input 
+                id="lesson-duration-input" 
+                type="text" 
+                required 
+                placeholder="16:45" 
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white font-mono text-sm font-medium focus:outline-none focus:border-purple-400"
+              />
+            </div>
+
+            <!-- Downloadable Resource Name -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Resource File Name</label>
+              <input 
+                id="lesson-resource-name-input" 
+                type="text" 
+                placeholder="e.g. Fusion-Title-Presets.zip" 
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+              />
+            </div>
+
+            <!-- Downloadable Resource URL -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Resource Download URL</label>
+              <input 
+                id="lesson-resource-url-input" 
+                type="text" 
+                placeholder="https://... or # for simulated file" 
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+              />
+            </div>
+          </div>
+
+          <!-- Description / Objectives -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Lesson Objectives &amp; Description *</label>
+            <textarea 
+              id="lesson-description-input" 
+              required 
+              rows="3" 
+              placeholder="Outline what students will learn, tools used, and creative production techniques in this lesson..."
+              class="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+            ></textarea>
+          </div>
+
+          <!-- Paywall Gate Checkbox -->
+          <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-0.5">
+              <label class="flex items-center gap-2.5 cursor-pointer">
+                <input id="lesson-free-preview-input" type="checkbox" class="w-4 h-4 rounded text-purple-600 focus:ring-purple-500" />
+                <span class="text-xs font-bold text-white">Enable as Free Preview Lesson</span>
+              </label>
+              <p class="text-[11px] text-slate-400 pl-6.5">If unchecked, lesson is locked until student settles the $49 masterclass enrollment.</p>
+            </div>
+
+            <button type="submit" class="btn-primary py-2.5 px-6 text-sm font-bold shadow-lg shrink-0">
+              <span id="save-lesson-btn-text">+ Save &amp; Publish Lesson</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Published Curriculum Manager -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 space-y-4">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div class="space-y-0.5">
+            <h3 class="text-xl font-bold text-white">Curriculum Modules &amp; Video Lessons</h3>
+            <p class="text-xs text-slate-400">Reorder, edit details, toggle free preview access, or delete video lessons.</p>
+          </div>
+        </div>
+
+        <div id="admin-curriculum-container" class="space-y-6">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Student Enrollments CRM & Manual Access Control -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
+          <div class="space-y-0.5">
+            <h3 class="text-xl font-bold text-white">Student Enrollments &amp; Access Control</h3>
+            <p class="text-xs text-slate-400">Review students who settled payments, and manually grant or revoke studio access.</p>
+          </div>
+
+          <!-- Manual Grant Tool -->
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <input 
+              id="manual-student-email-input" 
+              type="email" 
+              placeholder="student@example.com" 
+              class="px-3.5 py-2 rounded-xl border border-white/10 bg-white/[0.04] text-white text-xs font-medium focus:outline-none focus:border-purple-400"
+            />
+            <button id="manual-grant-access-btn" type="button" class="btn-primary py-2 px-4 text-xs font-bold shrink-0">
+              Grant Access
+            </button>
+          </div>
+        </div>
+
+        <div id="admin-enrollments-list" class="space-y-3">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
     </section>
 
     <!-- ==============================================================
@@ -508,6 +747,11 @@
               <label class="block text-xs font-bold text-slate-300 uppercase">Behance Portfolio URL</label>
               <input id="social-behance-input" type="url" placeholder="https://behance.net/jithin" class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm" />
             </div>
+
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold text-slate-300 uppercase">Telegram Support Bot URL</label>
+              <input id="social-telegram-input" type="url" placeholder="https://t.me/FTJithinSupportBot" value="https://t.me/FTJithinSupportBot" class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm" />
+            </div>
           </div>
 
           <div class="pt-4 border-t border-white/5 flex justify-end">
@@ -526,8 +770,14 @@
       <div class="glass-panel p-4 sm:p-6 rounded-3xl border border-white/10 space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div class="space-y-1">
-            <h3 class="text-xl font-bold text-white">Customer Dispatches CRM</h3>
-            <p class="text-xs text-slate-400">Streamed project inquiries, video call bookings, and messages</p>
+            <div class="flex items-center gap-2">
+              <h3 class="text-xl font-bold text-white">Customer Dispatches CRM</h3>
+              <a href="https://t.me/FTJithinSupportBot" target="_blank" rel="noopener noreferrer" class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 flex items-center gap-1 hover:bg-sky-500/30 transition-all">
+                <span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+                <span>@FTJithinSupportBot Sync Active</span>
+              </a>
+            </div>
+            <p class="text-xs text-slate-400">Streamed project inquiries from Website &amp; Telegram Bot</p>
           </div>
 
           <div class="flex items-center gap-2">
@@ -571,38 +821,41 @@
          TAB 6: SETTINGS, SEO & PASSKEY
          ============================================================== -->
     <section id="view-settings" class="admin-view hidden space-y-6">
-      <!-- Change Master PIN -->
-      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-4 max-w-xl">
+      <!-- Change Master Password -->
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-theme space-y-4 max-w-xl bg-white shadow-lg">
         <div class="space-y-1">
-          <h3 class="text-lg font-bold text-white">Update Master Passkey</h3>
-          <p class="text-xs text-slate-400">Change the passkey used to unlock this Admin Studio.</p>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-50 text-purple-700 border border-purple-200">
+            <span>🔒 SHA-256 ENCRYPTED</span>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900">Update Master Password</h3>
+          <p class="text-xs text-slate-600">Change the encrypted master password used to unlock this Admin Studio.</p>
         </div>
 
         <form id="change-pin-form" class="space-y-4 pt-2">
           <div class="space-y-1.5">
-            <label class="block text-xs font-bold text-slate-300">Current Passkey</label>
+            <label class="block text-xs font-bold text-slate-700">Current Password</label>
             <input 
               id="current-pin-input" 
               type="password" 
               required 
-              placeholder="••••••••" 
-              class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-mono focus:outline-none focus:border-purple-400"
+              placeholder="••••••••••••" 
+              class="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm font-mono focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
             />
           </div>
 
           <div class="space-y-1.5">
-            <label class="block text-xs font-bold text-slate-300">New Passkey (min 4 characters)</label>
+            <label class="block text-xs font-bold text-slate-700">New Password (min 6 characters)</label>
             <input 
               id="new-pin-input" 
               type="password" 
               required 
-              placeholder="••••••••" 
-              class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-mono focus:outline-none focus:border-purple-400"
+              placeholder="••••••••••••" 
+              class="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm font-mono focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
             />
           </div>
 
           <button type="submit" class="btn-primary py-2.5 px-5 text-xs font-bold shadow-md">
-            Save New Passkey
+            Save &amp; Encrypt Password
           </button>
         </form>
       </div>

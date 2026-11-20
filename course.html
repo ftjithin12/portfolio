@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="format-detection" content="telephone=no" />
   <title>Creative Motion Studio • FT JITHIN DESIGNZ | Visual Learning</title>
   <meta name="description" content="Interactive learning environment for motion graphics, video editing techniques, and visual storytelling by Jithin." />
 
@@ -26,10 +30,10 @@
     }
   </script>
 
-  <!-- Custom Styles (Curated Black & White with Light Minimal RGB Theme) -->
+  <!-- Custom Styles (Curated Clean Apple-Grade Light Theme) -->
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
-<body class="selection:bg-white selection:text-black">
+<body class="selection:bg-blue-600 selection:text-white">
 
   <!-- Top Scroll Progress Bar -->
   <div id="scroll-progress-bar"></div>
@@ -60,26 +64,39 @@
         </div>
       </div>
 
-      <!-- Center: Course Progress Summary -->
-      <div class="hidden md:flex items-center gap-3">
-        <div class="text-right">
-          <div id="course-progress-percent" class="text-xs font-bold font-mono text-white">35%</div>
-          <div id="course-progress-fraction" class="text-[10px] text-slate-400 font-mono font-semibold">3 of 7 completed</div>
+      <!-- Center: Course Access State & Progress Summary -->
+      <div class="hidden md:flex items-center gap-4">
+        <!-- Access Badge -->
+        <div id="course-access-status-badge" class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span>Free Preview (Lesson 1.1)</span>
         </div>
-        <div class="w-32 h-2 rounded-full bg-black/40 border border-white/10 overflow-hidden">
-          <div id="course-progress-fill" class="h-full bg-gradient-to-r from-sky-400 via-purple-500 to-pink-500 rounded-full transition-all duration-300" style="width: 35%;"></div>
+
+        <div class="text-right">
+          <div id="course-progress-percent" class="text-xs font-bold font-mono text-white">14%</div>
+          <div id="course-progress-fraction" class="text-[10px] text-slate-400 font-mono font-semibold">1 of 7 completed</div>
+        </div>
+        <div class="w-28 h-2 rounded-full bg-black/40 border border-white/10 overflow-hidden">
+          <div id="course-progress-fill" class="h-full bg-gradient-to-r from-sky-400 via-purple-500 to-pink-500 rounded-full transition-all duration-300" style="width: 14%;"></div>
         </div>
       </div>
 
-      <!-- Right: Creator Tools -->
+      <!-- Right: Creator Tools & Checkout Trigger -->
       <div class="flex items-center gap-2.5">
+        <!-- Test Access Switcher -->
+        <button id="test-access-toggle-btn" class="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-mono font-bold bg-white/[0.04] text-slate-400 hover:text-white border border-white/10 hover:border-white/25 transition-all" title="Toggle between Locked and Unlocked for testing">
+          <span>🔒 Test Mode</span>
+        </button>
+
+        <!-- Unlock Course CTA Button -->
+        <button id="header-unlock-btn" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold btn-primary shadow-lg">
+          <span>Unlock All ($49)</span>
+        </button>
+
         <a href="admin.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-slate-300 hover:text-white border border-white/15 transition-all">
           <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
           <span>Admin</span>
         </a>
-        <button id="open-add-lesson-modal" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold btn-primary shadow-lg">
-          <span>+ Add Module</span>
-        </button>
       </div>
 
     </div>
@@ -87,6 +104,50 @@
 
   <!-- Main LMS Workspace Layout -->
   <main class="pt-20 pb-16 px-4 sm:px-6 max-w-7xl mx-auto relative z-10">
+
+    <!-- Active Enrollment Banner (Shows if not settled) -->
+    <div id="unsettled-paywall-banner" class="mb-6 p-4 sm:p-5 rounded-3xl glass-panel border border-purple-500/30 bg-purple-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-xl shrink-0">
+          🔒
+        </div>
+        <div>
+          <h2 class="text-sm sm:text-base font-bold text-white">
+            Motion &amp; Visual Storytelling Masterclass — Limited Free Preview
+          </h2>
+          <p class="text-xs text-slate-300">
+            Lesson 1.1 is unlocked for preview. Settle the one-time $49 enrollment to unlock all 7 modules, full video lessons, and downloadable project kits.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5 shrink-0">
+        <button id="banner-settle-payment-btn" class="btn-primary py-2 px-5 text-xs font-bold shadow-lg">
+          <span>Settle Payment ($49) →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Settled Success Welcome Banner (Hidden when locked) -->
+    <div id="settled-welcome-banner" class="hidden mb-6 p-4 sm:p-5 rounded-3xl glass-panel border border-emerald-500/30 bg-emerald-950/20 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-xl shrink-0">
+          ✦
+        </div>
+        <div>
+          <h2 class="text-sm sm:text-base font-bold text-white">
+            Full Studio Access Active — Masterclass Unlocked
+          </h2>
+          <p class="text-xs text-slate-300">
+            Payment settled successfully. You have lifetime access to all lessons, speed graph techniques, and production assets.
+          </p>
+        </div>
+      </div>
+      <span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+        ENROLLED STUDENT
+      </span>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
       <!-- LEFT 2 COLUMNS: Custom Video Player & Student Workspace -->
@@ -96,7 +157,24 @@
         <div id="video-frame-container" class="rounded-3xl overflow-hidden border border-theme bg-black shadow-2xl relative transition-all">
           <div class="aspect-video relative bg-gradient-to-tr from-slate-950 via-indigo-950 to-slate-900 flex items-center justify-center overflow-hidden">
 
-            <!-- Big Overlay Play Button -->
+            <!-- LOCKED OVERLAY (Displayed when selected lesson is locked) -->
+            <div id="video-locked-overlay" class="hidden absolute inset-0 z-30 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center text-center p-6 space-y-4">
+              <div class="w-16 h-16 rounded-3xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-3xl shadow-2xl text-purple-300 animate-pulse">
+                🔒
+              </div>
+              <div class="space-y-1.5 max-w-md">
+                <span class="text-xs font-mono font-bold text-purple-400 uppercase tracking-wider">Premium Masterclass Content</span>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-white">This Lesson Is Locked</h3>
+                <p class="text-xs text-slate-300 leading-relaxed font-medium">
+                  Enroll in <strong class="text-white">FT JITHIN DESIGNZ Masterclass</strong> to watch this video lesson, access the speed graph presets, and download the production project files.
+                </p>
+              </div>
+              <button id="locked-overlay-settle-btn" class="btn-primary py-3 px-6 text-xs font-bold shadow-xl">
+                <span>Settle Payment &amp; Unlock All ($49) →</span>
+              </button>
+            </div>
+
+            <!-- Big Overlay Play Button (For Unlocked Lessons) -->
             <button id="video-overlay-play" class="w-20 h-20 rounded-full bg-white/20 hover:bg-white/30 border border-white/40 backdrop-blur-md flex items-center justify-center text-white text-3xl shadow-2xl transition-all hover:scale-110 z-10" aria-label="Play Video">
               ▶
             </button>
@@ -115,9 +193,9 @@
             </div>
 
             <!-- Bottom Custom Video Player Controls Bar -->
-            <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/80 to-transparent flex flex-col gap-2 z-20">
+            <div id="video-controls-bar" class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/80 to-transparent flex flex-col gap-2 z-20">
               <!-- Scrubber Bar -->
-              <div id="video-scrubber" class="video-scrubber-track">
+              <div id="video-scrubber" class="video-scrubber-track cursor-pointer">
                 <div id="video-scrubber-fill" class="video-scrubber-fill"></div>
                 <div id="video-scrubber-handle" class="video-scrubber-handle"></div>
               </div>
@@ -145,7 +223,10 @@
         <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-theme space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-theme pb-4">
             <div>
-              <span class="text-xs font-mono font-bold text-purple-400">Current Creative Lesson</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-mono font-bold text-purple-400">Current Creative Lesson</span>
+                <span id="lesson-access-pill" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300">Free Preview</span>
+              </div>
               <h3 id="lesson-header-title" class="text-xl sm:text-2xl font-bold text-theme-primary mt-1">
                 Kinetic Motion Curves &amp; Animation Pacing
               </h3>
@@ -168,16 +249,7 @@
           <div class="space-y-3 pt-2">
             <h4 class="text-xs font-mono font-bold uppercase text-theme-muted tracking-wider">Creative Project Files</h4>
             <div id="lesson-downloads-list" class="space-y-2">
-              <a href="#" class="p-3.5 rounded-2xl bg-theme-card border border-theme hover:border-purple-400/40 flex items-center justify-between transition-colors">
-                <div class="flex items-center gap-3">
-                  <span class="text-lg">📦</span>
-                  <div>
-                    <div class="text-xs font-bold text-white">Kinetic-Motion-Starter-Kit.zip</div>
-                    <div class="text-[10px] text-slate-400 font-mono">After Effects project &amp; sound assets • 18.4 MB</div>
-                  </div>
-                </div>
-                <span class="text-xs font-mono font-bold text-purple-400">Download ↓</span>
-              </a>
+              <!-- Rendered via JS -->
             </div>
           </div>
         </div>
@@ -205,36 +277,141 @@
     </div>
   </main>
 
-  <!-- Add Lesson / Module Modal -->
-  <div id="add-lesson-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
-    <div class="modal-content rounded-3xl max-w-lg w-full p-6 sm:p-8 relative space-y-5">
-      <div class="flex items-center justify-between border-b border-theme pb-3">
-        <div>
-          <span class="text-xs font-mono font-bold text-purple-400">Curriculum Builder</span>
-          <h3 class="text-lg font-bold text-theme-primary mt-0.5">Add Creative Module / Lesson</h3>
+  <!-- ==============================================================
+       PAYMENT SETTLEMENT MODAL (CARD, UPI, PAYPAL, PASSCODE)
+       ============================================================== -->
+  <div id="payment-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-content rounded-3xl max-w-xl w-full p-6 sm:p-8 max-h-[92vh] overflow-y-auto relative space-y-6">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between border-b border-theme pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-500 shadow-md">
+            <img src="assets/images/logo.png" alt="Logo" class="w-full h-full object-cover rounded-[14px]" />
+          </div>
+          <div>
+            <span class="text-xs font-mono font-bold text-purple-400">SECURE STUDIO SETTLEMENT</span>
+            <h3 class="text-xl font-extrabold text-white mt-0.5">Enroll &amp; Unlock Masterclass</h3>
+          </div>
         </div>
-        <button id="close-add-lesson-modal" class="w-8 h-8 rounded-full bg-theme-card border border-theme text-theme-muted hover:text-theme-primary flex items-center justify-center text-lg">✕</button>
+        <button id="close-payment-modal-btn" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-slate-400 hover:text-white flex items-center justify-center text-lg">✕</button>
       </div>
 
-      <form id="add-lesson-form" class="space-y-4">
-        <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-theme-primary">Module Title</label>
-          <input type="text" id="input-module-title" required placeholder="e.g. Module 3: Cinematic Color Science" class="w-full px-4 py-2.5 rounded-xl border text-sm font-medium" />
+      <!-- Pricing Summary Callout -->
+      <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-between">
+        <div class="space-y-0.5">
+          <div class="text-xs font-bold text-white">Motion &amp; Visual Storytelling Masterclass</div>
+          <div class="text-[11px] text-slate-400">Lifetime Studio Access • All 7 Lessons &amp; Project Files</div>
+        </div>
+        <div class="text-right">
+          <div class="text-2xl font-extrabold text-white font-mono">$49.00</div>
+          <div class="text-[10px] text-emerald-400 font-semibold font-mono">Instant Unlock</div>
+        </div>
+      </div>
+
+      <!-- Payment Method Switcher Tabs -->
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Select Payment Method</label>
+        <div class="grid grid-cols-4 gap-2 text-center text-xs font-semibold">
+          <button type="button" class="pay-method-tab active p-2.5 rounded-xl border border-white/10 bg-white text-black font-bold transition-all" data-method="card">
+            💳 Card
+          </button>
+          <button type="button" class="pay-method-tab p-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 hover:text-white transition-all" data-method="upi">
+            📱 UPI / QR
+          </button>
+          <button type="button" class="pay-method-tab p-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 hover:text-white transition-all" data-method="paypal">
+            🅿️ PayPal
+          </button>
+          <button type="button" class="pay-method-tab p-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-slate-300 hover:text-white transition-all" data-method="voucher">
+            🔑 Passkey
+          </button>
+        </div>
+      </div>
+
+      <!-- Student Credentials -->
+      <form id="payment-checkout-form" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-slate-300">Your Full Name *</label>
+            <input type="text" id="pay-student-name" required placeholder="Jithin or Student Name" class="w-full px-3.5 py-2 rounded-xl border border-white/10 bg-white/[0.04] text-white text-xs font-medium focus:outline-none focus:border-purple-400" />
+          </div>
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-slate-300">Your Email Address *</label>
+            <input type="email" id="pay-student-email" required placeholder="student@example.com" class="w-full px-3.5 py-2 rounded-xl border border-white/10 bg-white/[0.04] text-white text-xs font-medium focus:outline-none focus:border-purple-400" />
+          </div>
         </div>
 
-        <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-theme-primary">Lesson Title</label>
-          <input type="text" id="input-lesson-title" required placeholder="e.g. 3.1 Node-Based DaVinci Grading" class="w-full px-4 py-2.5 rounded-xl border text-sm font-medium" />
+        <!-- 1. CARD TAB PANEL -->
+        <div id="tab-panel-card" class="pay-panel space-y-3">
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-slate-300">Card Number</label>
+            <input type="text" id="card-number-input" placeholder="4242 •••• •••• 4242" maxlength="19" class="w-full px-3.5 py-2 rounded-xl border border-white/10 bg-white/[0.04] text-white font-mono text-xs focus:outline-none focus:border-purple-400" />
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-slate-300">Expiry (MM/YY)</label>
+              <input type="text" id="card-expiry-input" placeholder="12/28" maxlength="5" class="w-full px-3.5 py-2 rounded-xl border border-white/10 bg-white/[0.04] text-white font-mono text-xs focus:outline-none focus:border-purple-400" />
+            </div>
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-slate-300">CVC / Security Code</label>
+              <input type="password" id="card-cvc-input" placeholder="•••" maxlength="4" class="w-full px-3.5 py-2 rounded-xl border border-white/10 bg-white/[0.04] text-white font-mono text-xs focus:outline-none focus:border-purple-400" />
+            </div>
+          </div>
         </div>
 
-        <div class="space-y-1.5">
-          <label class="block text-xs font-semibold text-theme-primary">Duration (MM:SS)</label>
-          <input type="text" id="input-lesson-duration" placeholder="18:30" class="w-full px-4 py-2.5 rounded-xl border text-sm font-medium font-mono" />
+        <!-- 2. UPI TAB PANEL -->
+        <div id="tab-panel-upi" class="pay-panel hidden space-y-3 text-center">
+          <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 flex flex-col items-center justify-center space-y-2">
+            <div class="w-36 h-36 bg-white rounded-xl p-2 flex items-center justify-center shadow-lg">
+              <!-- Simulated QR Code SVG -->
+              <svg class="w-full h-full text-black" viewBox="0 0 100 100" fill="currentColor">
+                <path d="M10 10h30v30h-30zM15 15v20h20v-20zM22 22h6v6h-6zM60 10h30v30h-30zM65 15v20h20v-20zM72 22h6v6h-6zM10 60h30v30h-30zM15 65v20h20v-20zM22 72h6v6h-6zM50 15h5v5h-5zM50 30h5v5h-5zM60 60h10v10h-10zM75 60h15v10h-15zM60 75h15v15h-15zM80 80h10v10h-10zM50 50h10v10h-10zM50 70h5v10h-5z"/>
+              </svg>
+            </div>
+            <span class="text-[11px] font-mono text-slate-300">Scan with GPay, PhonePe, Paytm, or BHIM</span>
+          </div>
+          <div class="space-y-1 text-left">
+            <label class="block text-xs font-semibold text-slate-300">Or Enter Your UPI ID</label>
+            <input type="text" id="upi-id-input" placeholder="username@okhdfcbank" class="w-full px-3.5 py-2 rounded-xl border border-white/10 bg-white/[0.04] text-white font-mono text-xs focus:outline-none focus:border-purple-400" />
+          </div>
         </div>
 
-        <button type="submit" class="btn-primary w-full py-3 text-xs font-bold">
-          <span>Save to Curriculum</span>
-        </button>
+        <!-- 3. PAYPAL TAB PANEL -->
+        <div id="tab-panel-paypal" class="pay-panel hidden space-y-3">
+          <div class="p-4 rounded-2xl bg-blue-950/30 border border-blue-500/20 text-center space-y-2">
+            <span class="text-2xl">🅿️</span>
+            <div class="text-xs font-bold text-white">PayPal Instant Checkout</div>
+            <p class="text-[11px] text-slate-400">Click below to authorize settlement via your international PayPal balance or credit card.</p>
+          </div>
+        </div>
+
+        <!-- 4. PASSCODE VOUCHER PANEL -->
+        <div id="tab-panel-voucher" class="pay-panel hidden space-y-3">
+          <div class="p-3.5 rounded-2xl bg-purple-950/30 border border-purple-500/20 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-white">Master Passkey / Voucher Unlock</span>
+              <button type="button" id="use-default-passcode-btn" class="text-[11px] font-mono text-purple-300 hover:text-white underline">Use Demo Code (JITHIN2026)</button>
+            </div>
+            <p class="text-[11px] text-slate-400">Enter author student passkey for instant access settlement without payment gateway.</p>
+          </div>
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-slate-300">Passkey / Code</label>
+            <input type="text" id="passkey-voucher-input" placeholder="e.g. JITHIN2026" class="w-full px-3.5 py-2 rounded-xl border border-white/10 bg-white/[0.04] text-white font-mono text-xs uppercase focus:outline-none focus:border-purple-400" />
+          </div>
+        </div>
+
+        <!-- Settlement Action Button -->
+        <div class="pt-2">
+          <button type="submit" id="submit-settle-payment-btn" class="btn-primary w-full py-3 text-xs font-bold shadow-xl flex items-center justify-center gap-2">
+            <span id="settle-btn-spinner" class="hidden w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
+            <span id="settle-btn-text">Settle Payment &amp; Unlock Masterclass ($49.00) →</span>
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between text-[10px] text-slate-500 pt-1 font-mono">
+          <span>🔒 256-Bit SSL Encrypted Settlement</span>
+          <span>FT JITHIN DESIGNZ</span>
+        </div>
       </form>
     </div>
   </div>

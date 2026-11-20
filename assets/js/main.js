@@ -167,7 +167,59 @@
   }
 
   // -------------------------------------------------------------
-  // 6. DYNAMIC PROFILE & BRANDING LOADER
+  // 6. INTERACTIVE ANALYTICS DASHBOARD WIDGET (Hero Section)
+  // -------------------------------------------------------------
+  function initAnalyticsWidget() {
+    const tabs = document.querySelectorAll('.saas-tab-btn');
+    const valueDisplay = document.getElementById('saas-metric-val');
+    const chartBars = document.querySelectorAll('.saas-chart-bar');
+    const badgeStatus = document.getElementById('saas-badge-status');
+
+    if (!tabs.length || !chartBars.length) return;
+
+    const dataSets = {
+      overview: {
+        val: '$148,290',
+        badge: '+28.4% vs last mo',
+        bars: [45, 62, 55, 78, 90, 84, 98]
+      },
+      analytics: {
+        val: '1.42M views',
+        badge: '99.98% Engagement',
+        bars: [60, 40, 85, 92, 70, 88, 95]
+      },
+      retention: {
+        val: '94.6%',
+        badge: '98.5% Client Satisfaction',
+        bars: [80, 82, 85, 89, 91, 93, 96]
+      }
+    };
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.classList.remove('bg-white', 'text-black', 'shadow-sm');
+          t.classList.add('text-theme-muted');
+        });
+        tab.classList.add('bg-white', 'text-black', 'shadow-sm');
+        tab.classList.remove('text-theme-muted');
+
+        const mode = tab.getAttribute('data-mode') || 'overview';
+        const data = dataSets[mode] || dataSets.overview;
+
+        if (valueDisplay) valueDisplay.innerText = data.val;
+        if (badgeStatus) badgeStatus.innerText = data.badge;
+
+        chartBars.forEach((bar, idx) => {
+          const heightPercent = data.bars[idx] || 50;
+          bar.style.height = `${heightPercent}%`;
+        });
+      });
+    });
+  }
+
+  // -------------------------------------------------------------
+  // 7. DYNAMIC PROFILE & BRANDING LOADER
   // -------------------------------------------------------------
   async function loadSiteProfile() {
     if (typeof window.fetchSiteProfile !== 'function') return;
@@ -452,7 +504,7 @@
     if (toolsContainer) {
       const tools = Array.isArray(project.tools) ? project.tools : [];
       toolsContainer.innerHTML = tools.map(t => `
-        <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-white/10 text-white border border-white/20">
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-slate-100 text-slate-800 border border-slate-200 shadow-sm">
           ${escapeHtml(t)}
         </span>
       `).join('');
@@ -460,20 +512,41 @@
 
     if (mediaContainer) {
       if (project.media_url) {
-        if (project.media_type === 'video' || project.media_url.includes('youtube') || project.media_url.includes('vimeo') || project.media_url.endsWith('.mp4')) {
+        const url = project.media_url.trim();
+        let embedUrl = url;
+        const isMp4 = url.toLowerCase().endsWith('.mp4');
+
+        if (url.includes('youtube.com/watch?v=')) {
+          const vid = url.split('v=')[1]?.split('&')[0];
+          embedUrl = vid ? `https://www.youtube.com/embed/${vid}` : url;
+        } else if (url.includes('youtu.be/')) {
+          const vid = url.split('youtu.be/')[1]?.split('?')[0];
+          embedUrl = vid ? `https://www.youtube.com/embed/${vid}` : url;
+        } else if (url.includes('vimeo.com/')) {
+          const vid = url.split('vimeo.com/')[1]?.split('?')[0];
+          embedUrl = vid ? `https://player.vimeo.com/video/${vid}` : url;
+        }
+
+        if (isMp4) {
           mediaContainer.innerHTML = `
-            <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black border border-white/10">
-              <iframe src="${escapeHtml(project.media_url)}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+            <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black border border-theme shadow-md">
+              <video src="${escapeHtml(url)}" controls class="w-full h-full object-contain" autoplay muted></video>
+            </div>
+          `;
+        } else if (project.media_type === 'video' || embedUrl !== url || url.includes('embed')) {
+          mediaContainer.innerHTML = `
+            <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black border border-theme shadow-md">
+              <iframe src="${escapeHtml(embedUrl)}" class="w-full h-full" frameborder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
             </div>
           `;
         } else {
           mediaContainer.innerHTML = `
-            <img src="${escapeHtml(project.media_url)}" alt="${escapeHtml(project.title)}" class="w-full rounded-2xl max-h-[450px] object-contain border border-white/10 bg-black/50" />
+            <img src="${escapeHtml(url)}" alt="${escapeHtml(project.title)}" class="w-full rounded-2xl max-h-[450px] object-contain border border-theme bg-slate-50" />
           `;
         }
       } else if (project.thumbnail_url) {
         mediaContainer.innerHTML = `
-          <img src="${escapeHtml(project.thumbnail_url)}" alt="${escapeHtml(project.title)}" class="w-full rounded-2xl max-h-[450px] object-cover border border-white/10" />
+          <img src="${escapeHtml(project.thumbnail_url)}" alt="${escapeHtml(project.title)}" class="w-full rounded-2xl max-h-[450px] object-cover border border-theme shadow-md" />
         `;
       } else {
         mediaContainer.innerHTML = '';
@@ -668,12 +741,14 @@
 
     if (mobileMenuBtn && mobileDrawer) {
       mobileMenuBtn.addEventListener('click', () => {
-        mobileDrawer.classList.toggle('active');
+        const isActive = mobileDrawer.classList.toggle('active');
+        document.body.style.overflow = isActive ? 'hidden' : '';
       });
 
       mobileLinks.forEach(link => {
         link.addEventListener('click', () => {
           mobileDrawer.classList.remove('active');
+          document.body.style.overflow = '';
         });
       });
     }
@@ -711,6 +786,7 @@
     initKineticTextRotator();
     initScrollReveals();
     initAppleScrollScrub();
+    initAnalyticsWidget();
     loadSiteProfile();
     loadServices();
     loadPortfolioProjects();
