@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "FT JITHIN DESIGNZ — Personal Creative Portfolio & Studio",
   "private": true,
-  "scripts": {
-    "build": "echo 'Static build complete'"
-  },
+  "scripts": {},
   "dependencies": {
     "@supabase/supabase-js": "^2.119.2"
   }
