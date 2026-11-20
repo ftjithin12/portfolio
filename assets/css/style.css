@@ -637,3 +637,79 @@ svg {
     height: 16px;
   }
 }
+
+/* ===================================================================
+   DAYLIGHT DYNAMIC GRADIENT ENGINE (24-Hour Adaptive System)
+   =================================================================== */
+:root {
+  --daylight-gradient: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #f59e0b 100%);
+  --daylight-glow: rgba(236, 72, 153, 0.4);
+  --daylight-accent: #ec4899;
+}
+
+/* Phase 1: Sunrise Dawn (05:00 - 09:00) */
+.daylight-dawn {
+  --daylight-gradient: linear-gradient(135deg, #f43f5e 0%, #fb923c 45%, #facc15 100%) !important;
+  --daylight-glow: rgba(251, 146, 60, 0.45) !important;
+  --daylight-accent: #fb923c !important;
+}
+
+/* Phase 2: High Noon Radiance (09:00 - 15:00) */
+.daylight-noon {
+  --daylight-gradient: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #6366f1 100%) !important;
+  --daylight-glow: rgba(59, 130, 246, 0.45) !important;
+  --daylight-accent: #3b82f6 !important;
+}
+
+/* Phase 3: Golden Hour Dusk (15:00 - 20:00) */
+.daylight-dusk {
+  --daylight-gradient: linear-gradient(135deg, #ec4899 0%, #a855f7 50%, #f59e0b 100%) !important;
+  --daylight-glow: rgba(236, 72, 153, 0.45) !important;
+  --daylight-accent: #ec4899 !important;
+}
+
+/* Phase 4: Cosmic Midnight (20:00 - 05:00) */
+.daylight-night {
+  --daylight-gradient: linear-gradient(135deg, #8b5cf6 0%, #4f46e5 50%, #06b6d4 100%) !important;
+  --daylight-glow: rgba(139, 92, 246, 0.45) !important;
+  --daylight-accent: #8b5cf6 !important;
+}
+
+/* Animated Shifting Gradient Keyframe */
+@keyframes daylightFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.daylight-dynamic-bar {
+  background: var(--daylight-gradient) !important;
+  background-size: 200% 200% !important;
+  animation: daylightFlow 8s ease infinite !important;
+  box-shadow: 0 4px 22px var(--daylight-glow) !important;
+}
+
+.daylight-dynamic-badge {
+  background: var(--daylight-gradient) !important;
+  background-size: 200% 200% !important;
+  animation: daylightFlow 8s ease infinite !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 12px var(--daylight-glow) !important;
+}
+
+.daylight-dynamic-text {
+  background: var(--daylight-gradient) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+.daylight-dynamic-glow {
+  box-shadow: 0 0 35px var(--daylight-glow) !important;
+}

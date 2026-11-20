@@ -177,6 +177,25 @@
 
     if (!tabs.length || !chartBars.length) return;
 
+    // 24-Hour Daylight Phase Auto-Detection
+    function applyDaylightHeroPhase() {
+      const heroCard = document.getElementById('hero-saas-card') || document.querySelector('.saas-chart-bar')?.closest('.glass-panel');
+      if (!heroCard) return;
+      const hour = new Date().getHours();
+      heroCard.classList.remove('daylight-dawn', 'daylight-noon', 'daylight-dusk', 'daylight-night');
+      if (hour >= 5 && hour < 9) {
+        heroCard.classList.add('daylight-dawn');
+      } else if (hour >= 9 && hour < 15) {
+        heroCard.classList.add('daylight-noon');
+      } else if (hour >= 15 && hour < 20) {
+        heroCard.classList.add('daylight-dusk');
+      } else {
+        heroCard.classList.add('daylight-night');
+      }
+    }
+    applyDaylightHeroPhase();
+    setInterval(applyDaylightHeroPhase, 60000);
+
     const dataSets = {
       overview: {
         val: '$148,290',

@@ -192,6 +192,21 @@
         tab.classList.remove('text-slate-400');
 
         const targetTab = tab.getAttribute('data-tab');
+        if (targetTab === 'analytics') {
+          views.forEach(view => {
+            if (view.id === 'view-overview') {
+              view.classList.remove('hidden');
+            } else {
+              view.classList.add('hidden');
+            }
+          });
+          const analyticsEl = document.getElementById('admin-analytics-dashboard');
+          if (analyticsEl) {
+            analyticsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          return;
+        }
+
         views.forEach(view => {
           if (view.id === `view-${targetTab}`) {
             view.classList.remove('hidden');
@@ -1590,6 +1605,279 @@
   }
 
   // -------------------------------------------------------------
+  // 4.7. LIVE STUDIO ANALYTICS (24-Hour Adaptive Daylight Gradient Engine)
+  // -------------------------------------------------------------
+  function initAdminLiveAnalytics() {
+    const dashboardCard = document.getElementById('admin-analytics-dashboard');
+    if (!dashboardCard) return;
+
+    const ambientGlow = document.getElementById('admin-analytics-ambient-glow');
+    const clockEl = document.getElementById('daylight-clock-display');
+    const phaseIcon = document.getElementById('daylight-phase-icon');
+    const phaseName = document.getElementById('daylight-phase-name');
+    const gradientLabel = document.getElementById('admin-saas-gradient-label');
+    const gradientSub = document.getElementById('admin-saas-gradient-sub');
+    const presetBtns = document.querySelectorAll('.daylight-preset-btn');
+
+    const tabs = document.querySelectorAll('.admin-saas-tab-btn');
+    const metricTitle = document.getElementById('admin-saas-metric-title');
+    const metricVal = document.getElementById('admin-saas-metric-val');
+    const badgeStatus = document.getElementById('admin-saas-badge-status');
+    const peakWindow = document.getElementById('admin-saas-peak-window');
+    const barDetail = document.getElementById('admin-saas-bar-detail');
+    const chartBars = document.querySelectorAll('.admin-saas-chart-bar');
+    const barValLabels = document.querySelectorAll('.admin-saas-bar-val');
+    const dayColumns = document.querySelectorAll('[data-day]');
+
+    let activePreset = 'auto'; // 'auto', 'dawn', 'noon', 'dusk', 'night'
+    let currentPhase = 'dusk';
+
+    const daylightPhases = {
+      dawn: {
+        name: 'Sunrise Dawn',
+        icon: '🌅',
+        timeWindow: '05:00 - 09:00 IST',
+        label: 'Sunrise Dawn (Gold & Peach)',
+        next: 'Next: Daylight Radiance (09:00)',
+        glowColor: 'rgba(251, 146, 60, 0.45)',
+        class: 'daylight-dawn'
+      },
+      noon: {
+        name: 'High Noon',
+        icon: '☀️',
+        timeWindow: '09:00 - 15:00 IST',
+        label: 'Daylight Radiance (Azure Sky)',
+        next: 'Next: Golden Hour Dusk (15:00)',
+        glowColor: 'rgba(59, 130, 246, 0.45)',
+        class: 'daylight-noon'
+      },
+      dusk: {
+        name: 'Golden Hour Dusk',
+        icon: '🌇',
+        timeWindow: '15:00 - 20:00 IST',
+        label: 'Golden Hour (Magenta & Amber)',
+        next: 'Next: Cosmic Midnight (20:00)',
+        glowColor: 'rgba(236, 72, 153, 0.45)',
+        class: 'daylight-dusk'
+      },
+      night: {
+        name: 'Cosmic Midnight',
+        icon: '🌌',
+        timeWindow: '20:00 - 05:00 IST',
+        label: 'Cosmic Midnight (Ultraviolet)',
+        next: 'Next: Sunrise Dawn (05:00)',
+        glowColor: 'rgba(139, 92, 246, 0.45)',
+        class: 'daylight-night'
+      }
+    };
+
+    function determineAutoPhase() {
+      const hour = new Date().getHours();
+      if (hour >= 5 && hour < 9) return 'dawn';
+      if (hour >= 9 && hour < 15) return 'noon';
+      if (hour >= 15 && hour < 20) return 'dusk';
+      return 'night';
+    }
+
+    function applyDaylightPhase(phaseKey) {
+      currentPhase = phaseKey;
+      const config = daylightPhases[phaseKey] || daylightPhases.dusk;
+
+      dashboardCard.classList.remove('daylight-dawn', 'daylight-noon', 'daylight-dusk', 'daylight-night');
+      dashboardCard.classList.add(config.class);
+
+      if (ambientGlow) {
+        ambientGlow.style.backgroundColor = config.glowColor;
+      }
+      if (phaseIcon) phaseIcon.textContent = config.icon;
+      if (phaseName) {
+        phaseName.textContent = (activePreset === 'auto' ? 'Auto: ' : '') + config.name;
+      }
+      if (gradientLabel) gradientLabel.textContent = config.label;
+      if (gradientSub) gradientSub.textContent = config.next;
+
+      // Sync public hero card if open in browser
+      const publicHeroCard = document.getElementById('hero-saas-card');
+      if (publicHeroCard) {
+        publicHeroCard.classList.remove('daylight-dawn', 'daylight-noon', 'daylight-dusk', 'daylight-night');
+        publicHeroCard.classList.add(config.class);
+      }
+    }
+
+    function updateDaylightEngine() {
+      const now = new Date();
+      if (clockEl) {
+        clockEl.textContent = now.toLocaleTimeString('en-US', { hour12: false }) + ' IST';
+      }
+
+      if (activePreset === 'auto') {
+        const autoPhase = determineAutoPhase();
+        if (autoPhase !== currentPhase) {
+          applyDaylightPhase(autoPhase);
+        }
+      }
+    }
+
+    // Set initial phase
+    applyDaylightPhase(determineAutoPhase());
+    updateDaylightEngine();
+    setInterval(updateDaylightEngine, 1000);
+
+    // Preset button switcher
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        presetBtns.forEach(b => {
+          b.classList.remove('active', 'bg-white/20', 'text-white', 'font-bold');
+          b.classList.add('text-slate-300');
+        });
+        btn.classList.add('active', 'bg-white/20', 'text-white', 'font-bold');
+        btn.classList.remove('text-slate-300');
+
+        const chosen = btn.getAttribute('data-phase');
+        if (chosen === 'auto') {
+          activePreset = 'auto';
+          applyDaylightPhase(determineAutoPhase());
+          showToast('Daylight Adaptive Engine: Clock Auto-Sync Enabled', '🔄');
+        } else if (daylightPhases[chosen]) {
+          activePreset = chosen;
+          applyDaylightPhase(chosen);
+          showToast(`Daylight Phase switched to ${daylightPhases[chosen].name}!`, daylightPhases[chosen].icon);
+        }
+      });
+    });
+
+    // Metric Data Sets
+    const dataSets = {
+      overview: {
+        title: 'Live Creative Output',
+        val: '$148,290',
+        badge: '+28.4% vs last mo',
+        peak: '17:00 - 21:00 IST',
+        bars: [45, 62, 55, 78, 90, 84, 98],
+        dailyFigures: [
+          'Mon: $18,450 (8 projects completed)',
+          'Tue: $24,200 (11 projects completed)',
+          'Wed: $21,100 (9 projects completed)',
+          'Thu: $29,800 (14 projects completed)',
+          'Fri: $36,400 (17 projects completed)',
+          'Sat: $31,500 (13 projects completed)',
+          'Sun: $39,840 (Peak output • 19 projects completed)'
+        ]
+      },
+      analytics: {
+        title: 'Global Portfolio Impressions',
+        val: '1.42M views',
+        badge: '99.98% Engagement',
+        peak: '14:00 - 18:00 IST',
+        bars: [60, 40, 85, 92, 70, 88, 95],
+        dailyFigures: [
+          'Mon: 165K views across Behance & Reels',
+          'Tue: 110K views across YouTube & Web',
+          'Wed: 235K views across Portfolio',
+          'Thu: 260K views across Instagram',
+          'Fri: 195K views across Creative Net',
+          'Sat: 242K views across Client Spotlights',
+          'Sun: 275K views (Peak Viral Motion Reach)'
+        ]
+      },
+      retention: {
+        title: 'Client Retention & Repeat Rate',
+        val: '94.6%',
+        badge: '98.5% Client Satisfaction',
+        peak: 'Continuous 24h',
+        bars: [80, 82, 85, 89, 91, 93, 96],
+        dailyFigures: [
+          'Mon: 91.2% client satisfaction score',
+          'Tue: 92.5% repeat commission rate',
+          'Wed: 93.8% milestone signoff rate',
+          'Thu: 94.6% contract renewal velocity',
+          'Fri: 95.8% five-star rating index',
+          'Sat: 96.2% recommendation rate',
+          'Sun: 97.4% (Peak Brand Trust Index)'
+        ]
+      },
+      traffic: {
+        title: 'Realtime Active Visitors',
+        val: '18,420 visits',
+        badge: '+42.1% Today',
+        peak: 'Now (Evening Rush)',
+        bars: [50, 68, 72, 85, 94, 91, 99],
+        dailyFigures: [
+          'Mon: 2,140 unique visitors',
+          'Tue: 2,890 unique visitors',
+          'Wed: 3,050 unique visitors',
+          'Thu: 3,740 unique visitors',
+          'Fri: 4,120 unique visitors',
+          'Sat: 3,980 unique visitors',
+          'Sun: 4,450 unique visitors (Live Peak)'
+        ]
+      }
+    };
+
+    let currentMode = 'overview';
+
+    function renderMetrics(mode) {
+      currentMode = mode;
+      const data = dataSets[mode] || dataSets.overview;
+
+      if (metricTitle) metricTitle.textContent = data.title;
+      if (metricVal) metricVal.textContent = data.val;
+      if (badgeStatus) badgeStatus.textContent = data.badge;
+      if (peakWindow) peakWindow.textContent = data.peak;
+
+      chartBars.forEach((bar, idx) => {
+        const heightPercent = data.bars[idx] || 50;
+        bar.style.height = `${heightPercent}%`;
+        if (barValLabels[idx]) {
+          barValLabels[idx].textContent = `${heightPercent}%`;
+        }
+      });
+
+      if (barDetail) {
+        barDetail.innerHTML = `Today's Projected Velocity: <span class="text-white font-bold font-mono">${escapeHtml(data.dailyFigures[6])}</span>`;
+      }
+    }
+
+    // Tab buttons
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.classList.remove('active', 'bg-white', 'text-black');
+          t.classList.add('text-slate-400');
+        });
+        tab.classList.add('active', 'bg-white', 'text-black');
+        tab.classList.remove('text-slate-400');
+
+        const mode = tab.getAttribute('data-mode') || 'overview';
+        renderMetrics(mode);
+      });
+    });
+
+    // Day bar click interactions
+    dayColumns.forEach((col, idx) => {
+      col.addEventListener('click', () => {
+        const day = col.getAttribute('data-day') || '';
+        const data = dataSets[currentMode] || dataSets.overview;
+        const figure = data.dailyFigures[idx] || '';
+
+        if (barDetail) {
+          barDetail.innerHTML = `<span class="text-amber-300 font-bold">${day} Breakdown:</span> <span class="text-white font-bold font-mono">${escapeHtml(figure)}</span>`;
+        }
+      });
+    });
+
+    // Realtime pulse simulation
+    setInterval(() => {
+      if (currentMode === 'traffic' && metricVal) {
+        const base = 18420 + Math.floor(Math.random() * 30);
+        metricVal.textContent = `${base.toLocaleString()} visits`;
+      }
+    }, 18000);
+
+    renderMetrics('overview');
+  }
+
+  // -------------------------------------------------------------
   // INITIALIZATION
   // -------------------------------------------------------------
   function initAll() {
@@ -1598,6 +1886,7 @@
     initProjectForm();
     initAdminLessonForm();
     initCoursesVisibilityControl();
+    initAdminLiveAnalytics();
     initProfileForms();
     initDispatchControls();
   }

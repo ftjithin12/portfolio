@@ -153,6 +153,9 @@
         <button class="admin-nav-tab active px-3.5 py-2 rounded-xl bg-white text-black font-bold transition-all shrink-0" data-tab="overview">
           <span>📊 Overview</span>
         </button>
+        <button class="admin-nav-tab px-3.5 py-2 rounded-xl text-slate-400 hover:text-white transition-all shrink-0" data-tab="analytics">
+          <span>📈 Analytics</span>
+        </button>
         <button class="admin-nav-tab px-3.5 py-2 rounded-xl text-slate-400 hover:text-white transition-all shrink-0" data-tab="projects">
           <span>🎬 Projects</span>
         </button>
@@ -223,6 +226,161 @@
           </div>
           <div class="text-3xl font-extrabold text-white font-mono">Synced</div>
           <p class="text-xs text-slate-400">Dual-layer persistent storage</p>
+        </div>
+      </div>
+
+      <!-- ==============================================================
+           LIVE STUDIO ANALYTICS WIDGET (24-Hour Adaptive Daylight Gradient Engine)
+           ============================================================== -->
+      <div id="admin-analytics-dashboard" class="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 relative overflow-hidden transition-all duration-700">
+        <!-- Ambient Daylight Background Glow -->
+        <div id="admin-analytics-ambient-glow" class="absolute -top-24 -right-24 w-80 h-80 rounded-full blur-3xl pointer-events-none transition-all duration-1000 opacity-20 bg-pink-500"></div>
+
+        <!-- Window Header Bar with macOS Window Dots & Daylight Mode Indicator -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10 relative z-10">
+          
+          <!-- Left: Mac Window Controls & Studio URL Tag -->
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-rose-500 inline-block shadow-sm shadow-rose-500/40"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500 inline-block shadow-sm shadow-amber-500/40"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block shadow-sm shadow-emerald-500/40"></span>
+            </div>
+            <div class="h-4 w-[1px] bg-white/15 hidden sm:block"></div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono font-bold text-white tracking-tight">ftjithindesignz.studio</span>
+              <span class="text-xs font-mono text-slate-400">• live analytics</span>
+              <span class="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>REALTIME</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Right: Daylight Gradient Controls & Metric Tabs -->
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Daylight Phase Badge & Interactive Switcher -->
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs">
+              <span id="daylight-phase-icon">🌅</span>
+              <span id="daylight-phase-name" class="font-mono font-bold text-white text-[11px]">Auto: Golden Hour</span>
+              <!-- Quick Daylight Presets -->
+              <div class="flex items-center gap-1 ml-1 pl-1.5 border-l border-white/10">
+                <button type="button" class="daylight-preset-btn px-1.5 py-0.5 rounded text-[10px] hover:bg-white/10 text-slate-300" data-phase="dawn" title="Sunrise Dawn (05:00-09:00)">🌅</button>
+                <button type="button" class="daylight-preset-btn px-1.5 py-0.5 rounded text-[10px] hover:bg-white/10 text-slate-300" data-phase="noon" title="High Noon (09:00-15:00)">☀️</button>
+                <button type="button" class="daylight-preset-btn px-1.5 py-0.5 rounded text-[10px] hover:bg-white/10 text-slate-300" data-phase="dusk" title="Golden Hour Dusk (15:00-20:00)">🌇</button>
+                <button type="button" class="daylight-preset-btn px-1.5 py-0.5 rounded text-[10px] hover:bg-white/10 text-slate-300" data-phase="night" title="Cosmic Midnight (20:00-05:00)">🌌</button>
+                <button type="button" class="daylight-preset-btn active px-1.5 py-0.5 rounded text-[10px] bg-white/20 text-white font-bold" data-phase="auto" title="Automatic clock sync">🔄 Auto</button>
+              </div>
+            </div>
+
+            <!-- Interactive Metric Mode Tabs -->
+            <div class="flex items-center p-1 rounded-xl bg-white/[0.04] border border-white/10 text-xs font-semibold">
+              <button class="admin-saas-tab-btn active px-3 py-1 rounded-lg bg-white text-black font-bold transition-all shadow-sm" data-mode="overview">Overview</button>
+              <button class="admin-saas-tab-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-all" data-mode="analytics">Analytics</button>
+              <button class="admin-saas-tab-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-all" data-mode="retention">Retention</button>
+              <button class="admin-saas-tab-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-all" data-mode="traffic">Live Traffic</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Metric KPI Display + Micro-Stats -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6 relative z-10">
+          
+          <!-- Left Metric Column -->
+          <div class="space-y-4">
+            <div class="space-y-1">
+              <div class="flex items-center justify-between">
+                <span id="admin-saas-metric-title" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Live Creative Output</span>
+                <span id="daylight-clock-display" class="text-[11px] font-mono text-purple-300 font-semibold">17:45:00 IST</span>
+              </div>
+              <div id="admin-saas-metric-val" class="text-3xl sm:text-4xl font-extrabold text-white font-mono tracking-tight">$148,290</div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <span id="admin-saas-badge-status" class="px-2.5 py-0.5 rounded-full text-xs font-bold daylight-dynamic-badge">
+                +28.4% vs last mo
+              </span>
+              <span id="admin-saas-subtext" class="text-xs text-slate-400 font-medium">Updated 30s ago</span>
+            </div>
+
+            <!-- Micro Metrics Cards -->
+            <div class="grid grid-cols-2 gap-2.5 pt-2">
+              <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-0.5">
+                <span class="text-[10px] font-mono text-slate-400 uppercase font-bold">Peak Traffic Window</span>
+                <div id="admin-saas-peak-window" class="text-xs font-bold text-white font-mono">17:00 - 21:00 IST</div>
+                <span class="text-[10px] text-emerald-400 font-semibold">● Active Peak Now</span>
+              </div>
+              <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-0.5">
+                <span class="text-[10px] font-mono text-slate-400 uppercase font-bold">Daylight Gradient State</span>
+                <div id="admin-saas-gradient-label" class="text-xs font-bold text-amber-300 font-mono">Golden Hour (Dusk)</div>
+                <span id="admin-saas-gradient-sub" class="text-[10px] text-slate-400 font-mono">Next: Cosmic Night (20:00)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right 7-Day Animated Bar Chart (with Daylight Adaptive Gradient) -->
+          <div class="lg:col-span-2 flex flex-col justify-between pt-2">
+            <div class="flex items-center justify-between text-xs text-slate-400 pb-2 px-1">
+              <span class="font-mono font-semibold">7-Day Studio Activity Velocity</span>
+              <span class="font-mono text-[11px] text-slate-500">Hover / Click bar for daily breakdown</span>
+            </div>
+
+            <div class="flex items-end justify-between gap-3 h-36 pt-4 px-2 bg-white/[0.02] rounded-2xl border border-white/5">
+              <!-- Monday -->
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer" data-day="Mon" data-index="0">
+                <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">45%</span>
+                <div class="admin-saas-chart-bar w-full rounded-t-lg bg-white/15 hover:bg-white/25 transition-all duration-500" style="height: 45%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors">Mon</span>
+              </div>
+
+              <!-- Tuesday -->
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer" data-day="Tue" data-index="1">
+                <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">62%</span>
+                <div class="admin-saas-chart-bar w-full rounded-t-lg bg-white/15 hover:bg-white/25 transition-all duration-500" style="height: 62%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors">Tue</span>
+              </div>
+
+              <!-- Wednesday -->
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer" data-day="Wed" data-index="2">
+                <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">55%</span>
+                <div class="admin-saas-chart-bar w-full rounded-t-lg bg-white/15 hover:bg-white/25 transition-all duration-500" style="height: 55%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors">Wed</span>
+              </div>
+
+              <!-- Thursday -->
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer" data-day="Thu" data-index="3">
+                <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">78%</span>
+                <div class="admin-saas-chart-bar w-full rounded-t-lg bg-white/15 hover:bg-white/25 transition-all duration-500" style="height: 78%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors">Thu</span>
+              </div>
+
+              <!-- Friday -->
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer" data-day="Fri" data-index="4">
+                <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">90%</span>
+                <div class="admin-saas-chart-bar w-full rounded-t-lg bg-white/15 hover:bg-white/25 transition-all duration-500" style="height: 90%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors">Fri</span>
+              </div>
+
+              <!-- Saturday -->
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer" data-day="Sat" data-index="5">
+                <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">84%</span>
+                <div class="admin-saas-chart-bar w-full rounded-t-lg bg-white/15 hover:bg-white/25 transition-all duration-500" style="height: 84%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors">Sat</span>
+              </div>
+
+              <!-- Sunday (Active / Peak Day with Daylight Changing Gradient) -->
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer" data-day="Sun" data-index="6">
+                <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-white opacity-100 transition-opacity">98%</span>
+                <div id="admin-saas-active-bar" class="admin-saas-chart-bar w-full rounded-t-lg daylight-dynamic-bar transition-all duration-500" style="height: 98%;"></div>
+                <span id="admin-saas-active-bar-label" class="text-[10px] font-mono text-purple-400 font-bold">Sun ✦</span>
+              </div>
+            </div>
+
+            <!-- Bar Click Feedback Detail Pill -->
+            <div id="admin-saas-bar-detail" class="text-right text-[11px] font-mono text-slate-400 pt-2 font-semibold">
+              Today's Projected Velocity: <span class="text-white font-bold font-mono">Peak Performance (+28.4%)</span>
+            </div>
+          </div>
         </div>
       </div>
 
