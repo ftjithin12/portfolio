@@ -2,9 +2,11 @@
  * Environment configuration and validation
  */
 
+const path = require('path');
 const dotenv = require('dotenv');
 
-// Load environment variables from .env file
+// Load environment variables from bot directory .env or current working directory
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 dotenv.config();
 
 function validateConfig() {
