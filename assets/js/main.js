@@ -1,7 +1,8 @@
 /**
- * APPLE-GRADE SAAS PORTFOLIO SCRIPT
- * Curated Black & White (Charcoal Obsidian) with Light Minimal RGB Theme
- * Hardware-accelerated kinetic typography, scroll progress, and zero 3D tilt/parallax in hero
+ * FT JITHIN DESIGNZ — FLAGSHIP PORTFOLIO ENGINE
+ * Brand: FT JITHIN DESIGNZ | Creative: Jithin
+ * Identity: Motion Designer • Graphic Designer • Video Editor • Visual Storyteller • Creative Digital Artist
+ * Tagline: "Turning Ideas Into Visual Experiences."
  */
 
 (function () {
@@ -11,7 +12,7 @@
   // 1. TOAST NOTIFICATION SYSTEM
   // -------------------------------------------------------------
   let toastTimeout;
-  function showToast(message, icon = '✨') {
+  function showToast(message, icon = '✦') {
     let toast = document.getElementById('toast');
     if (!toast) {
       toast = document.createElement('div');
@@ -19,7 +20,7 @@
       document.body.appendChild(toast);
     }
 
-    toast.innerHTML = `<span class="text-base">${icon}</span> <span>${message}</span>`;
+    toast.innerHTML = `<span class="text-base text-purple-400">${icon}</span> <span>${message}</span>`;
     toast.classList.add('show');
 
     clearTimeout(toastTimeout);
@@ -30,7 +31,7 @@
   window.showToast = showToast;
 
   // -------------------------------------------------------------
-  // 2. TOP SCROLL PROGRESS BAR (Light Minimal RGB Gradient)
+  // 2. TOP SCROLL PROGRESS BAR (Minimal Light RGB Spectrum)
   // -------------------------------------------------------------
   function initScrollProgressBar() {
     let bar = document.getElementById('scroll-progress-bar');
@@ -59,11 +60,12 @@
     if (!rotator) return;
 
     const phrases = [
-      'fluid motion',
-      'kinetic interfaces',
-      'micro-interactions',
-      'SaaS architectures',
-      'tactile engineering'
+      'Visual Experiences',
+      'Motion Graphics',
+      'Visual Storytelling',
+      'Graphic Design',
+      'Cinematic Edits',
+      'Poster Artwork'
     ];
     let currentIndex = 0;
 
@@ -84,11 +86,11 @@
           rotator.style.transform = 'translateY(0) scale(1)';
         });
       }, 300);
-    }, 2600);
+    }, 2800);
   }
 
   // -------------------------------------------------------------
-  // 4. SCROLL-TRIGGERED REVEAL ANIMATIONS (IntersectionObserver)
+  // 4. SCROLL-TRIGGERED REVEAL ANIMATIONS
   // -------------------------------------------------------------
   function initScrollReveals() {
     const revealElements = document.querySelectorAll('.reveal-on-scroll');
@@ -103,628 +105,623 @@
           }
         });
       },
-      {
-        threshold: 0.12,
-        rootMargin: '0px 0px -40px 0px'
-      }
+      { rootMargin: '0px 0px -60px 0px', threshold: 0.1 }
     );
 
     revealElements.forEach(el => observer.observe(el));
   }
 
   // -------------------------------------------------------------
-  // 5. APPLE-STYLE SCROLL-SCRUBBED TEXT ANIMATION
+  // 5. APPLE-STYLE SCROLL-SCRUBBED TYPOGRAPHY
   // -------------------------------------------------------------
-  function initAppleScrollText() {
+  function initAppleScrollScrub() {
     const scrubContainers = document.querySelectorAll('.apple-scrub-text');
+    if (!scrubContainers.length) return;
 
     scrubContainers.forEach(container => {
-      if (!container.dataset.prepared) {
-        const rawText = container.innerText.trim();
-        const words = rawText.split(/\s+/);
-        container.innerHTML = words
-          .map((word, i) => {
-            const isHighlight = container.dataset.highlightWords && container.dataset.highlightWords.includes(word);
-            return `<span class="apple-word ${isHighlight ? 'highlight' : ''}" data-index="${i}">${word}</span> `;
-          })
-          .join('');
-        container.dataset.prepared = 'true';
-      }
-    });
+      const originalText = container.textContent.trim();
+      const highlightWords = (container.getAttribute('data-highlight-words') || '').split(' ').map(w => w.trim().toLowerCase());
+      const words = originalText.split(/\s+/);
 
-    function updateScrub() {
-      const viewportHeight = window.innerHeight;
+      container.innerHTML = '';
+      const wordSpans = [];
 
-      scrubContainers.forEach(container => {
+      words.forEach((word) => {
+        const span = document.createElement('span');
+        span.className = 'scrub-word';
+        span.textContent = word + ' ';
+
+        const cleanWord = word.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+        if (highlightWords.includes(cleanWord)) {
+          span.classList.add('accent-scrub-word');
+        }
+
+        container.appendChild(span);
+        wordSpans.push(span);
+      });
+
+      function onScroll() {
         const rect = container.getBoundingClientRect();
-        const words = container.querySelectorAll('.apple-word');
-        if (!words.length) return;
+        const windowHeight = window.innerHeight;
 
-        // Active range
-        const startPoint = viewportHeight * 0.85;
-        const endPoint = viewportHeight * 0.2;
-        const totalDistance = startPoint - endPoint;
-        const currentPos = startPoint - rect.top;
-        const progress = Math.max(0, Math.min(1, currentPos / totalDistance));
+        const startY = windowHeight * 0.85;
+        const endY = windowHeight * 0.20;
 
-        const wordsToLight = Math.floor(progress * words.length);
+        let rawProgress = (startY - rect.top) / (startY - endY);
+        let progress = Math.max(0, Math.min(1, rawProgress));
 
-        words.forEach((w, idx) => {
+        const wordsToLight = Math.floor(progress * wordSpans.length);
+
+        wordSpans.forEach((span, idx) => {
           if (idx <= wordsToLight) {
-            w.classList.add('active');
+            span.classList.add('active');
           } else {
-            w.classList.remove('active');
+            span.classList.remove('active');
           }
         });
-
-        // Update progress pill if present
-        const pill = container.parentElement.querySelector('.scrub-progress-pill');
-        if (pill) {
-          pill.innerText = `${Math.round(progress * 100)}% scrubbed`;
-        }
-      });
-    }
-
-    window.addEventListener('scroll', updateScrub, { passive: true });
-    updateScrub();
-  }
-
-  // -------------------------------------------------------------
-  // 6. INTERACTIVE SAAS DASHBOARD DEMO WIDGET (Hero Section, Stable & Rock-Solid)
-  // -------------------------------------------------------------
-  function initSaaSDemoWidget() {
-    const tabs = document.querySelectorAll('.saas-tab-btn');
-    const valueDisplay = document.getElementById('saas-metric-val');
-    const chartBars = document.querySelectorAll('.saas-chart-bar');
-    const badgeStatus = document.getElementById('saas-badge-status');
-
-    if (!tabs.length || !chartBars.length) return;
-
-    const dataSets = {
-      overview: {
-        val: '$148,290',
-        badge: '+28.4% vs last mo',
-        bars: [45, 62, 55, 78, 90, 84, 98]
-      },
-      analytics: {
-        val: '1.42M req',
-        badge: '99.98% SLA',
-        bars: [60, 40, 85, 92, 70, 88, 95]
-      },
-      retention: {
-        val: '94.6%',
-        badge: '<0.8% churn',
-        bars: [80, 82, 85, 89, 91, 93, 96]
       }
-    };
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => {
-          t.classList.remove('bg-white', 'text-black', 'shadow-sm');
-          t.classList.add('text-theme-muted');
-        });
-        tab.classList.add('bg-white', 'text-black', 'shadow-sm');
-        tab.classList.remove('text-theme-muted');
-
-        const mode = tab.getAttribute('data-mode') || 'overview';
-        const data = dataSets[mode] || dataSets.overview;
-
-        if (valueDisplay) valueDisplay.innerText = data.val;
-        if (badgeStatus) badgeStatus.innerText = data.badge;
-
-        chartBars.forEach((bar, idx) => {
-          const heightPercent = data.bars[idx] || 50;
-          bar.style.height = `${heightPercent}%`;
-        });
-      });
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
     });
   }
 
   // -------------------------------------------------------------
-  // 7. PORTFOLIO FILTER & QUICK-VIEW CASE STUDY MODAL
+  // 6. DYNAMIC PROFILE & BRANDING LOADER
   // -------------------------------------------------------------
-  const projectDatabase = {
-    'zenith-saas': {
-      title: 'Zenith OS - Cloud Infrastructure Orchestrator',
-      client: 'Zenith Systems • Series B Enterprise',
-      role: 'Principal Product Architect & Motion Lead',
-      timeline: '6 Months (2025)',
-      description: 'Engineered an ultra-fast distributed cluster management interface handling over 250,000 live microservices. Designed a proprietary design system with Apple-inspired ergonomics, sub-50ms interaction latencies, and real-time telemetry visualizers.',
-      metrics: [
-        { label: 'Latency Reduction', val: '-64%' },
-        { label: 'MAU Growth', val: '3.8x' },
-        { label: 'Task Completion', val: '2.4x faster' }
-      ],
-      stack: ['Next.js 15', 'TypeScript', 'Web Workers', 'Tailwind', 'Canvas WebGL', 'Framer Motion'],
-      highlights: [
-        'Multi-region cluster telemetry with WebSockets streaming at 60 FPS.',
-        'Accessible keyboard-first command palette with zero runtime dependencies.',
-        'Custom WebGL topology graph capable of rendering 10,000+ nodes smoothly.'
-      ]
-    },
-    'prism-motion': {
-      title: 'Prism AI - Intelligent Workflow Canvas',
-      client: 'Prism Technologies • Seed Round',
-      role: 'Founding Design Engineer',
-      timeline: '4 Months (2025)',
-      description: 'Created a spatial infinite-canvas SaaS app empowering teams to build autonomous agent workflows visually. Integrated hardware-accelerated pan/zoom, collaborative cursors, and predictive layout nodes.',
-      metrics: [
-        { label: 'User Retention', val: '88%' },
-        { label: 'Funding Raised', val: '$8.2M' },
-        { label: 'CSAT Score', val: '4.9/5' }
-      ],
-      stack: ['React', 'Zustand', 'PixiJS', 'Tailwind CSS', 'FastAPI', 'WebRTC'],
-      highlights: [
-        'Infinite canvas coordinate matrix with butter-smooth GPU rendering.',
-        'Real-time multi-user multiplayer presence with conflict-free CRDT resolution.',
-        'Integrated natural language workflow generator.'
-      ]
-    },
-    'aura-design-system': {
-      title: 'Aura - Multi-Platform Design System',
-      client: 'Global FinTech Corp',
-      role: 'Staff Design Systems Architect',
-      timeline: '8 Months (2024-2025)',
-      description: 'Unified 14 web and mobile consumer banking products into a single coherent, tokenized design engine. Authored 95+ accessible headless components, an automated Figma-to-code pipeline, and strict WCAG AAA guidelines.',
-      metrics: [
-        { label: 'Design Velocity', val: '+45%' },
-        { label: 'Codebase Deduplication', val: '-38%' },
-        { label: 'WCAG AAA Compliance', val: '100%' }
-      ],
-      stack: ['Radix UI', 'React', 'Tailwind', 'Storybook', 'Tokens Studio', 'TypeScript'],
-      highlights: [
-        'Multi-theme token engine supporting high-contrast, OLED, and custom brand skins.',
-        'Automated regression testing of component visual states across 4 viewport breakpoints.',
-        'Interactive component playground with real-time prop tweaking and code export.'
-      ]
-    },
-    'hyperion-lms': {
-      title: 'Hyperion - Next-Gen Learning Interface',
-      client: 'Self-Initiated Flagship Product',
-      role: 'Creator & Lead Architect',
-      timeline: 'Continuous Evolution',
-      description: 'A revolutionary educational interface purpose-built for visual software engineering. Features simulated zero-latency video playback, in-situ note taking, dynamic curriculum builders, and interactive code exercises.',
-      metrics: [
-        { label: 'Completion Rate', val: '72%' },
-        { label: 'Active Students', val: '1,240+' },
-        { label: 'Avg Rating', val: '4.98/5' }
-      ],
-      stack: ['HTML5 Video API', 'Vanilla ES6+', 'Tailwind CSS', 'IndexedDB', 'LocalStorage'],
-      highlights: [
-        'Fully localized browser persistence for learner notes, progress, and lesson bookmarks.',
-        'Modular course creator allowing instructors to append curricula dynamically on the fly.',
-        'Keyboard-driven playback shortcuts mirroring professional video editors.'
-      ]
+  async function loadSiteProfile() {
+    if (typeof window.fetchSiteProfile !== 'function') return;
+    try {
+      const profile = await window.fetchSiteProfile();
+
+      // Brand Title Elements
+      document.querySelectorAll('.brand-name-display').forEach(el => {
+        el.textContent = profile.brand_name || 'FT JITHIN DESIGNZ';
+      });
+
+      document.querySelectorAll('.designer-name-display').forEach(el => {
+        el.textContent = profile.name || 'Jithin';
+      });
+
+      document.querySelectorAll('.tagline-display').forEach(el => {
+        el.textContent = profile.tagline || 'Turning Ideas Into Visual Experiences.';
+      });
+
+      // Bio text if element exists
+      const bioEl = document.getElementById('about-bio-display');
+      if (bioEl && profile.full_bio) {
+        bioEl.textContent = profile.full_bio;
+      }
+
+      // Contact info elements
+      const emailEl = document.getElementById('contact-email-display');
+      if (emailEl && profile.email) {
+        emailEl.textContent = profile.email;
+        emailEl.href = `mailto:${profile.email}`;
+      }
+
+      const copyEmailBtn = document.querySelector('.copy-email-btn');
+      if (copyEmailBtn && profile.email) {
+        copyEmailBtn.setAttribute('data-email', profile.email);
+      }
+
+      // Social Links
+      if (profile.social_links) {
+        const igLink = document.getElementById('social-link-instagram');
+        if (igLink && profile.social_links.instagram) igLink.href = profile.social_links.instagram;
+
+        const ytLink = document.getElementById('social-link-youtube');
+        if (ytLink && profile.social_links.youtube) ytLink.href = profile.social_links.youtube;
+
+        const bhLink = document.getElementById('social-link-behance');
+        if (bhLink && profile.social_links.behance) bhLink.href = profile.social_links.behance;
+
+        const inLink = document.getElementById('social-link-linkedin');
+        if (inLink && profile.social_links.linkedin) inLink.href = profile.social_links.linkedin;
+      }
+    } catch (err) {
+      console.warn('Profile loader note:', err);
     }
-  };
+  }
 
-  function initWorksFilter() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
+  // -------------------------------------------------------------
+  // 7. DYNAMIC CREATIVE SERVICES LOADER
+  // -------------------------------------------------------------
+  async function loadServices() {
+    const container = document.getElementById('services-grid-container');
+    if (!container || typeof window.fetchServices !== 'function') return;
 
-    if (!filterButtons.length || !projectCards.length) return;
+    try {
+      const services = await window.fetchServices();
+      const activeServices = services.filter(s => s.is_active !== false);
+
+      if (!activeServices.length) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-12 glass-panel rounded-3xl p-8 border border-theme">
+            <p class="text-sm text-theme-secondary font-medium">Services are currently being updated in the studio.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = activeServices.map((service, index) => {
+        const toolsList = Array.isArray(service.tools) ? service.tools : [];
+        const toolsHtml = toolsList.map(t => `
+          <span class="px-2.5 py-1 rounded-full text-[11px] font-mono font-semibold bg-white/[0.04] text-slate-300 border border-white/10">
+            ${escapeHtml(t)}
+          </span>
+        `).join('');
+
+        return `
+          <div class="glass-panel spotlight-card p-6 sm:p-8 rounded-3xl border border-theme flex flex-col justify-between space-y-5 transition-all duration-300 hover:border-purple-400/40 group">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-2xl">${service.icon || '✦'}</span>
+                <span class="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider">0${index + 1} / ${escapeHtml(service.category || 'Service')}</span>
+              </div>
+              <h3 class="text-xl font-bold text-white tracking-tight group-hover:text-purple-300 transition-colors">
+                ${escapeHtml(service.title)}
+              </h3>
+              <p class="text-sm text-theme-secondary leading-relaxed font-medium">
+                ${escapeHtml(service.description)}
+              </p>
+            </div>
+
+            <div class="space-y-4 pt-3 border-t border-white/5">
+              <div class="flex flex-wrap gap-1.5">
+                ${toolsHtml}
+              </div>
+              <a href="#contact" class="inline-flex items-center gap-1.5 text-xs font-bold text-sky-400 hover:text-white transition-colors">
+                <span>Inquire About ${escapeHtml(service.title)}</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch (err) {
+      console.warn('Services render note:', err);
+    }
+  }
+
+  // -------------------------------------------------------------
+  // 8. DYNAMIC PORTFOLIO PROJECTS LOADER & EMPTY STATE
+  // -------------------------------------------------------------
+  let currentProjects = [];
+  let activeFilter = 'all';
+
+  async function loadPortfolioProjects() {
+    const container = document.getElementById('portfolio-projects-grid');
+    if (!container || typeof window.fetchProjects !== 'function') return;
+
+    try {
+      const allProjects = await window.fetchProjects();
+      currentProjects = allProjects.filter(p => p.is_published !== false);
+
+      renderProjects();
+      initFilterControls();
+    } catch (err) {
+      console.warn('Projects render note:', err);
+    }
+  }
+
+  function renderProjects() {
+    const container = document.getElementById('portfolio-projects-grid');
+    if (!container) return;
+
+    let filtered = currentProjects;
+    if (activeFilter !== 'all') {
+      filtered = currentProjects.filter(p => (p.category || '').toLowerCase() === activeFilter.toLowerCase());
+    }
+
+    // EMPTY STATE: If no projects yet, show clean creative empty state!
+    if (!filtered.length) {
+      container.innerHTML = `
+        <div class="col-span-full glass-panel rounded-3xl p-10 sm:p-14 border border-theme text-center space-y-5 max-w-2xl mx-auto my-6">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-400/20 via-purple-500/20 to-pink-500/20 border border-white/10 flex items-center justify-center mx-auto text-3xl">
+            🎬
+          </div>
+          <div class="space-y-2">
+            <h3 class="text-xl sm:text-2xl font-bold text-white tracking-tight">Creative Vault Updating</h3>
+            <p class="text-sm text-theme-secondary leading-relaxed font-medium">
+              Projects, motion showreels, and graphic designs are currently being curated into this portfolio gallery. 
+              You can connect with Jithin directly to request private work reels or commission custom creative projects.
+            </p>
+          </div>
+          <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+            <a href="#contact" class="btn-primary text-xs py-2.5 px-5 font-bold">
+              <span>Request Work Reel / Inquire</span>
+            </a>
+            <a href="admin.html" class="btn-secondary text-xs py-2.5 px-4 font-bold inline-flex items-center gap-1.5 text-slate-400 hover:text-white">
+              <span>Admin: Add Projects</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            </a>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    // Render Real Projects
+    container.innerHTML = filtered.map(p => {
+      const tools = Array.isArray(p.tools) ? p.tools : [];
+      const toolsPills = tools.map(t => `
+        <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-white/10 text-slate-300 border border-white/10">
+          ${escapeHtml(t)}
+        </span>
+      `).join('');
+
+      const mediaPreview = p.thumbnail_url 
+        ? `<img src="${escapeHtml(p.thumbnail_url)}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />`
+        : `<div class="w-full h-full bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 flex flex-col items-center justify-center p-6 text-center">
+            <span class="text-3xl mb-2">✦</span>
+            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">${escapeHtml(p.category || 'Creative Project')}</span>
+           </div>`;
+
+      return `
+        <div class="project-card glass-panel spotlight-card rounded-3xl overflow-hidden group transition-all duration-300 border border-theme flex flex-col justify-between" data-category="${escapeHtml((p.category || '').toLowerCase())}">
+          <div class="relative h-60 sm:h-64 overflow-hidden bg-black/60 border-b border-theme">
+            ${mediaPreview}
+            <div class="absolute top-4 left-4 z-10">
+              <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-black/70 backdrop-blur-md text-white border border-white/20">
+                ${escapeHtml(p.category || 'Motion Design')}
+              </span>
+            </div>
+          </div>
+
+          <div class="p-6 sm:p-7 space-y-4 flex-1 flex flex-col justify-between">
+            <div class="space-y-2">
+              <h3 class="text-xl font-bold text-white group-hover:text-purple-300 transition-colors">
+                ${escapeHtml(p.title)}
+              </h3>
+              <p class="text-sm text-theme-secondary line-clamp-3 leading-relaxed font-medium">
+                ${escapeHtml(p.description || '')}
+              </p>
+            </div>
+
+            <div class="space-y-4 pt-3 border-t border-white/5">
+              <div class="flex flex-wrap gap-1.5">
+                ${toolsPills}
+              </div>
+
+              <div class="flex items-center justify-between pt-1">
+                <button class="open-project-modal-btn text-xs font-semibold px-4 py-2 rounded-full bg-sky-500/10 hover:bg-sky-500 text-sky-400 hover:text-white border border-sky-400/30 transition-all flex items-center gap-1.5" data-project-id="${escapeHtml(p.id)}">
+                  <span>View Details</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+
+                ${p.project_link ? `
+                  <a href="${escapeHtml(p.project_link)}" target="_blank" rel="noopener noreferrer" class="text-xs font-mono font-bold text-slate-400 hover:text-white transition-colors flex items-center gap-1">
+                    <span>Live Media</span>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                  </a>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    // Attach click handlers to project cards
+    container.querySelectorAll('.open-project-modal-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-project-id');
+        openProjectDetailModal(id);
+      });
+    });
+  }
+
+  function initFilterControls() {
+    const filterButtons = document.querySelectorAll('.portfolio-filter-btn');
+    if (!filterButtons.length) return;
 
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         filterButtons.forEach(b => {
-          b.classList.remove('bg-white', 'text-black', 'border-white');
+          b.classList.remove('bg-white', 'text-black', 'border-white', 'shadow-sm');
           b.classList.add('text-theme-muted', 'border-transparent');
         });
-        btn.classList.add('bg-white', 'text-black', 'border-white');
+        btn.classList.add('bg-white', 'text-black', 'border-white', 'shadow-sm');
         btn.classList.remove('text-theme-muted', 'border-transparent');
 
-        const filter = btn.getAttribute('data-filter');
-
-        projectCards.forEach(card => {
-          const category = card.getAttribute('data-category');
-          if (filter === 'all' || category === filter) {
-            card.style.display = 'block';
-            setTimeout(() => {
-              card.style.opacity = '1';
-              card.style.transform = 'translateY(0)';
-            }, 30);
-          } else {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(16px)';
-            setTimeout(() => {
-              card.style.display = 'none';
-            }, 250);
-          }
-        });
+        activeFilter = btn.getAttribute('data-filter') || 'all';
+        renderProjects();
       });
     });
   }
 
-  function initCaseStudyModal() {
-    const modal = document.getElementById('case-study-modal');
-    const closeBtn = document.getElementById('close-case-study-modal') || document.getElementById('modal-close-btn');
-    const triggerButtons = document.querySelectorAll('.open-case-study-btn, .view-case-study-btn');
+  function openProjectDetailModal(projectId) {
+    const project = currentProjects.find(p => p.id === projectId);
+    if (!project) return;
 
+    const modal = document.getElementById('project-detail-modal');
     if (!modal) return;
 
-    function openModal(projectId) {
-      const data = projectDatabase[projectId] || projectDatabase['zenith-saas'];
-      
-      const titleEl = document.getElementById('modal-project-title');
-      const clientEl = document.getElementById('modal-project-client');
-      const descEl = document.getElementById('modal-project-desc');
-      const metricsEl = document.getElementById('modal-project-metrics');
-      const stackEl = document.getElementById('modal-project-stack');
-      const highlightsEl = document.getElementById('modal-project-highlights');
+    const titleEl = document.getElementById('modal-detail-title');
+    const categoryEl = document.getElementById('modal-detail-category');
+    const descEl = document.getElementById('modal-detail-desc');
+    const toolsContainer = document.getElementById('modal-detail-tools');
+    const mediaContainer = document.getElementById('modal-detail-media');
+    const linkBtn = document.getElementById('modal-detail-link');
 
-      if (titleEl) titleEl.innerText = data.title;
-      if (clientEl) clientEl.innerText = `${data.client} • ${data.role} (${data.timeline})`;
-      if (descEl) descEl.innerText = data.description;
+    if (titleEl) titleEl.textContent = project.title;
+    if (categoryEl) categoryEl.textContent = project.category || 'Creative Project';
+    if (descEl) descEl.textContent = project.description || '';
 
-      if (metricsEl) {
-        metricsEl.innerHTML = data.metrics.map(m => `
-          <div class="p-3 rounded-2xl bg-white/[0.04] border border-white/10 text-center">
-            <div class="text-2xl font-extrabold text-white font-mono">${m.val}</div>
-            <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mt-0.5">${m.label}</div>
-          </div>
-        `).join('');
-      }
-
-      if (stackEl) {
-        stackEl.innerHTML = data.stack.map(s => `
-          <span class="px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-white/[0.05] border border-white/10 text-slate-300">${s}</span>
-        `).join('');
-      }
-
-      if (highlightsEl) {
-        highlightsEl.innerHTML = data.highlights.map(h => `
-          <li class="flex items-start gap-2.5 text-sm text-slate-300">
-            <span class="text-purple-400 mt-0.5 font-bold">✦</span>
-            <span>${h}</span>
-          </li>
-        `).join('');
-      }
-
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
+    if (toolsContainer) {
+      const tools = Array.isArray(project.tools) ? project.tools : [];
+      toolsContainer.innerHTML = tools.map(t => `
+        <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-white/10 text-white border border-white/20">
+          ${escapeHtml(t)}
+        </span>
+      `).join('');
     }
 
-    function closeModal() {
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    triggerButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const projectId = btn.getAttribute('data-project-id');
-        openModal(projectId);
-      });
-    });
-
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('active')) {
-        closeModal();
-      }
-    });
-  }
-
-  // -------------------------------------------------------------
-  // 8. COURSE WAITLIST / ENROLLMENT MODAL
-  // -------------------------------------------------------------
-  function initCourseWaitlistModal() {
-    const modal = document.getElementById('waitlist-modal') || document.getElementById('course-enroll-modal');
-    const closeBtn = document.getElementById('close-waitlist-modal') || document.getElementById('course-modal-close');
-    const triggers = document.querySelectorAll('.open-waitlist-btn, .open-course-modal-btn');
-    const form = document.getElementById('waitlist-form') || document.getElementById('course-waitlist-form');
-
-    if (!modal) return;
-
-    function openModal() {
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    triggers.forEach(btn => btn.addEventListener('click', openModal));
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
-    });
-
-    // Centralized Customer Dispatch Saver for Admin Dashboard
-    function saveAdminDispatch(dispatch) {
-      try {
-        const key = 'admin_dispatches';
-        const existing = JSON.parse(localStorage.getItem(key) || '[]');
-        existing.unshift({
-          id: 'DISP-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-          timestamp: new Date().toISOString(),
-          status: 'Unread',
-          ...dispatch
-        });
-        localStorage.setItem(key, JSON.stringify(existing));
-      } catch (err) {
-        console.warn('Dispatch save note:', err);
-      }
-    }
-
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const emailInput = form.querySelector('input[type="email"]');
-        const focusSelect = form.querySelector('select');
-        if (!emailInput || !emailInput.value.trim()) {
-          showToast('Please provide a valid email address.', '⚠️');
-          return;
+    if (mediaContainer) {
+      if (project.media_url) {
+        if (project.media_type === 'video' || project.media_url.includes('youtube') || project.media_url.includes('vimeo') || project.media_url.endsWith('.mp4')) {
+          mediaContainer.innerHTML = `
+            <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black border border-white/10">
+              <iframe src="${escapeHtml(project.media_url)}" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+            </div>
+          `;
+        } else {
+          mediaContainer.innerHTML = `
+            <img src="${escapeHtml(project.media_url)}" alt="${escapeHtml(project.title)}" class="w-full rounded-2xl max-h-[450px] object-contain border border-white/10 bg-black/50" />
+          `;
         }
-
-        const email = emailInput.value.trim();
-        const focus = focusSelect ? focusSelect.value : 'Frontend Engineer transitioning to Motion/SaaS';
-
-        saveAdminDispatch({
-          type: 'Course Waitlist',
-          name: email.split('@')[0],
-          email: email,
-          budget: 'Student ($390 VIP)',
-          message: `Focus Area: ${focus}. Requested early-bird 40% discount pass & Discord key.`
-        });
-
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const origText = submitBtn.innerText;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span>Adding to VIP Cohort...</span>`;
-
-        setTimeout(() => {
-          submitBtn.disabled = false;
-          submitBtn.innerText = origText;
-          emailInput.value = '';
-          closeModal();
-          showToast('You are on the VIP waitlist! Early access link sent.', '🎓');
-        }, 800);
-      });
+      } else if (project.thumbnail_url) {
+        mediaContainer.innerHTML = `
+          <img src="${escapeHtml(project.thumbnail_url)}" alt="${escapeHtml(project.title)}" class="w-full rounded-2xl max-h-[450px] object-cover border border-white/10" />
+        `;
+      } else {
+        mediaContainer.innerHTML = '';
+      }
     }
+
+    if (linkBtn) {
+      if (project.project_link) {
+        linkBtn.href = project.project_link;
+        linkBtn.classList.remove('hidden');
+      } else {
+        linkBtn.classList.add('hidden');
+      }
+    }
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
 
   // -------------------------------------------------------------
-  // 9. CONTACT FORM INTERACTION & BUDGET SELECTOR
+  // 9. CONTACT FORM DISPATCH & MODALS
   // -------------------------------------------------------------
   function initContactForm() {
-    const form = document.getElementById('portfolio-contact-form') || document.getElementById('contact-form');
-    const budgetChips = document.querySelectorAll('.budget-chip');
-    let selectedBudget = '<$10k';
-
-    function saveAdminDispatch(dispatch) {
-      try {
-        const key = 'admin_dispatches';
-        const existing = JSON.parse(localStorage.getItem(key) || '[]');
-        existing.unshift({
-          id: 'DISP-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-          timestamp: new Date().toISOString(),
-          status: 'Unread',
-          ...dispatch
-        });
-        localStorage.setItem(key, JSON.stringify(existing));
-      } catch (err) {
-        console.warn('Dispatch save note:', err);
-      }
-    }
-
-    budgetChips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        budgetChips.forEach(c => {
-          c.classList.remove('bg-white', 'text-black', 'border-white');
-          c.classList.add('bg-white/[0.04]', 'text-slate-300', 'border-white/10');
-        });
-        chip.classList.add('bg-white', 'text-black', 'border-white');
-        chip.classList.remove('bg-white/[0.04]', 'text-slate-300', 'border-white/10');
-        selectedBudget = chip.getAttribute('data-budget');
-      });
-    });
-
+    const form = document.getElementById('contact-form');
     if (!form) return;
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = form.querySelector('#contact-name')?.value.trim() || form.querySelector('input[type="text"]')?.value.trim();
-      const email = form.querySelector('#contact-email')?.value.trim() || form.querySelector('input[type="email"]')?.value.trim();
-      const message = form.querySelector('#contact-message')?.value.trim() || form.querySelector('textarea')?.value.trim();
+    let selectedBudget = '$1,500 - $3,500';
 
-      if (!name || !email || !message) {
-        showToast('Please fill out all required fields.', '⚠️');
-        return;
-      }
-
-      saveAdminDispatch({
-        type: 'Project Inquiry',
-        name: name,
-        email: email,
-        budget: selectedBudget,
-        message: message
+    const budgetPills = form.querySelectorAll('.budget-pill');
+    budgetPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        budgetPills.forEach(p => {
+          p.classList.remove('border-purple-400', 'bg-purple-500/20', 'text-purple-300');
+          p.classList.add('border-theme', 'bg-theme-card', 'text-theme-secondary');
+        });
+        pill.classList.add('border-purple-400', 'bg-purple-500/20', 'text-purple-300');
+        pill.classList.remove('border-theme', 'bg-theme-card', 'text-theme-secondary');
+        selectedBudget = pill.textContent.trim();
       });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nameInput = document.getElementById('contact-name');
+      const emailInput = document.getElementById('contact-email');
+      const messageInput = document.getElementById('contact-message');
 
       const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `
-        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-black inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-        </svg>
-        <span>Securing connection...</span>
-      `;
+      const originalText = submitBtn ? submitBtn.innerHTML : 'Send Inquiry';
 
-      setTimeout(() => {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-        form.reset();
-        showToast(`Inquiry dispatched successfully! Budget bracket: ${selectedBudget}. Expect a response within 12 hours.`, '🚀');
-      }, 950);
-    });
-  }
-
-  // -------------------------------------------------------------
-  // 10. DISCOVERY CALL CALENDAR SCHEDULER MODAL
-  // -------------------------------------------------------------
-  function initScheduleModal() {
-    const modal = document.getElementById('schedule-modal') || document.getElementById('schedule-meeting-modal');
-    const closeBtn = document.getElementById('close-schedule-modal') || document.getElementById('schedule-modal-close');
-    const openButtons = document.querySelectorAll('.open-schedule-btn, .open-meeting-modal-btn');
-    const timeSlots = document.querySelectorAll('.schedule-slot-btn, .time-slot-btn');
-    const confirmBtn = document.getElementById('confirm-schedule-btn') || document.getElementById('schedule-confirm-btn');
-
-    let selectedSlot = null;
-
-    function saveAdminDispatch(dispatch) {
-      try {
-        const key = 'admin_dispatches';
-        const existing = JSON.parse(localStorage.getItem(key) || '[]');
-        existing.unshift({
-          id: 'DISP-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
-          timestamp: new Date().toISOString(),
-          status: 'Confirmed',
-          ...dispatch
-        });
-        localStorage.setItem(key, JSON.stringify(existing));
-      } catch (err) {
-        console.warn('Dispatch save note:', err);
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>Dispatching...</span>`;
       }
-    }
 
-    if (!modal) return;
+      const dispatch = {
+        id: 'disp-' + Date.now(),
+        type: 'Project Inquiry',
+        name: nameInput ? nameInput.value.trim() : 'Anonymous',
+        email: emailInput ? emailInput.value.trim() : 'no-email',
+        budget: selectedBudget,
+        message: messageInput ? messageInput.value.trim() : '',
+        status: 'Unread',
+        timestamp: new Date().toISOString()
+      };
 
-    function openScheduleModal() {
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeScheduleModal() {
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    openButtons.forEach(btn => btn.addEventListener('click', openScheduleModal));
-    if (closeBtn) closeBtn.addEventListener('click', closeScheduleModal);
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeScheduleModal();
-    });
-
-    timeSlots.forEach(slot => {
-      slot.addEventListener('click', () => {
-        timeSlots.forEach(s => {
-          s.classList.remove('bg-white', 'text-black', 'border-white');
-          s.classList.add('bg-white/[0.04]', 'text-slate-300', 'border-white/10');
-        });
-        slot.classList.add('bg-white', 'text-black', 'border-white');
-        slot.classList.remove('bg-white/[0.04]', 'text-slate-300', 'border-white/10');
-        selectedSlot = slot.getAttribute('data-slot') || slot.innerText.trim();
-      });
-    });
-
-    if (confirmBtn) {
-      confirmBtn.addEventListener('click', () => {
-        if (!selectedSlot) {
-          showToast('Please pick an available time slot first.', '⏱️');
-          return;
+      try {
+        if (typeof window.syncDispatchToSupabase === 'function') {
+          await window.syncDispatchToSupabase(dispatch);
+        } else {
+          const local = JSON.parse(localStorage.getItem('ft_jithin_dispatches') || '[]');
+          local.unshift(dispatch);
+          localStorage.setItem('ft_jithin_dispatches', JSON.stringify(local));
         }
 
-        saveAdminDispatch({
-          type: '1:1 Discovery Call',
-          name: 'Consultation Booker',
-          email: 'client-pending-confirmation@meeting.app',
-          budget: 'Advisory Call',
-          message: `15-Min Strategy Consultation reserved for: ${selectedSlot}. Google Meet room generated.`
-        });
+        showToast('Inquiry dispatched successfully! Jithin will respond promptly.', '✦');
+        form.reset();
+      } catch (err) {
+        showToast('Inquiry recorded locally. Thank you!', '✓');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      }
+    });
 
-        closeScheduleModal();
-        showToast(`Discovery session confirmed for ${selectedSlot}! Calendar invite dispatched.`, '📅');
+    // Copy Email handler
+    const copyBtns = document.querySelectorAll('.copy-email-btn');
+    copyBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const email = btn.getAttribute('data-email') || 'contact@ftjithindesignz.com';
+        navigator.clipboard.writeText(email).then(() => {
+          showToast(`Copied ${email} to clipboard!`, '📋');
+        }).catch(() => {
+          showToast(`Email: ${email}`, '📧');
+        });
+      });
+    });
+  }
+
+  // -------------------------------------------------------------
+  // 10. MODALS HANDLING (Project, Discovery Call, Mobile Menu)
+  // -------------------------------------------------------------
+  function initModals() {
+    // Project detail modal
+    const projectModal = document.getElementById('project-detail-modal');
+    const closeProjectModalBtn = document.getElementById('close-project-modal-btn');
+    if (closeProjectModalBtn && projectModal) {
+      closeProjectModalBtn.addEventListener('click', () => {
+        projectModal.classList.remove('active');
+        document.body.style.overflow = '';
       });
     }
-  }
 
-  // -------------------------------------------------------------
-  // 11. LIVE FOOTER CLOCK
-  // -------------------------------------------------------------
-  function initLiveClock() {
-    const clockEl = document.getElementById('live-clock');
-    if (!clockEl) return;
+    // Discovery call modal
+    const scheduleModal = document.getElementById('schedule-meeting-modal');
+    const openScheduleBtns = document.querySelectorAll('.open-schedule-btn');
+    const closeScheduleBtn = document.getElementById('schedule-modal-close');
+    const confirmBookingBtn = document.getElementById('confirm-booking-btn');
 
-    function update() {
-      const now = new Date();
-      clockEl.innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    openScheduleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (scheduleModal) {
+          scheduleModal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      });
+    });
+
+    if (closeScheduleBtn && scheduleModal) {
+      closeScheduleBtn.addEventListener('click', () => {
+        scheduleModal.classList.remove('active');
+        document.body.style.overflow = '';
+      });
     }
-    update();
-    setInterval(update, 1000);
-  }
 
-  // -------------------------------------------------------------
-  // 12. MOBILE NAVIGATION DRAWER
-  // -------------------------------------------------------------
-  function initMobileMenu() {
-    const menuBtn = document.getElementById('mobile-menu-btn');
+    if (confirmBookingBtn) {
+      confirmBookingBtn.addEventListener('click', async () => {
+        const activeSlot = document.querySelector('.time-slot-btn.selected');
+        const slotText = activeSlot ? activeSlot.textContent.trim() : 'Project Consultation Call';
+
+        const dispatch = {
+          id: 'call-' + Date.now(),
+          type: 'Consultation Booking',
+          name: 'Consultation Request',
+          email: 'Pending Confirmation',
+          budget: 'Briefing Session',
+          message: `Scheduled Slot: ${slotText}`,
+          status: 'Unread',
+          timestamp: new Date().toISOString()
+        };
+
+        if (typeof window.syncDispatchToSupabase === 'function') {
+          await window.syncDispatchToSupabase(dispatch);
+        }
+
+        if (scheduleModal) scheduleModal.classList.remove('active');
+        document.body.style.overflow = '';
+        showToast(`Consultation slot requested: ${slotText}`, '📅');
+      });
+    }
+
+    // Time slot selection
+    const timeSlotBtns = document.querySelectorAll('.time-slot-btn');
+    timeSlotBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        timeSlotBtns.forEach(b => {
+          b.classList.remove('selected', 'border-purple-400', 'bg-purple-500/20', 'text-white');
+          b.classList.add('border-theme', 'bg-theme-card', 'text-theme-secondary');
+        });
+        btn.classList.add('selected', 'border-purple-400', 'bg-purple-500/20', 'text-white');
+        btn.classList.remove('border-theme', 'bg-theme-card', 'text-theme-secondary');
+      });
+    });
+
+    // Close on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+
+    // Mobile Hamburger
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileDrawer = document.getElementById('mobile-drawer');
     const mobileLinks = document.querySelectorAll('.mobile-nav-link');
 
-    if (!menuBtn || !mobileDrawer) return;
-
-    menuBtn.addEventListener('click', () => {
-      const isOpen = mobileDrawer.classList.contains('active');
-      if (isOpen) {
-        mobileDrawer.classList.remove('active');
-        document.body.style.overflow = '';
-      } else {
-        mobileDrawer.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-    });
-
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        mobileDrawer.classList.remove('active');
-        document.body.style.overflow = '';
+    if (mobileMenuBtn && mobileDrawer) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileDrawer.classList.toggle('active');
       });
-    });
+
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileDrawer.classList.remove('active');
+        });
+      });
+    }
+
+    // Live Clock in footer
+    const clock = document.getElementById('live-clock');
+    if (clock) {
+      const updateClock = () => {
+        const now = new Date();
+        clock.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      };
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
   }
 
   // -------------------------------------------------------------
-  // 13. INITIALIZATION ON DOM READY
+  // UTILITY HELPERS
   // -------------------------------------------------------------
-  document.addEventListener('DOMContentLoaded', () => {
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // -------------------------------------------------------------
+  // INITIALIZATION ON DOM READY
+  // -------------------------------------------------------------
+  function initAll() {
     initScrollProgressBar();
     initKineticTextRotator();
     initScrollReveals();
-    initAppleScrollText();
-    initSaaSDemoWidget();
-    initWorksFilter();
-    initCaseStudyModal();
-    initCourseWaitlistModal();
+    initAppleScrollScrub();
+    loadSiteProfile();
+    loadServices();
+    loadPortfolioProjects();
     initContactForm();
-    initScheduleModal();
-    initLiveClock();
-    initMobileMenu();
+    initModals();
+  }
 
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        const targetId = this.getAttribute('href');
-        if (targetId === '#' || targetId === '') return;
-        const target = document.querySelector(targetId);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      });
-    });
-  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
 
 })();

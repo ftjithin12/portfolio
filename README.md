@@ -1,73 +1,78 @@
-# Modern Apple-Grade SaaS Portfolio, Course LMS & Admin Suite
+# FT JITHIN DESIGNZ — Personal Portfolio & Creative Studio
 
-A minimal, ultra-modern portfolio website engineered with Apple-inspired kinetic typography, SaaS interactive animations, a dedicated Course LMS interface, and a secure Admin Command Center with Supabase integration.
+The official personal portfolio of **Jithin** (**FT JITHIN DESIGNZ**) — Motion Designer, Graphic Designer, Video Editor, Visual Storyteller, and Creative Digital Artist.
 
----
-
-## ✦ Key Features
-
-1. **Apple-Style Text Animation & Kinetic Typography**
-   - Live kinetic rotator cycling through core competencies with smooth Apple-style ease.
-   - Luminous scroll-scrubbed text reveal that dynamically illuminates words as the user scrolls.
-
-2. **Refined Black & White Aesthetic with Light Minimal RGB**
-   - Modern charcoal obsidian zinc backdrop (`#0c0e14`, avoiding harsh `#000000`).
-   - High-contrast pure white and cool silver typography.
-   - Light minimal RGB spectrum accents on the top scroll progress bar, status pill, and interactive buttons.
-
-3. **SaaS Dashboard Interactive Showcase (Hero Section)**
-   - Grounded, rock-solid telemetry showcase (zero 3D tilt/wobble for maximum elegance).
-   - Live interactive metric tabs (*Overview*, *Analytics*, *Retention*).
-   - Dynamic bar chart simulation responding to user interaction.
-
-4. **Dedicated Course LMS Interface (`course.html`)**
-   - Video player with play/pause, timeline scrubber, and speed controls.
-   - Interactive curriculum checklist with completion progress calculations.
-   - Persistent student notepad saved locally.
-   - Real-time synchronization with the Admin Studio.
-
-5. **Restricted Admin Command Suite (`admin.html`)**
-   - Protected by passkey authentication gate (Default PIN: `2026`) and Touch ID simulation.
-   - **Course Studio**: Author new courses and lessons that publish directly to the student LMS.
-   - **Customer Dispatches CRM**: Real-time inbox capturing all project inquiries, 1:1 discovery calls, and course waitlist signups.
-   - 1-click **Export to CSV** for customer leads.
-
-6. **Full Supabase Integration**
-   - Complete Next.js server/client/middleware helpers in `utils/supabase/`.
-   - Client-side connector in `assets/js/supabase.js`.
-   - Environment configuration in `.env.local`.
+> **Main Tagline**: *"Turning Ideas Into Visual Experiences."*
 
 ---
 
-## ✦ How to Run & View
+## ✦ Creative Core & Identity
 
-You can open the website in any browser directly without needing build tools:
-
-- Open `index.html` to view the flagship portfolio.
-- Open `course.html` to view the Course LMS.
-- Open `admin.html` to access the Admin Command Suite (PIN: `2026`).
+- **Designer**: Jithin
+- **Brand**: FT JITHIN DESIGNZ
+- **Disciplines**:
+  - **Motion Graphics**: Kinetic typography, title sequences, 2D/3D animated identities.
+  - **Graphic Design**: Typographic systems, visual identities, key visual compositions.
+  - **Video Editing**: Narrative pacing, scene transitions, and audio sync.
+  - **Poster Design**: Artistic print & digital poster art, expressive layout typography.
+  - **Social Media Creatives**: High-impact reels, motion teasers, and campaign assets.
+  - **Visual Branding**: Cohesive brand identity systems and design language.
+- **Production Toolkit**:
+  - Adobe Photoshop
+  - Adobe After Effects
+  - Adobe Premiere Pro
+  - DaVinci Resolve
 
 ---
 
-## ✦ File Structure
+## ✦ Key Architectural Features
 
-```
-├── index.html          # Main Apple-style portfolio
-├── about.html          # Dedicated About page
-├── works.html          # Dedicated Works gallery
-├── course.html         # Dedicated Course LMS Learning Interface
-├── contact.html        # Dedicated Contact page
-├── admin.html          # Secure Admin Command Suite
-├── page.tsx            # Supabase Server Component
-├── .env.local          # Supabase environment variables
-├── utils/supabase/     # Server, client, and middleware helpers
-├── assets/
-│   ├── css/
-│   │   └── style.css   # Kinetic typography, obsidian theme, progress bar
-│   └── js/
-│       ├── main.js     # Kinetic rotator, modals, scroll tracking
-│       ├── course.js   # LMS player, curriculum accordion
-│       ├── admin.js    # Passkey auth, course builder, dispatches CRM
-│       └── supabase.js # Supabase database connector
-└── README.md           # Documentation
-```
+1. **Dynamic Portfolio Engine Connected to Supabase**
+   - Public Works gallery rendered dynamically from Supabase / LocalStorage.
+   - Filter by discipline (*Motion Graphics*, *Graphic Design*, *Video Editing*, *Poster Design*, etc.).
+   - Clean, elegant empty state when no projects are published yet (zero invented fake projects).
+   - High-fidelity project detail modal supporting image showcases, video embeds, software tags, and live external links.
+
+2. **Apple-Style Kinetic Typography & Scroll-Scrubbed Text**
+   - Live hardware-accelerated kinetic rotator cycling through Jithin's creative disciplines.
+   - Scroll-scrubbed contrast reveal illuminating Jithin's creative manifesto.
+
+3. **Premium Dark Obsidian Aesthetic with Minimal Light RGB**
+   - Modern charcoal obsidian zinc backdrop (`#0c0e14`, avoiding pitch black).
+   - Subtle RGB spectrum borders and ambient glows.
+   - 100% accessible typography with modern typography stack (`Plus Jakarta Sans` & `JetBrains Mono`).
+
+4. **Comprehensive Admin Command Suite (`admin.html`)**
+   - Master Passkey Protection (Default PIN: `2026`) with Touch ID simulation.
+   - **Portfolio Projects Manager**: Add, edit, delete, publish/unpublish projects with thumbnails, video/image media, and tools used.
+   - **Creative Services Manager**: Edit titles, descriptions, tools, and toggle active status for the 6 creative disciplines.
+   - **Profile & Bio Manager**: Manage Brand Name, Tagline, Short Bio, Full Biography, and Skills.
+   - **Contact & Socials Settings**: Editable contact email, phone, location placeholders, and social links (Instagram, YouTube, Behance).
+   - **SEO Metadata**: Manage page title and meta description.
+   - **Customer Dispatches CRM**: Filter, review, mark replied, and export client inquiries as timestamped CSV files.
+
+5. **Dual-Layer Persistence**
+   - Writes immediately to `localStorage` and asynchronously syncs to Supabase Postgres cloud tables.
+   - Operates seamlessly both online and offline.
+
+---
+
+## ✦ Supabase Database Schema
+
+Run `supabase-schema.sql` in your [Supabase SQL Editor](https://supabase.com/dashboard/project/pbgwnzutcypnkjdcmkes/sql) to provision:
+- `public.dispatches`: Client inquiries and consultation bookings.
+- `public.projects`: Dynamic portfolio projects with tools and media.
+- `public.services`: Core creative disciplines with active toggle.
+- `public.site_profile`: Brand profile, bio, contact details, and SEO.
+- `public.courses`: Studio learning modules and video lessons.
+
+---
+
+## ✦ Quick Start
+
+Open in any modern web browser:
+- `index.html`: Flagship portfolio for FT JITHIN DESIGNZ.
+- `about.html`: Authentic biography, creative tenets, and software toolkit.
+- `works.html`: Dedicated portfolio archive and category filters.
+- `contact.html`: Project inquiry channel and consultation booking.
+- `admin.html`: Admin Command Suite (Master PIN: `2026`).

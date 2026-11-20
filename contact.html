@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact & Advisory • Alexander Thorne | Design Engineer</title>
-  <meta name="description" content="Initiate a project discussion, book a 15-minute discovery consultation, or inquire about course access." />
+  <title>Contact &amp; Commissions • FT JITHIN DESIGNZ | Creative Inquiries</title>
+  <meta name="description" content="Get in touch with Jithin for motion graphics, graphic design, video editing, and visual storytelling commissions." />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -30,9 +30,9 @@
   <!-- Top Scroll Progress Bar -->
   <div id="scroll-progress-bar"></div>
 
-  <!-- Ambient Glow (Subtle Minimal RGB) -->
-  <div class="ambient-glow bg-sky-400/12 w-[500px] h-[500px] -top-32 -left-32"></div>
-  <div class="ambient-glow bg-purple-500/12 w-[600px] h-[600px] top-[40%] -right-40"></div>
+  <!-- Ambient Glow -->
+  <div class="ambient-glow bg-purple-500/12 w-[550px] h-[550px] -top-32 -left-32"></div>
+  <div class="ambient-glow bg-sky-400/12 w-[600px] h-[600px] top-[40%] -right-40"></div>
 
   <!-- Background Grid Overlay -->
   <div class="bg-grid-overlay"></div>
@@ -47,7 +47,7 @@
           </div>
         </div>
         <span class="font-bold text-sm tracking-tight text-white group-hover:opacity-80 transition-opacity">
-          ALEXANDER <span class="text-slate-400 font-mono text-xs">/ DE</span>
+          FT JITHIN <span class="text-slate-400 font-mono text-xs">/ DESIGNZ</span>
         </span>
       </a>
 
@@ -55,14 +55,12 @@
         <a href="index.html" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">Home</a>
         <a href="about.html" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">About</a>
         <a href="works.html" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">Works</a>
-        <a href="course.html" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">My Course</a>
         <a href="contact.html" class="px-3.5 py-1.5 rounded-full bg-white/[0.08] text-white font-bold transition-all">Contact</a>
       </nav>
 
       <div class="flex items-center gap-2.5">
-        <a href="course.html" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 backdrop-blur-md transition-all">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>Course Interface</span>
+        <a href="index.html" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 backdrop-blur-md transition-all">
+          <span>Back to Portfolio</span>
         </a>
       </div>
     </div>
@@ -72,30 +70,55 @@
 
     <!-- Page Header -->
     <div class="text-center space-y-4 max-w-2xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-sky-400 bg-sky-500/10 border border-sky-500/20">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/20">
         <span>Direct Communication</span>
       </div>
       <h1 class="text-4xl sm:text-6xl font-extrabold text-theme-primary tracking-tight leading-tight">
-        Let’s start a <span class="text-gradient">conversation.</span>
+        Let’s start a <span class="text-gradient">creative project.</span>
       </h1>
       <p class="text-theme-secondary text-sm sm:text-base leading-relaxed font-medium">
-        Whether you are planning a high-impact SaaS product launch, re-architecting your motion system, or seeking course guidance — reach out below.
+        Whether you need high-impact motion graphics, a striking poster design, cinematic video editing, or visual branding — reach out below.
       </p>
+    </div>
+
+    <!-- Contact Info Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="p-5 rounded-2xl glass-panel border border-theme space-y-1">
+        <span class="text-xs font-mono font-bold text-slate-400 uppercase">Studio Email</span>
+        <div class="text-sm font-bold text-white">
+          <a id="contact-email-display" href="mailto:contact@ftjithindesignz.com" class="hover:text-purple-300 transition-colors">
+            contact@ftjithindesignz.com
+          </a>
+        </div>
+      </div>
+
+      <div class="p-5 rounded-2xl glass-panel border border-theme space-y-1">
+        <span class="text-xs font-mono font-bold text-slate-400 uppercase">Specialization</span>
+        <div class="text-sm font-bold text-white">Motion, Video &amp; Graphics</div>
+      </div>
+
+      <div class="p-5 rounded-2xl glass-panel border border-theme space-y-1">
+        <span class="text-xs font-mono font-bold text-slate-400 uppercase">Availability</span>
+        <div class="text-sm font-bold text-emerald-400 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Open for Commissions</span>
+        </div>
+      </div>
     </div>
 
     <!-- Contact Form Container -->
     <div class="glass-panel spotlight-card rounded-3xl p-8 sm:p-12 border border-theme shadow-2xl">
       <form id="contact-form" class="space-y-6">
 
-        <!-- Budget Selector -->
+        <!-- Budget / Scope Selector -->
         <div class="space-y-2.5">
-          <label class="block text-xs font-bold uppercase tracking-wider text-theme-muted">Project Scope / Budget Range</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-theme-muted">Project Scope / Estimated Investment</label>
           <div class="flex flex-wrap gap-2.5">
-            <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">&lt; $5k</button>
-            <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-sky-400 bg-sky-500/20 text-sky-400 transition-all">$5k - $15k</button>
-            <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">$15k - $30k</button>
-            <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">$30k+</button>
-            <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">Course Inquiry</button>
+            <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-purple-400 transition-all">$500 - $1,500</button>
+            <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-purple-400 bg-purple-500/20 text-purple-300 transition-all">$1,500 - $3,500</button>
+            <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-purple-400 transition-all">$3,500 - $7,500</button>
+            <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-purple-400 transition-all">$7,500+</button>
+            <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-purple-400 transition-all">Custom Scope</button>
           </div>
         </div>
 
@@ -103,36 +126,36 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div class="space-y-1.5">
             <label for="contact-name" class="block text-xs font-semibold text-theme-primary">Full Name *</label>
-            <input type="text" id="contact-name" required placeholder="Elena Rostova" 
+            <input type="text" id="contact-name" required placeholder="Your full name" 
               class="w-full px-4 py-3 rounded-xl border text-sm font-medium" />
           </div>
           <div class="space-y-1.5">
             <label for="contact-email" class="block text-xs font-semibold text-theme-primary">Email Address *</label>
-            <input type="email" id="contact-email" required placeholder="elena@company.com" 
+            <input type="email" id="contact-email" required placeholder="your-email@example.com" 
               class="w-full px-4 py-3 rounded-xl border text-sm font-medium" />
           </div>
         </div>
 
         <!-- Message Area -->
         <div class="space-y-1.5">
-          <label for="contact-message" class="block text-xs font-semibold text-theme-primary">Tell me about your vision & requirements *</label>
-          <textarea id="contact-message" rows="5" required placeholder="What are your goals, timeline, and key challenges?" 
+          <label for="contact-message" class="block text-xs font-semibold text-theme-primary">Project Details &amp; Objectives *</label>
+          <textarea id="contact-message" rows="5" required placeholder="Describe your creative requirements, motion animation idea, video deliverables, and timeline..." 
             class="w-full px-4 py-3 rounded-xl border text-sm font-medium resize-none"></textarea>
         </div>
 
-        <!-- Form Actions -->
+        <!-- Submit and Copy Actions -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
           <button type="submit" class="btn-primary w-full sm:w-auto">
-            <span>Send Direct Message</span>
+            <span>Dispatch Inquiry</span>
             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
           </button>
 
           <div class="flex items-center gap-3">
-            <button type="button" class="copy-email-btn px-4 py-2.5 rounded-full border border-theme bg-theme-card hover:bg-theme-card-hover text-xs font-mono font-semibold text-theme-secondary transition-all flex items-center gap-2" data-email="alexander@designengineer.io">
+            <button type="button" class="copy-email-btn px-4 py-2.5 rounded-full border border-theme bg-theme-card hover:bg-theme-card-hover text-xs font-mono font-semibold text-theme-secondary transition-all flex items-center gap-2" data-email="contact@ftjithindesignz.com">
               <span>📋 Copy Email</span>
             </button>
             <button type="button" class="open-schedule-btn px-4 py-2.5 rounded-full border border-theme bg-theme-card hover:bg-theme-card-hover text-xs font-semibold text-theme-secondary transition-all">
-              📅 Book Discovery Slot
+              📅 Book Consultation
             </button>
           </div>
         </div>
@@ -140,89 +163,59 @@
       </form>
     </div>
 
-    <!-- Frequently Asked Questions Accordion -->
-    <div class="space-y-6 pt-8">
-      <div class="text-center space-y-2">
-        <h2 class="text-2xl font-bold text-theme-primary">Frequently Asked Questions</h2>
-        <p class="text-xs text-theme-muted font-semibold">Everything you need to know about working together or taking the course.</p>
-      </div>
-
-      <div class="space-y-3">
-        <details class="glass-panel p-5 rounded-2xl group transition-all cursor-pointer">
-          <summary class="font-bold text-sm text-theme-primary list-none flex items-center justify-between">
-            <span>What does a typical project engagement look like?</span>
-            <span class="text-sky-400 transition-transform group-open:rotate-180">↓</span>
-          </summary>
-          <p class="text-xs text-theme-secondary mt-3 leading-relaxed font-medium">
-            Most engagements span 4 to 8 weeks. We begin with a deep dive into user flows and technical constraints, iterate rapidly through high-fidelity prototypes and motion studies, and deliver production-ready code with automated tests and documentation.
-          </p>
-        </details>
-
-        <details class="glass-panel p-5 rounded-2xl group transition-all cursor-pointer">
-          <summary class="font-bold text-sm text-theme-primary list-none flex items-center justify-between">
-            <span>How do I access the course learning platform?</span>
-            <span class="text-sky-400 transition-transform group-open:rotate-180">↓</span>
-          </summary>
-          <p class="text-xs text-theme-secondary mt-3 leading-relaxed font-medium">
-            You can preview the live LMS interface anytime using the <a href="course.html" class="text-sky-400 underline font-bold">Course Interface</a> link. You can track progress, take interactive lecture notes, and even test the custom Curriculum Builder to add your own modules.
-          </p>
-        </details>
-
-        <details class="glass-panel p-5 rounded-2xl group transition-all cursor-pointer">
-          <summary class="font-bold text-sm text-theme-primary list-none flex items-center justify-between">
-            <span>Do you offer fractional advisory for engineering teams?</span>
-            <span class="text-sky-400 transition-transform group-open:rotate-180">↓</span>
-          </summary>
-          <p class="text-xs text-theme-secondary mt-3 leading-relaxed font-medium">
-            Yes. I frequently partner with seed to Series B leadership on a retainer basis to conduct frontend architecture reviews, optimize frame-budget performance, and guide design system migrations.
-          </p>
-        </details>
-      </div>
-    </div>
-
   </main>
 
-  <!-- Meeting Booking Modal -->
+  <!-- Consultation Modal -->
   <div id="schedule-meeting-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
     <div class="modal-content rounded-3xl max-w-md w-full p-6 sm:p-8 relative space-y-5">
       <div class="flex items-center justify-between border-b border-theme pb-3">
         <div>
-          <span class="text-xs font-mono font-bold text-sky-400">1:1 Consultation</span>
-          <h3 class="text-lg font-bold text-theme-primary mt-0.5">Book 15-Min Discovery Call</h3>
+          <span class="text-xs font-mono font-bold text-purple-400">Creative Consultation</span>
+          <h3 class="text-lg font-bold text-theme-primary mt-0.5">Book Project Briefing Call</h3>
         </div>
         <button id="schedule-modal-close" class="w-8 h-8 rounded-full bg-theme-card border border-theme text-theme-muted hover:text-theme-primary flex items-center justify-center text-lg">✕</button>
       </div>
 
-      <p class="text-xs text-theme-secondary font-medium">Select an open slot to review project requirements, motion scope, or advisory.</p>
+      <p class="text-xs text-theme-secondary font-medium">Select a slot to discuss project scope, animation storyboard, video requirements, or timeline.</p>
 
       <div class="space-y-2">
-        <span class="text-xs font-mono font-bold text-theme-muted">Available Slots (This Week)</span>
+        <span class="text-xs font-mono font-bold text-theme-muted">Available Consultation Slots</span>
         <div class="grid grid-cols-2 gap-2">
-          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">Wed • 2:00 PM EST</button>
-          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">Wed • 4:30 PM EST</button>
-          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">Thu • 11:00 AM EST</button>
-          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">Thu • 3:15 PM EST</button>
+          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-purple-400 transition-all">Wed • 2:00 PM</button>
+          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-purple-400 transition-all">Wed • 4:30 PM</button>
+          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-purple-400 transition-all">Thu • 11:00 AM</button>
+          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-purple-400 transition-all">Thu • 3:30 PM</button>
         </div>
       </div>
 
       <button id="confirm-booking-btn" class="btn-primary w-full py-2.5 text-xs font-bold mt-2">
-        Confirm Video Appointment
+        Confirm Consultation Request
       </button>
     </div>
   </div>
 
-  <footer class="border-t border-theme py-8 px-6 text-center text-xs text-theme-muted font-mono font-semibold flex flex-col sm:flex-row items-center justify-between max-w-4xl mx-auto gap-4">
-    <div>© 2026 Alexander Thorne • Inquiries &amp; Advisory</div>
-    <div>
-      <a href="admin.html" class="inline-flex items-center gap-1 text-slate-500 hover:text-white transition-colors">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-        <span>Admin Suite</span>
-      </a>
+  <!-- Toast Container -->
+  <div id="toast"></div>
+
+  <!-- Footer -->
+  <footer class="border-t border-theme py-12 px-6 bg-theme-nav relative z-10">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-4">
+        <span class="text-sm font-bold text-white">FT JITHIN DESIGNZ</span>
+        <span class="text-theme-muted">|</span>
+        <span class="text-xs font-mono text-slate-400">Inquiries &amp; Commissions</span>
+      </div>
+      <div class="flex items-center gap-4 text-xs font-semibold text-slate-400">
+        <a href="index.html" class="hover:text-white transition-colors">Home</a>
+        <a href="about.html" class="hover:text-white transition-colors">About</a>
+        <a href="works.html" class="hover:text-white transition-colors">Works</a>
+        <a href="contact.html" class="text-white">Contact</a>
+        <a href="admin.html" class="hover:text-white text-slate-600 transition-colors">Admin</a>
+      </div>
     </div>
   </footer>
 
-  <div id="toast"></div>
-  <!-- Supabase Client -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="assets/js/supabase.js"></script>
   <script src="assets/js/main.js"></script>
