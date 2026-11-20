@@ -271,6 +271,14 @@
         const inLink = document.getElementById('social-link-linkedin');
         if (inLink && profile.social_links.linkedin) inLink.href = profile.social_links.linkedin;
       }
+
+      // Sync public courses visibility setting from cloud profile
+      if (profile.courses_visible !== undefined) {
+        localStorage.setItem('ft_jithin_courses_visible', profile.courses_visible ? 'true' : 'false');
+        if (typeof applyCoursesVisibility === 'function') {
+          applyCoursesVisibility();
+        }
+      }
     } catch (err) {
       console.warn('Profile loader note:', err);
     }
@@ -766,6 +774,44 @@
   }
 
   // -------------------------------------------------------------
+  // 10. DYNAMIC COURSES PAGE VISIBILITY CONTROLLER
+  // -------------------------------------------------------------
+  let applyCoursesVisibility = null;
+
+  function initCoursesVisibility() {
+    applyCoursesVisibility = function() {
+      const isVisible = localStorage.getItem('ft_jithin_courses_visible') === 'true';
+      const courseSection = document.getElementById('course');
+      const navItems = document.querySelectorAll('.courses-nav-item');
+
+      if (courseSection) {
+        if (isVisible) {
+          courseSection.classList.remove('hidden');
+        } else {
+          courseSection.classList.add('hidden');
+        }
+      }
+
+      navItems.forEach(item => {
+        if (isVisible) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    };
+
+    applyCoursesVisibility();
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'ft_jithin_courses_visible') {
+        if (typeof applyCoursesVisibility === 'function') {
+          applyCoursesVisibility();
+        }
+      }
+    });
+  }
+
+  // -------------------------------------------------------------
   // UTILITY HELPERS
   // -------------------------------------------------------------
   function escapeHtml(str) {
@@ -787,6 +833,7 @@
     initScrollReveals();
     initAppleScrollScrub();
     initAnalyticsWidget();
+    initCoursesVisibility();
     loadSiteProfile();
     loadServices();
     loadPortfolioProjects();

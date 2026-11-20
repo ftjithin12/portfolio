@@ -618,6 +618,9 @@
 
   function saveCourseData() {
     localStorage.setItem(STORAGE_LESSONS_KEY, JSON.stringify(allModules));
+    if (typeof window.saveCourseToSupabase === 'function') {
+      window.saveCourseToSupabase(allModules).catch(e => console.info('Course cloud sync note:', e));
+    }
   }
 
   function renderAdminCurriculum() {
@@ -757,7 +760,18 @@
         document.getElementById('edit-lesson-mod-id').value = mod.id;
         document.getElementById('lesson-module-input').value = mod.title;
         document.getElementById('lesson-title-input').value = les.title;
-        document.getElementById('lesson-video-url-input').value = les.videoUrl || '';
+        const videoInput = document.getElementById('lesson-video-url-input');
+        videoInput.value = les.videoUrl || '';
+        
+        const videoPreviewWrap = document.getElementById('lesson-video-preview-wrap');
+        const videoPreviewEl = document.getElementById('lesson-video-preview-el');
+        if (les.videoUrl && videoPreviewWrap && videoPreviewEl && !les.videoUrl.includes('youtube') && !les.videoUrl.includes('vimeo')) {
+          videoPreviewEl.src = les.videoUrl;
+          videoPreviewWrap.classList.remove('hidden');
+        } else if (videoPreviewWrap) {
+          videoPreviewWrap.classList.add('hidden');
+        }
+
         document.getElementById('lesson-duration-input').value = les.duration || '15:00';
         document.getElementById('lesson-description-input').value = les.description || '';
         document.getElementById('lesson-free-preview-input').checked = !!les.isFreePreview;
@@ -779,6 +793,58 @@
   function initAdminLessonForm() {
     const form = document.getElementById('admin-lesson-form');
     const resetBtn = document.getElementById('reset-lesson-form-btn');
+    const videoFileInput = document.getElementById('lesson-video-file-input');
+    const videoUrlInput = document.getElementById('lesson-video-url-input');
+    const videoPreviewWrap = document.getElementById('lesson-video-preview-wrap');
+    const videoPreviewEl = document.getElementById('lesson-video-preview-el');
+    const resFileInput = document.getElementById('lesson-resource-file-input');
+    const resNameInput = document.getElementById('lesson-resource-name-input');
+    const resUrlInput = document.getElementById('lesson-resource-url-input');
+
+    if (videoFileInput) {
+      videoFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            if (videoUrlInput) videoUrlInput.value = event.target.result;
+            if (videoPreviewEl) videoPreviewEl.src = event.target.result;
+            if (videoPreviewWrap) videoPreviewWrap.classList.remove('hidden');
+            showToast('Video file attached successfully!', '🎬');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    if (videoUrlInput) {
+      videoUrlInput.addEventListener('input', () => {
+        const val = videoUrlInput.value.trim();
+        if (val && !val.includes('youtube') && !val.includes('vimeo') && videoPreviewWrap && videoPreviewEl) {
+          videoPreviewEl.src = val;
+          videoPreviewWrap.classList.remove('hidden');
+        } else if (videoPreviewWrap) {
+          videoPreviewWrap.classList.add('hidden');
+        }
+      });
+    }
+
+    if (resFileInput) {
+      resFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          if (resNameInput && !resNameInput.value) {
+            resNameInput.value = file.name;
+          }
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            if (resUrlInput) resUrlInput.value = event.target.result;
+            showToast(`Resource kit "${file.name}" attached!`, '📦');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
 
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
@@ -787,6 +853,8 @@
         document.getElementById('edit-lesson-mod-id').value = '';
         document.getElementById('lesson-form-header').textContent = '+ Add New Video Lesson';
         document.getElementById('save-lesson-btn-text').textContent = '+ Save & Publish Lesson';
+        if (videoPreviewWrap) videoPreviewWrap.classList.add('hidden');
+        if (videoPreviewEl) videoPreviewEl.src = '';
       });
     }
 
@@ -855,6 +923,8 @@
         document.getElementById('edit-lesson-mod-id').value = '';
         document.getElementById('lesson-form-header').textContent = '+ Add New Video Lesson';
         document.getElementById('save-lesson-btn-text').textContent = '+ Save & Publish Lesson';
+        if (videoPreviewWrap) videoPreviewWrap.classList.add('hidden');
+        if (videoPreviewEl) videoPreviewEl.src = '';
 
         showToast('Video lesson saved to Masterclass curriculum!', '✦');
       });
@@ -936,6 +1006,79 @@
         </div>
       `;
     }).join('');
+  }
+
+  // -------------------------------------------------------------
+  // 4.6. PUBLIC COURSES PAGE VISIBILITY TOGGLE (ADMIN KEYBUTTON)
+  // -------------------------------------------------------------
+  const STORAGE_COURSES_VISIBLE_KEY = 'ft_jithin_courses_visible';
+  let updateVisibilityUI = null;
+
+  function initCoursesVisibilityControl() {
+    const toggleBtn = document.getElementById('toggle-courses-visibility-btn');
+    const badge = document.getElementById('courses-visibility-badge');
+    const iconEl = document.getElementById('toggle-courses-visibility-icon');
+    const textEl = document.getElementById('toggle-courses-visibility-text');
+    const overviewChip = document.getElementById('overview-courses-visibility-chip');
+
+    updateVisibilityUI = function(isVisible) {
+      if (badge) {
+        if (isVisible) {
+          badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+          badge.textContent = '● Live & Visible on Website';
+        } else {
+          badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30';
+          badge.textContent = '○ Currently Hidden';
+        }
+      }
+
+      if (toggleBtn && textEl && iconEl) {
+        if (isVisible) {
+          toggleBtn.className = 'px-5 py-2.5 text-xs font-bold shrink-0 flex items-center gap-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 transition-all';
+          iconEl.textContent = '🔒';
+          textEl.textContent = 'Hide Courses Page';
+        } else {
+          toggleBtn.className = 'btn-primary px-5 py-2.5 text-xs font-bold shrink-0 flex items-center gap-2 shadow-lg';
+          iconEl.textContent = '👁️';
+          textEl.textContent = 'Unhide Courses Page';
+        }
+      }
+
+      if (overviewChip) {
+        if (isVisible) {
+          overviewChip.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 ml-2 font-bold';
+          overviewChip.textContent = 'Live';
+        } else {
+          overviewChip.className = 'text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 ml-2 font-bold';
+          overviewChip.textContent = 'Hidden';
+        }
+      }
+    }
+
+    const currentVisible = localStorage.getItem(STORAGE_COURSES_VISIBLE_KEY) === 'true';
+    updateVisibilityUI(currentVisible);
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', async () => {
+        const isNowVisible = localStorage.getItem(STORAGE_COURSES_VISIBLE_KEY) !== 'true';
+        localStorage.setItem(STORAGE_COURSES_VISIBLE_KEY, isNowVisible ? 'true' : 'false');
+        updateVisibilityUI(isNowVisible);
+
+        if (typeof window.saveSiteProfile === 'function') {
+          try {
+            await window.saveSiteProfile({ courses_visible: isNowVisible });
+          } catch (e) {
+            console.warn('Visibility profile sync note:', e);
+          }
+        }
+
+        if (isNowVisible) {
+          showToast('Courses & Masterclass page is now LIVE on website!', '🎓');
+        } else {
+          showToast('Courses page has been hidden from public visitors.', '🔒');
+        }
+      });
+    }
   }
 
   // -------------------------------------------------------------
@@ -1066,6 +1209,14 @@
     const seoDescInput = document.getElementById('seo-desc-input');
     if (seoTitleInput) seoTitleInput.value = siteProfile.seo_title || '';
     if (seoDescInput) seoDescInput.value = siteProfile.seo_description || '';
+
+    // Courses visibility sync
+    if (siteProfile.courses_visible !== undefined) {
+      localStorage.setItem(STORAGE_COURSES_VISIBLE_KEY, siteProfile.courses_visible ? 'true' : 'false');
+      if (typeof updateVisibilityUI === 'function') {
+        updateVisibilityUI(siteProfile.courses_visible);
+      }
+    }
   }
 
   function initProfileForms() {
@@ -1446,6 +1597,7 @@
     initTabs();
     initProjectForm();
     initAdminLessonForm();
+    initCoursesVisibilityControl();
     initProfileForms();
     initDispatchControls();
   }

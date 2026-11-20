@@ -179,8 +179,11 @@
               ▶
             </button>
 
-            <!-- Video Simulation Visual Graphic -->
-            <div class="absolute inset-x-8 top-12 bottom-20 flex flex-col items-center justify-center text-center space-y-3 pointer-events-none">
+            <!-- Real Embedded Video Player (YouTube, Vimeo, MP4, or Local Video) -->
+            <div id="active-video-embed" class="hidden absolute inset-0 z-15 bg-black flex items-center justify-center"></div>
+
+            <!-- Video Simulation Visual Graphic (Fallback when no video stream URL is provided) -->
+            <div id="active-lesson-graphic" class="absolute inset-x-8 top-12 bottom-20 flex flex-col items-center justify-center text-center space-y-3 pointer-events-none">
               <div class="w-16 h-16 rounded-2xl p-[1.5px] bg-gradient-to-tr from-blue-500 via-sky-400 to-purple-500 shadow-xl overflow-hidden">
                 <img src="assets/images/logo.png" alt="FT JITHIN DESIGNZ" class="w-full h-full object-cover rounded-[14px]" />
               </div>

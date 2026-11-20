@@ -136,6 +136,7 @@
   function initCoursePlatform() {
     loadUnlockState();
     loadModules();
+    loadCloudModules();
     renderAccessStatus();
     selectDefaultLesson();
     initVideoPlayer();
@@ -177,8 +178,25 @@
     }
   }
 
+  async function loadCloudModules() {
+    if (typeof window.fetchCoursesFromSupabase === 'function') {
+      try {
+        const cloud = await window.fetchCoursesFromSupabase();
+        if (cloud && Array.isArray(cloud) && cloud.length > 0) {
+          modules = cloud;
+          localStorage.setItem(STORAGE_LESSONS_KEY, JSON.stringify(modules));
+          renderCurriculum();
+          updateProgressKPIs();
+        }
+      } catch (e) {}
+    }
+  }
+
   function saveModules() {
     localStorage.setItem(STORAGE_LESSONS_KEY, JSON.stringify(modules));
+    if (typeof window.saveCourseToSupabase === 'function') {
+      window.saveCourseToSupabase(modules).catch(e => console.info('Course cloud sync note:', e));
+    }
   }
 
   // -------------------------------------------------------------
@@ -328,13 +346,56 @@
     }
 
     // Video Player & Controls Display based on accessibility
+    const activeVideoEmbed = document.getElementById('active-video-embed');
+
     if (accessible) {
       if (lockedOverlay) lockedOverlay.classList.add('hidden');
-      if (overlayPlay) overlayPlay.style.display = isPlaying ? 'none' : 'flex';
-      if (videoControls) videoControls.classList.remove('opacity-30', 'pointer-events-none');
+
+      if (currentLesson.videoUrl && currentLesson.videoUrl.trim()) {
+        const url = currentLesson.videoUrl.trim();
+        let embedUrl = url;
+        const isMp4 = url.toLowerCase().endsWith('.mp4') || url.startsWith('data:video/');
+
+        if (url.includes('youtube.com/watch?v=')) {
+          const vid = url.split('v=')[1]?.split('&')[0];
+          embedUrl = vid ? `https://www.youtube.com/embed/${vid}?autoplay=1&enablejsapi=1` : url;
+        } else if (url.includes('youtu.be/')) {
+          const vid = url.split('youtu.be/')[1]?.split('?')[0];
+          embedUrl = vid ? `https://www.youtube.com/embed/${vid}?autoplay=1&enablejsapi=1` : url;
+        } else if (url.includes('vimeo.com/')) {
+          const vid = url.split('vimeo.com/')[1]?.split('?')[0];
+          embedUrl = vid ? `https://player.vimeo.com/video/${vid}?autoplay=1` : url;
+        }
+
+        if (activeVideoEmbed) {
+          if (isMp4) {
+            activeVideoEmbed.innerHTML = `
+              <video id="active-lesson-video-tag" src="${escapeHtml(url)}" controls autoplay class="w-full h-full object-contain"></video>
+            `;
+          } else {
+            activeVideoEmbed.innerHTML = `
+              <iframe src="${escapeHtml(embedUrl)}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            `;
+          }
+          activeVideoEmbed.classList.remove('hidden');
+        }
+        if (overlayPlay) overlayPlay.style.display = 'none';
+        if (videoControls) videoControls.classList.add('hidden');
+      } else {
+        if (activeVideoEmbed) {
+          activeVideoEmbed.innerHTML = '';
+          activeVideoEmbed.classList.add('hidden');
+        }
+        if (overlayPlay) overlayPlay.style.display = isPlaying ? 'none' : 'flex';
+        if (videoControls) videoControls.classList.remove('opacity-30', 'pointer-events-none', 'hidden');
+      }
     } else {
       // Pause playback if running
       pauseVideo();
+      if (activeVideoEmbed) {
+        activeVideoEmbed.innerHTML = '';
+        activeVideoEmbed.classList.add('hidden');
+      }
       if (lockedOverlay) lockedOverlay.classList.remove('hidden');
       if (overlayPlay) overlayPlay.style.display = 'none';
       if (videoControls) videoControls.classList.add('opacity-30', 'pointer-events-none');

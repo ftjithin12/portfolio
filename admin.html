@@ -241,9 +241,12 @@
 
         <div class="p-5 rounded-3xl glass-panel border border-white/10 flex flex-col justify-between space-y-4">
           <div class="space-y-1">
-            <span class="text-xs font-mono font-bold text-sky-400 uppercase">Video Education</span>
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-sky-400 uppercase">Video Education</span>
+              <span id="overview-courses-visibility-chip" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">Hidden</span>
+            </div>
             <h3 class="text-base font-bold text-white">+ Manage Video Courses</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">Add video lessons, modules, set pricing ($49), and manage enrollments.</p>
+            <p class="text-xs text-slate-400 leading-relaxed">Add video lessons, modules, set pricing ($49), and toggle live public visibility.</p>
           </div>
           <button class="admin-nav-tab btn-primary py-2.5 px-4 text-xs font-bold w-full" data-tab="course">
             Open Course Studio →
@@ -475,6 +478,25 @@
             <div id="admin-course-enrollments-count" class="text-2xl font-extrabold text-emerald-400 font-mono">0</div>
           </div>
         </div>
+
+        <!-- Live Website Courses Visibility Keybutton -->
+        <div class="p-5 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 via-indigo-500/10 to-sky-500/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2.5">
+              <span class="text-sm font-bold text-white">Live Website Courses Visibility Key</span>
+              <span id="courses-visibility-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                ○ Currently Hidden
+              </span>
+            </div>
+            <p class="text-xs text-slate-300">
+              Control whether the Masterclass showcase, syllabus, and navigation links appear live on the public website.
+            </p>
+          </div>
+          <button id="toggle-courses-visibility-btn" type="button" class="btn-primary px-5 py-2.5 text-xs font-bold shrink-0 flex items-center gap-2 shadow-lg">
+            <span id="toggle-courses-visibility-icon">👁️</span>
+            <span id="toggle-courses-visibility-text">Unhide Courses Page</span>
+          </button>
+        </div>
       </div>
 
       <!-- Add / Edit Video Lesson Form -->
@@ -523,15 +545,27 @@
               />
             </div>
 
-            <!-- Video Stream / Embed URL -->
+            <!-- Video Stream / Embed URL & File Picker -->
             <div class="space-y-1.5">
-              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Video URL (YouTube / Vimeo / MP4)</label>
-              <input 
-                id="lesson-video-url-input" 
-                type="url" 
-                placeholder="https://www.youtube.com/watch?v=... or direct MP4 link" 
-                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
-              />
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Video URL or File</label>
+              <div class="flex gap-2">
+                <input 
+                  id="lesson-video-url-input" 
+                  type="text" 
+                  placeholder="YouTube, Vimeo, MP4 link, or browse local video" 
+                  class="flex-1 px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+                />
+                <label class="px-3.5 py-2.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold cursor-pointer border border-purple-500/30 flex items-center gap-1 shrink-0 transition-colors">
+                  <span>📁 Browse</span>
+                  <input type="file" id="lesson-video-file-input" accept="video/*" class="hidden" />
+                </label>
+              </div>
+              <p class="text-[11px] text-slate-500">Supports YouTube/Vimeo links, direct video URLs, or uploaded video files.</p>
+              <div id="lesson-video-preview-wrap" class="hidden pt-2">
+                <div class="aspect-video w-full max-w-sm rounded-xl overflow-hidden bg-black border border-white/20">
+                  <video id="lesson-video-preview-el" controls class="w-full h-full object-contain"></video>
+                </div>
+              </div>
             </div>
 
             <!-- Duration -->
@@ -557,15 +591,22 @@
               />
             </div>
 
-            <!-- Downloadable Resource URL -->
+            <!-- Downloadable Resource URL & File Picker -->
             <div class="space-y-1.5">
-              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Resource Download URL</label>
-              <input 
-                id="lesson-resource-url-input" 
-                type="text" 
-                placeholder="https://... or # for simulated file" 
-                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
-              />
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Resource Download URL or File</label>
+              <div class="flex gap-2">
+                <input 
+                  id="lesson-resource-url-input" 
+                  type="text" 
+                  placeholder="https://... or click browse to upload file" 
+                  class="flex-1 px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+                />
+                <label class="px-3.5 py-2.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold cursor-pointer border border-purple-500/30 flex items-center gap-1 shrink-0 transition-colors">
+                  <span>📁 Browse</span>
+                  <input type="file" id="lesson-resource-file-input" class="hidden" />
+                </label>
+              </div>
+              <p class="text-[11px] text-slate-500">Project files, presets, or templates available to students.</p>
             </div>
           </div>
 
