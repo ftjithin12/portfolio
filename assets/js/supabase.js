@@ -33,7 +33,7 @@
     tagline: 'Turning Ideas Into Visual Experiences.',
     short_bio: 'Creative designer specialized in motion graphics, graphic design, visual storytelling, and digital experiences.',
     full_bio: 'I am a creative designer interested in motion graphics, graphic design, visual storytelling, and digital experiences. Working extensively with Adobe Photoshop, Adobe After Effects, Adobe Premiere Pro, and DaVinci Resolve, I bridge artistic imagination and polished technical execution to bring stories to life.',
-    profile_image: '',
+    profile_image: 'assets/images/logo.png',
     email: 'contact@ftjithindesignz.com',
     phone: '+1 (555) 000-0000',
     location: 'Creative Studio',
