@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alexander Thorne • Design Engineer & SaaS Architect</title>
+  <meta name="description" content="Ultra-modern Apple-inspired portfolio featuring kinetic typography, SaaS interactive UI, and specialized curriculum." />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Styles (Curated Black & White with Light Minimal RGB Theme) -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="selection:bg-white selection:text-black">
+
+  <!-- Top Scroll Progress Bar (Minimal RGB Spectrum) -->
+  <div id="scroll-progress-bar"></div>
+
+  <!-- Ambient Glowing Background Elements (Subtle Minimal RGB Glow) -->
+  <div class="ambient-glow bg-sky-400/12 w-[550px] h-[550px] -top-32 -left-32"></div>
+  <div class="ambient-glow bg-purple-500/12 w-[620px] h-[620px] top-[30%] -right-40" style="animation-delay: -5s;"></div>
+  <div class="ambient-glow bg-pink-500/10 w-[580px] h-[580px] top-[65%] -left-36" style="animation-delay: -10s;"></div>
+
+  <!-- Subtle Non-Destructive Background Grid Overlay -->
+  <div class="bg-grid-overlay"></div>
+
+  <!-- Sticky Apple-Style Glass Navbar -->
+  <header class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-4 transition-all duration-300">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-5 py-3 rounded-full border border-theme bg-theme-nav backdrop-blur-xl shadow-xl glass-panel">
+      <!-- Logo / Brand -->
+      <a href="index.html" class="flex items-center gap-2.5 group">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-500 p-[1.5px] transition-transform group-hover:scale-105 shadow-md shadow-white/10">
+          <div class="w-full h-full rounded-full bg-[#12151f] flex items-center justify-center">
+            <span class="text-xs font-bold text-white tracking-wider">✦</span>
+          </div>
+        </div>
+        <span class="font-bold text-sm tracking-tight text-white group-hover:opacity-80 transition-opacity">
+          ALEXANDER <span class="text-slate-400 font-mono text-xs">/ DE</span>
+        </span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-1 text-sm font-semibold text-theme-secondary">
+        <a href="#hero" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">Home</a>
+        <a href="#about" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">About</a>
+        <a href="#works" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">Works</a>
+        <a href="#course" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">My Course</a>
+        <a href="#contact" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">Contact</a>
+      </nav>
+
+      <!-- Right Action Items -->
+      <div class="flex items-center gap-2.5">
+        <!-- Dedicated Course Interface Button -->
+        <a href="course.html" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 backdrop-blur-md transition-all hover:scale-[1.02]">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Course Interface</span>
+          <svg class="w-3.5 h-3.5 ml-0.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </a>
+
+        <!-- Mobile Menu Hamburger -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-full bg-theme-card border border-theme text-theme-primary" aria-label="Open Mobile Menu">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <div id="mobile-drawer" class="fixed inset-0 z-40 bg-theme-nav backdrop-blur-2xl flex flex-col justify-center items-center gap-6 text-xl font-medium transition-all duration-300 opacity-0 pointer-events-none [&.active]:opacity-100 [&.active]:pointer-events-auto">
+    <a href="#hero" class="mobile-nav-link text-theme-primary hover:text-sky-400">Home</a>
+    <a href="#about" class="mobile-nav-link text-theme-primary hover:text-sky-400">About</a>
+    <a href="#works" class="mobile-nav-link text-theme-primary hover:text-sky-400">Works</a>
+    <a href="#course" class="mobile-nav-link text-theme-primary hover:text-sky-400">My Course</a>
+    <a href="#contact" class="mobile-nav-link text-theme-primary hover:text-sky-400">Contact</a>
+    <a href="course.html" class="px-6 py-3 rounded-full btn-primary text-base font-semibold shadow-lg">Launch Course Interface →</a>
+  </div>
+
+  <main class="relative z-10 pt-24 sm:pt-28">
+
+    <!-- ==============================================================
+         1. HERO SECTION (100% VISIBLE, NO 3D/PARALLAX, LIVE KINETIC TEXT)
+         ============================================================== -->
+    <section id="hero" class="relative px-4 sm:px-6 pt-8 sm:pt-12 pb-16 sm:pb-24 flex flex-col items-center">
+      <div class="max-w-5xl mx-auto text-center space-y-6 relative z-10">
+
+        <!-- Available Status Pill Badge -->
+        <div class="inline-block">
+          <div class="status-pill">
+            <span class="pulse-dot-rgb"></span>
+            <span class="text-white">Available for Q2/Q3 Product Design & Motion Advisory</span>
+          </div>
+        </div>
+
+        <!-- Apple-Style Kinetic Headline (Live Rotating Animated Words, No 3D Wobble) -->
+        <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] text-white max-w-4xl mx-auto kinetic-headline">
+          <span class="inline-block kinetic-word-appear" style="animation-delay: 0.05s;">Crafting</span>
+          <span class="relative inline-block overflow-hidden align-baseline mx-1 px-3 py-0.5 rounded-2xl bg-white/[0.04] border border-white/10 shadow-inner">
+            <span id="kinetic-text-rotator" class="inline-block text-gradient-rgb font-extrabold transition-all duration-300">fluid motion</span>
+          </span>
+          <br class="hidden sm:inline" />
+          <span class="inline-block kinetic-word-appear" style="animation-delay: 0.25s;">&amp; modern SaaS interfaces.</span>
+        </h1>
+
+        <!-- Subheadline -->
+        <p class="text-base sm:text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-medium leading-relaxed">
+          I bridge the gap between high-calibre interaction design and production-grade engineering. Creating digital experiences that feel instantaneous, tactile, and alive.
+        </p>
+
+        <!-- Action CTAs -->
+        <div class="flex flex-wrap items-center justify-center gap-4 pt-2">
+          <a href="#works" class="btn-primary">
+            <span>Explore Works</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+          </a>
+          <a href="course.html" class="btn-secondary">
+            <span>Launch Course Interface</span>
+            <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </a>
+          <button class="open-schedule-btn btn-secondary">
+            <span>Book Discovery Call</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SaaS Interactive Dashboard Preview Card (Stable, Grounded, Zero 3D Tilt) -->
+      <div class="w-full max-w-4xl mx-auto mt-10 sm:mt-14 px-2 sm:px-4 reveal-on-scroll">
+        <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-theme shadow-2xl relative">
+          <!-- Window Header Bar -->
+          <div class="flex items-center justify-between pb-5 border-b border-theme">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+              <span class="text-xs font-mono text-slate-400 ml-2 hidden sm:inline font-semibold">zenith-cluster-v2.saas.app</span>
+            </div>
+
+            <!-- Interactive Metric Tabs -->
+            <div class="flex items-center p-1 rounded-xl bg-black/40 border border-white/10 text-xs font-semibold">
+              <button class="saas-tab-btn px-3 py-1 rounded-lg bg-white text-black font-bold transition-all shadow-sm" data-mode="overview">Overview</button>
+              <button class="saas-tab-btn px-3 py-1 rounded-lg text-theme-muted hover:text-white transition-all" data-mode="analytics">Analytics</button>
+              <button class="saas-tab-btn px-3 py-1 rounded-lg text-theme-muted hover:text-white transition-all" data-mode="retention">Retention</button>
+            </div>
+          </div>
+
+          <!-- Dynamic SaaS Metric Display -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+            <div class="space-y-2">
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Live System Throughput</span>
+              <div id="saas-metric-val" class="text-3xl sm:text-4xl font-extrabold text-white font-mono tracking-tight">$148,290</div>
+              <div class="flex items-center gap-2">
+                <span id="saas-badge-status" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white/[0.08] text-white border border-white/15">+28.4% vs last mo</span>
+              </div>
+            </div>
+
+            <!-- Dynamic Bar Chart Simulation -->
+            <div class="md:col-span-2 flex items-end justify-between gap-3 h-28 pt-4 px-2">
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                <div class="saas-chart-bar w-full rounded-t-lg bg-white/20 hover:bg-white/40 transition-all duration-500" style="height: 45%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400">Mon</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                <div class="saas-chart-bar w-full rounded-t-lg bg-white/25 hover:bg-white/40 transition-all duration-500" style="height: 62%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400">Tue</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                <div class="saas-chart-bar w-full rounded-t-lg bg-white/30 hover:bg-white/50 transition-all duration-500" style="height: 55%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400">Wed</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                <div class="saas-chart-bar w-full rounded-t-lg bg-white/35 hover:bg-white/50 transition-all duration-500" style="height: 78%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400">Thu</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                <div class="saas-chart-bar w-full rounded-t-lg bg-white/45 hover:bg-white/60 transition-all duration-500" style="height: 90%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400">Fri</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                <div class="saas-chart-bar w-full rounded-t-lg bg-white/40 hover:bg-white/60 transition-all duration-500" style="height: 84%;"></div>
+                <span class="text-[10px] font-mono font-bold text-slate-400">Sat</span>
+              </div>
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end">
+                <div class="saas-chart-bar w-full rounded-t-lg bg-gradient-to-t from-sky-400 via-purple-500 to-pink-500 transition-all duration-500 shadow-lg shadow-purple-500/30" style="height: 98%;"></div>
+                <span class="text-[10px] font-mono text-purple-300 font-bold">Sun</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================================
+         APPLE SCROLL-SCRUBBED TYPOGRAPHY TRANSITION STRIP
+         ============================================================== -->
+    <section class="py-28 px-6 border-y border-theme bg-theme-nav reveal-on-scroll">
+      <div class="max-w-5xl mx-auto text-center space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold text-sky-400 bg-sky-500/10 border border-sky-500/20">
+          <span class="scrub-progress-pill">Scroll down to illuminate text</span>
+        </div>
+        <p class="apple-scrub-text text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-relaxed text-theme-primary" data-highlight-words="Apple-grade friction-free transformative">
+          Every digital product should feel as tangible as hardware. We combine Apple-grade kinetic animation with enterprise SaaS rigor to engineer software that feels completely friction-free and transformative.
+        </p>
+      </div>
+    </section>
+
+    <!-- ==============================================================
+         2. ABOUT SECTION (Philosophy, Bento Grid & Interactive Milestones)
+         ============================================================== -->
+    <section id="about" class="py-28 px-4 sm:px-6 relative">
+      <div class="max-w-6xl mx-auto space-y-16">
+
+        <!-- Section Title Badge -->
+        <div class="text-center space-y-3 reveal-on-scroll">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-sky-400 bg-sky-500/10 border border-sky-500/20">
+            <span>About The Craft</span>
+          </div>
+          <h2 class="text-3xl sm:text-5xl font-bold text-theme-primary tracking-tight">
+            Design with restraint. <br class="hidden sm:inline" />
+            <span class="text-gradient">Engineer with precision.</span>
+          </h2>
+          <p class="text-theme-secondary max-w-xl mx-auto text-sm sm:text-base font-medium">
+            Over seven years shaping flagship web platforms, specialized motion engines, and scalable design token frameworks.
+          </p>
+        </div>
+
+        <!-- Bento Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <!-- Bento Card 1: Core Philosophy -->
+          <div class="glass-panel spotlight-card p-8 rounded-3xl md:col-span-2 space-y-4 reveal-on-scroll">
+            <span class="text-2xl">⚡</span>
+            <h3 class="text-xl font-bold text-theme-primary">The Interaction Philosophy</h3>
+            <p class="text-theme-secondary text-sm leading-relaxed font-medium">
+              Software shouldn’t feel static. Subtle spring curves, micro-reflections, and continuous gestures connect the human intent with machine execution. By prioritizing perceptual performance over unnecessary decorative bloat, users navigate complex SaaS workflows effortlessly.
+            </p>
+            <div class="pt-3 flex flex-wrap gap-2">
+              <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-theme-card text-theme-secondary border border-theme">Fluid Gestures</span>
+              <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-theme-card text-theme-secondary border border-theme">Design Systems</span>
+              <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-theme-card text-theme-secondary border border-theme">Zero Jank 60FPS</span>
+              <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-theme-card text-theme-secondary border border-theme">Spatial UI</span>
+            </div>
+          </div>
+
+          <!-- Bento Card 2: Quick Metrics -->
+          <div class="glass-panel spotlight-card p-8 rounded-3xl flex flex-col justify-between space-y-6 reveal-on-scroll">
+            <div>
+              <span class="text-2xl">📊</span>
+              <h3 class="text-xl font-bold text-theme-primary mt-2">Impact At Scale</h3>
+              <p class="text-theme-muted text-xs mt-1 font-semibold">Measurable production results across venture-backed startups.</p>
+            </div>
+            <div class="space-y-4">
+              <div class="border-b border-theme pb-3">
+                <div class="text-3xl font-extrabold text-gradient font-mono">1.8M+</div>
+                <div class="text-xs text-theme-muted font-medium">Active Monthly SaaS Users Reached</div>
+              </div>
+              <div class="border-b border-theme pb-3">
+                <div class="text-3xl font-extrabold text-gradient font-mono">&lt;40ms</div>
+                <div class="text-xs text-theme-muted font-medium">Average Perceived UI Response</div>
+              </div>
+              <div>
+                <div class="text-3xl font-extrabold text-gradient font-mono">100%</div>
+                <div class="text-xs text-theme-muted font-medium">Accessible & Semantic HTML Standards</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bento Card 3: Interactive Tech Stack Matrix -->
+          <div class="glass-panel spotlight-card p-8 rounded-3xl md:col-span-3 space-y-6 reveal-on-scroll">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 class="text-xl font-bold text-theme-primary">Core Architecture & Arsenal</h3>
+                <p class="text-theme-muted text-xs mt-1 font-semibold">Battle-tested tools and frameworks utilized daily.</p>
+              </div>
+              <a href="about.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-sky-400 hover:text-sky-300">
+                <span>View Full Biography & Stack</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              </a>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="p-4 rounded-2xl bg-theme-card border border-theme space-y-1 hover:border-sky-400/50 transition-colors">
+                <div class="text-xs font-mono font-bold text-sky-400">01 / Motion & Canvas</div>
+                <div class="font-bold text-theme-primary text-sm">GSAP, Three.js, Canvas 2D</div>
+                <div class="text-[11px] text-theme-muted font-medium">Parallax & GPU pipelines</div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-theme-card border border-theme space-y-1 hover:border-purple-400/50 transition-colors">
+                <div class="text-xs font-mono font-bold text-purple-400">02 / Frontend Core</div>
+                <div class="font-bold text-theme-primary text-sm">React, Next.js, TypeScript</div>
+                <div class="text-[11px] text-theme-muted font-medium">Scalable enterprise apps</div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-theme-card border border-theme space-y-1 hover:border-sky-400/50 transition-colors">
+                <div class="text-xs font-mono font-bold text-sky-400">03 / Styling & Tokens</div>
+                <div class="font-bold text-theme-primary text-sm">Tailwind CSS, Radix, CSS3</div>
+                <div class="text-[11px] text-theme-muted font-medium">Tokenized design systems</div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-theme-card border border-theme space-y-1 hover:border-emerald-400/50 transition-colors">
+                <div class="text-xs font-mono font-bold text-emerald-400">04 / Performance</div>
+                <div class="font-bold text-theme-primary text-sm">Web Workers, Lighthouse</div>
+                <div class="text-[11px] text-theme-muted font-medium">Sub-second bundle sizes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================================
+         3. WORKS SECTION (Portfolio Filter & Interactive Case Study Modal)
+         ============================================================== -->
+    <section id="works" class="py-28 px-4 sm:px-6 relative bg-theme-nav">
+      <div class="max-w-6xl mx-auto space-y-12">
+
+        <!-- Section Header & Filter Controls -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 reveal-on-scroll">
+          <div class="space-y-3">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-sky-400 bg-sky-500/10 border border-sky-500/20">
+              <span>Selected Works</span>
+            </div>
+            <h2 class="text-3xl sm:text-5xl font-bold text-theme-primary tracking-tight">
+              Crafted with purpose.
+            </h2>
+            <p class="text-theme-secondary text-sm sm:text-base max-w-lg font-medium">
+              Explore recent production applications, high-throughput cloud dashboards, and interactive design systems.
+            </p>
+          </div>
+
+          <!-- Filter Buttons -->
+          <div class="flex items-center gap-2 p-1.5 rounded-full bg-theme-card border border-theme text-xs font-semibold">
+            <button class="filter-btn active px-4 py-1.5 rounded-full font-semibold bg-indigo-600 text-white transition-all shadow-sm" data-filter="all">All Projects</button>
+            <button class="filter-btn px-4 py-1.5 rounded-full font-semibold text-theme-muted hover:text-theme-primary transition-all" data-filter="saas">SaaS Apps</button>
+            <button class="filter-btn px-4 py-1.5 rounded-full font-semibold text-theme-muted hover:text-theme-primary transition-all" data-filter="systems">Design Systems</button>
+            <button class="filter-btn px-4 py-1.5 rounded-full font-semibold text-theme-muted hover:text-theme-primary transition-all" data-filter="creative">AI & Motion</button>
+          </div>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+          <!-- Project Card 1: Zenith OS -->
+          <div class="project-card glass-panel spotlight-card rounded-3xl overflow-hidden group transition-all duration-300 reveal-on-scroll" data-category="saas">
+            <div class="h-64 sm:h-72 bg-gradient-to-br from-indigo-950 via-slate-900 to-sky-950 relative p-6 flex flex-col justify-between overflow-hidden">
+              <div class="flex items-center justify-between relative z-10">
+                <span class="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-white/10 text-white border border-white/20">SaaS Platform</span>
+                <span class="text-xs font-mono font-bold text-emerald-400 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Live v2.4
+                </span>
+              </div>
+              <div class="relative z-10 space-y-1">
+                <div class="text-3xl font-bold text-white tracking-tight">Zenith OS</div>
+                <div class="text-xs text-sky-200 font-medium">Distributed cloud cluster telemetry & management</div>
+              </div>
+              <div class="absolute -right-8 -bottom-8 w-48 h-48 rounded-full bg-sky-500/25 blur-2xl group-hover:bg-sky-500/40 transition-all duration-500"></div>
+            </div>
+
+            <div class="p-6 sm:p-8 space-y-5">
+              <div class="flex items-center justify-between text-xs font-mono text-theme-muted border-b border-theme pb-4 font-semibold">
+                <span>Latency: <strong class="text-theme-primary">-64%</strong></span>
+                <span>Uptime: <strong class="text-theme-primary">99.99%</strong></span>
+                <span>MAU: <strong class="text-theme-primary">3.8x</strong></span>
+              </div>
+              <p class="text-theme-secondary text-sm leading-relaxed font-medium">
+                Re-engineered the complete control plane interface for high-concurrency cloud deployments. Featured sub-second node filtering, custom WebGL network graphs, and hotkey navigation.
+              </p>
+              <div class="flex items-center justify-between pt-2">
+                <button class="view-case-study-btn text-xs font-semibold px-4 py-2 rounded-full bg-sky-500/10 hover:bg-sky-500 text-sky-400 hover:text-white border border-sky-400/30 transition-all flex items-center gap-1.5" data-project-id="zenith-saas">
+                  <span>View Case Study</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+                <a href="works.html" class="text-xs font-mono font-semibold text-theme-muted hover:text-sky-400 transition-colors">Details →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Card 2: Prism AI -->
+          <div class="project-card glass-panel spotlight-card rounded-3xl overflow-hidden group transition-all duration-300 reveal-on-scroll" data-category="creative">
+            <div class="h-64 sm:h-72 bg-gradient-to-br from-purple-950 via-slate-900 to-indigo-950 relative p-6 flex flex-col justify-between overflow-hidden">
+              <div class="flex items-center justify-between relative z-10">
+                <span class="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-white/10 text-white border border-white/20">AI Workflow Canvas</span>
+                <span class="text-xs font-mono font-bold text-purple-300">Series Seed</span>
+              </div>
+              <div class="relative z-10 space-y-1">
+                <div class="text-3xl font-bold text-white tracking-tight">Prism Motion</div>
+                <div class="text-xs text-purple-200 font-medium">Infinite node canvas for autonomous agent orchestration</div>
+              </div>
+              <div class="absolute -right-8 -bottom-8 w-48 h-48 rounded-full bg-purple-500/25 blur-2xl group-hover:bg-purple-500/40 transition-all duration-500"></div>
+            </div>
+
+            <div class="p-6 sm:p-8 space-y-5">
+              <div class="flex items-center justify-between text-xs font-mono text-theme-muted border-b border-theme pb-4 font-semibold">
+                <span>FPS: <strong class="text-theme-primary">60 Flat</strong></span>
+                <span>Nodes: <strong class="text-theme-primary">10k+</strong></span>
+                <span>Funding: <strong class="text-theme-primary">$8.2M</strong></span>
+              </div>
+              <p class="text-theme-secondary text-sm leading-relaxed font-medium">
+                Built an infinite spatial workspace with butter-smooth pan/zoom physics, real-time multiplayer cursor synchronization, and generative layout routing.
+              </p>
+              <div class="flex items-center justify-between pt-2">
+                <button class="view-case-study-btn text-xs font-semibold px-4 py-2 rounded-full bg-purple-500/10 hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-400/30 transition-all flex items-center gap-1.5" data-project-id="prism-motion">
+                  <span>View Case Study</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+                <a href="works.html" class="text-xs font-mono font-semibold text-theme-muted hover:text-purple-400 transition-colors">Details →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Card 3: Aura Design System -->
+          <div class="project-card glass-panel spotlight-card rounded-3xl overflow-hidden group transition-all duration-300 reveal-on-scroll" data-category="systems">
+            <div class="h-64 sm:h-72 bg-gradient-to-br from-sky-950 via-slate-900 to-indigo-950 relative p-6 flex flex-col justify-between overflow-hidden">
+              <div class="flex items-center justify-between relative z-10">
+                <span class="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-white/10 text-white border border-white/20">Design System</span>
+                <span class="text-xs font-mono font-bold text-sky-300">WCAG AAA</span>
+              </div>
+              <div class="relative z-10 space-y-1">
+                <div class="text-3xl font-bold text-white tracking-tight">Aura System</div>
+                <div class="text-xs text-sky-200 font-medium">Multi-brand design token architecture & 60+ components</div>
+              </div>
+              <div class="absolute -right-8 -bottom-8 w-48 h-48 rounded-full bg-sky-500/25 blur-2xl group-hover:bg-sky-500/40 transition-all duration-500"></div>
+            </div>
+
+            <div class="p-6 sm:p-8 space-y-5">
+              <div class="flex items-center justify-between text-xs font-mono text-theme-muted border-b border-theme pb-4 font-semibold">
+                <span>Bundle: <strong class="text-theme-primary">&lt;18KB gzip</strong></span>
+                <span>Speed: <strong class="text-theme-primary">+180%</strong></span>
+                <span>Components: <strong class="text-theme-primary">64</strong></span>
+              </div>
+              <p class="text-theme-secondary text-sm leading-relaxed font-medium">
+                Unified cross-platform engineering under a single tokenized framework. Includes automated accessibility testing and light/dark theme variables.
+              </p>
+              <div class="flex items-center justify-between pt-2">
+                <button class="view-case-study-btn text-xs font-semibold px-4 py-2 rounded-full bg-sky-500/10 hover:bg-sky-500 text-sky-400 hover:text-white border border-sky-400/30 transition-all flex items-center gap-1.5" data-project-id="aura-design-system">
+                  <span>View Case Study</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+                <a href="works.html" class="text-xs font-mono font-semibold text-theme-muted hover:text-sky-400 transition-colors">Details →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project Card 4: Hyperion LMS -->
+          <div class="project-card glass-panel spotlight-card rounded-3xl overflow-hidden group transition-all duration-300 reveal-on-scroll" data-category="saas">
+            <div class="h-64 sm:h-72 bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 relative p-6 flex flex-col justify-between overflow-hidden">
+              <div class="flex items-center justify-between relative z-10">
+                <span class="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-white/10 text-white border border-white/20">EdTech Video LMS</span>
+                <span class="text-xs font-mono font-bold text-sky-300">45k+ Students</span>
+              </div>
+              <div class="relative z-10 space-y-1">
+                <div class="text-3xl font-bold text-white tracking-tight">Hyperion Learning</div>
+                <div class="text-xs text-indigo-200 font-medium">Synchronized scrub video player & modular curriculum hub</div>
+              </div>
+              <div class="absolute -right-8 -bottom-8 w-48 h-48 rounded-full bg-purple-500/25 blur-2xl group-hover:bg-purple-500/40 transition-all duration-500"></div>
+            </div>
+
+            <div class="p-6 sm:p-8 space-y-5">
+              <div class="flex items-center justify-between text-xs font-mono text-theme-muted border-b border-theme pb-4 font-semibold">
+                <span>Completion: <strong class="text-theme-primary">+45%</strong></span>
+                <span>Rating: <strong class="text-theme-primary">4.9/5</strong></span>
+                <span>Sessions: <strong class="text-theme-primary">38m</strong></span>
+              </div>
+              <p class="text-theme-secondary text-sm leading-relaxed font-medium">
+                Engineered the next-generation video streaming interface with offline caching, synchronized note-taking, and interactive curriculum trackers.
+              </p>
+              <div class="flex items-center justify-between pt-2">
+                <button class="view-case-study-btn text-xs font-semibold px-4 py-2 rounded-full bg-purple-500/10 hover:bg-purple-600 text-purple-400 hover:text-white border border-purple-400/30 transition-all flex items-center gap-1.5" data-project-id="hyperion-lms">
+                  <span>View Case Study</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+                <a href="course.html" class="text-xs font-mono font-bold text-sky-400 hover:text-sky-300">See Live LMS →</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================================
+         4. MY COURSE SECTION (Dedicated Showcase + LMS Interface Bridge)
+         ============================================================== -->
+    <section id="course" class="py-28 px-4 sm:px-6 relative overflow-hidden">
+      <div class="max-w-6xl mx-auto space-y-14">
+
+        <!-- Course Header -->
+        <div class="text-center space-y-4 max-w-3xl mx-auto reveal-on-scroll">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider text-sky-400 bg-sky-500/10 border border-sky-500/20">
+            <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+            <span>Flagship Masterclass & Interactive Platform</span>
+          </div>
+          <h2 class="text-3xl sm:text-5xl font-extrabold text-theme-primary tracking-tight leading-tight">
+            The SaaS Motion & <span class="text-gradient">Design Engineering</span> Masterclass.
+          </h2>
+          <p class="text-theme-secondary text-sm sm:text-base leading-relaxed font-medium">
+            Master the exact techniques used to craft Apple-grade kinetic reveals, zero-jank parallax physics, dual-mode OLED themes, and production-grade SaaS platforms.
+          </p>
+        </div>
+
+        <!-- Course Feature Highlights Box -->
+        <div class="glass-panel spotlight-card rounded-3xl p-8 sm:p-12 border border-theme relative overflow-hidden reveal-on-scroll">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+
+            <!-- Left: Course Details & Curriculum Highlights -->
+            <div class="space-y-6">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/15 text-sky-400 border border-sky-500/30">4 Comprehensive Modules</span>
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/15 text-purple-400 border border-purple-500/30">40+ Video Lectures</span>
+                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">Figma + Starter Code</span>
+              </div>
+
+              <h3 class="text-2xl font-bold text-theme-primary">
+                Everything you need to ship world-class web experiences.
+              </h3>
+
+              <div class="space-y-3.5">
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">✓</div>
+                  <div class="text-sm text-theme-secondary font-medium">
+                    <strong class="text-theme-primary">Apple-Grade Kinetic Typography:</strong> Scroll-scrubbed contrast masks, blur-to-sharp reveals, and GPU compositing.
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">✓</div>
+                  <div class="text-sm text-theme-secondary font-medium">
+                    <strong class="text-theme-primary">60FPS Parallax & Spatial 3D Tilt:</strong> Inertial scrolling, mouse spotlight shaders, and multi-layer depth sorting.
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">✓</div>
+                  <div class="text-sm text-theme-secondary font-medium">
+                    <strong class="text-theme-primary">Production SaaS Architecture:</strong> Dual themes (Light Blue/Purple & Porcelain), accessible state machines, and micro-interactions.
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0 text-xs font-bold mt-0.5">✓</div>
+                  <div class="text-sm text-theme-secondary font-medium">
+                    <strong class="text-theme-primary">Custom Dynamic Curriculum Builder:</strong> Dedicated interactive LMS portal where you can add your own lessons dynamically!
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interactive Buttons -->
+              <div class="flex flex-wrap items-center gap-4 pt-4">
+                <a href="course.html" class="btn-primary">
+                  <span>Launch LMS Interface</span>
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+                <button class="open-course-modal-btn btn-secondary">
+                  <span>Join Early Waitlist</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Interactive LMS Interface Mockup Card -->
+            <div class="relative">
+              <div class="rounded-2xl border border-theme bg-theme-card backdrop-blur-xl p-5 shadow-2xl space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-theme text-xs font-mono text-theme-muted font-semibold">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
+                    <span>LMS Player & Workspace Preview</span>
+                  </div>
+                  <span class="text-sky-400">Interactive</span>
+                </div>
+
+                <!-- Video Frame Mock -->
+                <div class="relative rounded-xl overflow-hidden aspect-video bg-gradient-to-tr from-slate-900 via-indigo-950 to-slate-900 border border-theme flex items-center justify-center group cursor-pointer" onclick="window.location.href='course.html'">
+                  <div class="w-14 h-14 rounded-full bg-white/20 border border-white/30 backdrop-blur-md flex items-center justify-center text-white text-lg group-hover:scale-110 transition-transform shadow-xl">
+                    ▶
+                  </div>
+                  <div class="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] text-white font-mono font-semibold">
+                    <span>1.1 Apple Keynote Reveals</span>
+                    <span>14:20</span>
+                  </div>
+                </div>
+
+                <!-- Mini Curriculum Checklist Preview -->
+                <div class="space-y-2 pt-1">
+                  <div class="flex items-center justify-between text-xs text-theme-muted font-mono font-semibold">
+                    <span>Curriculum Progress</span>
+                    <span class="text-sky-400 font-bold">35%</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-theme-nav overflow-hidden border border-theme">
+                    <div class="h-full bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-500 rounded-full" style="width: 35%;"></div>
+                  </div>
+                </div>
+
+                <div class="pt-2 text-center">
+                  <a href="course.html" class="inline-block text-xs font-bold text-sky-400 hover:text-sky-300 underline underline-offset-4">
+                    Open Dedicated Course Dashboard & Student Interface →
+                  </a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================================
+         5. CONTACT SECTION (Interactive Form, Budget Pills & Scheduler)
+         ============================================================== -->
+    <section id="contact" class="py-28 px-4 sm:px-6 relative">
+      <div class="max-w-4xl mx-auto space-y-12">
+
+        <!-- Title & Subtitle -->
+        <div class="text-center space-y-3 reveal-on-scroll">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-sky-400 bg-sky-500/10 border border-sky-500/20">
+            <span>Direct Channel</span>
+          </div>
+          <h2 class="text-3xl sm:text-5xl font-bold text-theme-primary tracking-tight">
+            Let’s engineer something <span class="text-gradient">extraordinary.</span>
+          </h2>
+          <p class="text-theme-secondary text-sm sm:text-base max-w-lg mx-auto font-medium">
+            Have an upcoming project, design system need, or inquiry regarding the course? Dispatch a message or schedule a direct video call.
+          </p>
+        </div>
+
+        <!-- Contact Box -->
+        <div class="glass-panel spotlight-card rounded-3xl p-8 sm:p-12 border border-theme shadow-2xl reveal-on-scroll">
+          <form id="contact-form" class="space-y-6">
+
+            <!-- Budget Selector Pills -->
+            <div class="space-y-2.5">
+              <label class="block text-xs font-bold uppercase tracking-wider text-theme-muted">Estimated Project Scope / Investment</label>
+              <div class="flex flex-wrap gap-2.5">
+                <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">&lt; $5k</button>
+                <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-sky-400 bg-sky-500/20 text-sky-400 transition-all">$5k - $15k</button>
+                <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">$15k - $30k</button>
+                <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">$30k+</button>
+                <button type="button" class="budget-pill px-4 py-2 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">Course Inquiry</button>
+              </div>
+            </div>
+
+            <!-- Name and Email Row -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1.5">
+                <label for="contact-name" class="block text-xs font-semibold text-theme-primary">Your Full Name *</label>
+                <input type="text" id="contact-name" required placeholder="Elena Rostova" 
+                  class="w-full px-4 py-3 rounded-xl border text-sm font-medium transition-colors" />
+              </div>
+              <div class="space-y-1.5">
+                <label for="contact-email" class="block text-xs font-semibold text-theme-primary">Your Email Address *</label>
+                <input type="email" id="contact-email" required placeholder="elena@company.com" 
+                  class="w-full px-4 py-3 rounded-xl border text-sm font-medium transition-colors" />
+              </div>
+            </div>
+
+            <!-- Message Area -->
+            <div class="space-y-1.5">
+              <label for="contact-message" class="block text-xs font-semibold text-theme-primary">Project Details & Objectives *</label>
+              <textarea id="contact-message" rows="4" required placeholder="Describe your vision, timeline, and goals..." 
+                class="w-full px-4 py-3 rounded-xl border text-sm font-medium resize-none"></textarea>
+            </div>
+
+            <!-- Form Footer Actions -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
+              <button type="submit" class="btn-primary w-full sm:w-auto">
+                <span>Dispatch Inquiry</span>
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </button>
+
+              <div class="flex items-center gap-3">
+                <button type="button" class="copy-email-btn px-4 py-2.5 rounded-full border border-theme bg-theme-card hover:bg-theme-card-hover text-xs font-mono font-semibold text-theme-secondary transition-all flex items-center gap-2" data-email="alexander@designengineer.io">
+                  <span>📋 Copy Email</span>
+                </button>
+                <button type="button" class="open-schedule-btn px-4 py-2.5 rounded-full border border-theme bg-theme-card hover:bg-theme-card-hover text-xs font-semibold text-theme-secondary transition-all">
+                  📅 Schedule Call
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==============================================================
+       FOOTER (Live Clock, Status & Multi-page Links)
+       ============================================================== -->
+  <footer class="border-t border-theme py-12 px-6 bg-theme-nav relative z-10">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+
+      <!-- Left: Brand & Clock -->
+      <div class="flex items-center gap-4">
+        <span class="text-sm font-bold text-theme-primary">ALEXANDER / DE</span>
+        <span class="text-theme-muted">|</span>
+        <div class="flex items-center gap-2 text-xs font-mono text-theme-muted font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>Local Time:</span>
+          <span id="live-clock" class="text-theme-primary font-bold">12:00:00 PM</span>
+        </div>
+      </div>
+
+      <!-- Center: Navigation & Admin Access -->
+      <div class="flex flex-wrap items-center gap-4 text-xs font-semibold text-theme-secondary">
+        <a href="index.html" class="hover:text-theme-primary transition-colors">Hero</a>
+        <a href="about.html" class="hover:text-theme-primary transition-colors">About</a>
+        <a href="works.html" class="hover:text-theme-primary transition-colors">Works</a>
+        <a href="course.html" class="hover:text-sky-400 font-bold transition-colors">My Course (LMS)</a>
+        <a href="contact.html" class="hover:text-theme-primary transition-colors">Contact</a>
+        <a href="admin.html" class="inline-flex items-center gap-1 text-slate-500 hover:text-white transition-colors" title="Restricted Admin Access">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+          <span>Admin</span>
+        </a>
+      </div>
+
+      <!-- Right: Social Links & Back to Top -->
+      <div class="flex items-center gap-3">
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-theme-card border border-theme text-theme-secondary hover:text-theme-primary transition-colors" title="GitHub">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="p-2 rounded-full bg-theme-card border border-theme text-theme-secondary hover:text-theme-primary transition-colors" title="X / Twitter">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="#hero" class="p-2 rounded-full bg-theme-card border border-theme text-theme-secondary hover:text-theme-primary transition-colors" title="Back to Top">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==============================================================
+       MODALS
+       ============================================================== -->
+
+  <!-- 1. Case Study Modal -->
+  <div id="case-study-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-content rounded-3xl max-w-2xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto relative space-y-6">
+      <div class="flex items-center justify-between border-b border-theme pb-4">
+        <div>
+          <span id="modal-project-client" class="text-xs font-mono font-bold text-sky-400">Zenith Systems</span>
+          <h3 id="modal-project-title" class="text-xl sm:text-2xl font-bold text-theme-primary mt-1">Zenith OS</h3>
+        </div>
+        <button id="modal-close-btn" class="w-8 h-8 rounded-full bg-theme-card border border-theme text-theme-muted hover:text-theme-primary flex items-center justify-center text-lg">✕</button>
+      </div>
+
+      <div class="space-y-4">
+        <p id="modal-project-desc" class="text-sm text-theme-secondary leading-relaxed font-medium"></p>
+        <div id="modal-project-metrics" class="grid grid-cols-3 gap-3"></div>
+        <div class="space-y-2">
+          <div class="text-xs font-mono font-bold uppercase text-theme-muted">Architecture & Technologies</div>
+          <div id="modal-project-stack" class="flex flex-wrap gap-2"></div>
+        </div>
+        <div class="space-y-2 pt-2">
+          <div class="text-xs font-mono font-bold uppercase text-theme-muted">Key Engineering Milestones</div>
+          <ul id="modal-project-highlights" class="space-y-2"></ul>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-theme flex items-center justify-between">
+        <span class="text-xs text-theme-muted font-medium">Confidential enterprise release</span>
+        <a href="contact.html" class="btn-primary text-xs py-2 px-4">
+          <span>Discuss Similar Project</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Course Waitlist Modal -->
+  <div id="course-enroll-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-content rounded-3xl max-w-lg w-full p-6 sm:p-8 relative space-y-6">
+      <div class="flex items-center justify-between border-b border-theme pb-4">
+        <div>
+          <span class="text-xs font-mono font-bold text-sky-400">Early Access Pass</span>
+          <h3 class="text-xl font-bold text-theme-primary mt-1">Priority Course Enrollment</h3>
+        </div>
+        <button id="course-modal-close" class="w-8 h-8 rounded-full bg-theme-card border border-theme text-theme-muted hover:text-theme-primary flex items-center justify-center text-lg">✕</button>
+      </div>
+
+      <p class="text-xs text-theme-secondary leading-relaxed font-medium">
+        Join the priority waitlist to secure 40% early-bird discount and instant access to the private Discord community and starter code repositories.
+      </p>
+
+      <form id="course-waitlist-form" class="space-y-4">
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-theme-primary">Your Email Address</label>
+          <input type="email" required placeholder="alex@company.com" 
+            class="w-full px-4 py-2.5 rounded-xl border text-sm font-medium" />
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-theme-primary">Your Primary Focus</label>
+          <select class="w-full px-4 py-2.5 rounded-xl border text-sm font-medium">
+            <option>Frontend Engineer transitioning to Motion/SaaS</option>
+            <option>Product Designer looking to write code</option>
+            <option>Founder building a high-end web app</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-primary w-full py-3">
+          <span>Claim Early Bird Access</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Discovery Call Modal -->
+  <div id="schedule-meeting-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-content rounded-3xl max-w-md w-full p-6 sm:p-8 relative space-y-5">
+      <div class="flex items-center justify-between border-b border-theme pb-3">
+        <div>
+          <span class="text-xs font-mono font-bold text-sky-400">1:1 Direct Consultation</span>
+          <h3 class="text-lg font-bold text-theme-primary mt-0.5">Book 15-Min Discovery Call</h3>
+        </div>
+        <button id="schedule-modal-close" class="w-8 h-8 rounded-full bg-theme-card border border-theme text-theme-muted hover:text-theme-primary flex items-center justify-center text-lg">✕</button>
+      </div>
+
+      <p class="text-xs text-theme-secondary font-medium">Select an open slot to review project requirements, motion scope, or advisory.</p>
+
+      <div class="space-y-2">
+        <span class="text-xs font-mono font-bold text-theme-muted">Available Slots (This Week)</span>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">Wed • 2:00 PM EST</button>
+          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">Wed • 4:30 PM EST</button>
+          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">Thu • 11:00 AM EST</button>
+          <button type="button" class="time-slot-btn p-2.5 rounded-xl text-xs font-semibold border border-theme bg-theme-card text-theme-secondary hover:border-sky-400 transition-all">Thu • 3:15 PM EST</button>
+        </div>
+      </div>
+
+      <button id="confirm-booking-btn" class="btn-primary w-full py-2.5 text-xs font-bold mt-2">
+        Confirm Video Appointment
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Command Suite • Alexander Thorne | Restricted Access</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="Secure administrative command center for curriculum authoring and customer dispatch management." />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Styles (Curated Black & White with Light Minimal RGB Theme) -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="selection:bg-white selection:text-black">
+
+  <!-- Top Scroll Progress Bar -->
+  <div id="scroll-progress-bar"></div>
+
+  <!-- Ambient Glow (Subtle Minimal RGB) -->
+  <div class="ambient-glow bg-sky-400/10 w-[500px] h-[500px] -top-32 -left-32"></div>
+  <div class="ambient-glow bg-purple-500/10 w-[600px] h-[600px] top-[35%] -right-40"></div>
+
+  <!-- Background Grid Overlay -->
+  <div class="bg-grid-overlay"></div>
+
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-3.5 border-b border-theme bg-theme-nav backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Left: Brand & Admin Tag -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2.5 group">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-500 p-[1.5px] group-hover:scale-105 transition-transform shadow-md shadow-white/10">
+            <div class="w-full h-full rounded-full bg-[#12151f] flex items-center justify-center">
+              <span class="text-xs font-bold text-white">✦</span>
+            </div>
+          </div>
+          <span class="font-bold text-sm tracking-tight text-white group-hover:opacity-80 transition-opacity">
+            ALEXANDER <span class="text-slate-400 font-mono text-xs">/ DE</span>
+          </span>
+        </a>
+
+        <div class="hidden sm:block h-4 w-[1px] bg-white/15"></div>
+
+        <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-purple-500/15 text-purple-300 border border-purple-500/30">
+          <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
+          <span>ADMIN SUITE</span>
+        </span>
+      </div>
+
+      <!-- Right: Navigation & Lock -->
+      <div class="flex items-center gap-3">
+        <a href="course.html" target="_blank" class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 transition-all">
+          <span>Student LMS</span>
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+        </a>
+
+        <a href="index.html" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 transition-all">
+          <span>Portfolio Site</span>
+        </a>
+
+        <button class="lock-admin-btn inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-500/15 hover:bg-rose-500 text-rose-300 hover:text-white border border-rose-500/30 transition-all">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+          <span>Lock Portal</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==============================================================
+       1. AUTHENTICATION GATE SCREEN (SECURITY CHECK)
+       ============================================================== -->
+  <section id="auth-gate" class="min-h-screen flex items-center justify-center p-4 pt-20 relative z-20">
+    <div class="max-w-md w-full glass-panel rounded-3xl p-8 border border-white/15 shadow-2xl relative space-y-6 text-center">
+      <!-- Lock Aura -->
+      <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-400 via-purple-500 to-pink-500 p-[1.5px] mx-auto shadow-xl shadow-purple-500/20">
+        <div class="w-full h-full rounded-2xl bg-[#0e1017] flex items-center justify-center text-2xl">
+          🔒
+        </div>
+      </div>
+
+      <div class="space-y-1.5">
+        <h2 class="text-2xl font-extrabold text-white tracking-tight">Admin Passkey Verification</h2>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          Restricted access. Enter your master passkey to author courses and process customer dispatches.
+        </p>
+      </div>
+
+      <!-- Auth Form -->
+      <form id="admin-auth-form" class="space-y-4 text-left">
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-slate-300">Master Passkey / PIN</label>
+          <div class="relative">
+            <input 
+              id="admin-pin-input" 
+              type="password" 
+              required 
+              placeholder="••••••••" 
+              class="w-full px-4 py-3 rounded-xl border border-white/15 bg-white/[0.04] text-white font-mono text-center tracking-widest text-lg focus:outline-none focus:border-purple-400"
+            />
+          </div>
+          <div id="auth-error-msg" class="hidden text-xs text-rose-400 font-semibold pt-1"></div>
+        </div>
+
+        <button type="submit" class="btn-primary w-full py-3 text-sm font-bold shadow-lg">
+          <span>Authenticate &amp; Enter Suite →</span>
+        </button>
+
+        <div class="grid grid-cols-2 gap-2 pt-2">
+          <button type="button" id="biometric-unlock-btn" class="p-2.5 rounded-xl text-xs font-semibold border border-white/10 bg-white/[0.03] text-slate-300 hover:text-white hover:border-white/20 transition-all flex items-center justify-center gap-1.5">
+            <span>🧬 Touch ID</span>
+          </button>
+          <button type="button" id="demo-pin-btn" class="p-2.5 rounded-xl text-xs font-semibold border border-white/10 bg-white/[0.03] text-slate-300 hover:text-white hover:border-white/20 transition-all flex items-center justify-center gap-1.5">
+            <span>🔑 Demo PIN (2026)</span>
+          </button>
+        </div>
+      </form>
+
+      <div class="text-[11px] font-mono text-slate-500 pt-2 border-t border-white/5">
+        Hardware-isolated session token • AES-256 state
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================================
+       2. FULL ADMIN COMMAND SUITE (REVEALED UPON UNLOCK)
+       ============================================================== -->
+  <main id="admin-suite" class="hidden min-h-screen pt-24 pb-20 px-4 sm:px-6 max-w-7xl mx-auto relative z-10 space-y-8">
+
+    <!-- Top Banner & Tab Switcher Bar -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-panel p-4 sm:p-5 rounded-3xl border border-white/10">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-lg">
+          ⚡
+        </div>
+        <div>
+          <h1 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">Alexander Thorne Command Center</h1>
+          <p class="text-xs text-slate-400 font-medium">Live Curriculum Engine &amp; Inbound Customer Dispatches CRM</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex items-center p-1 rounded-2xl bg-black/40 border border-white/10 text-xs font-semibold overflow-x-auto">
+        <button class="admin-nav-tab active px-4 py-2 rounded-xl bg-white text-black font-bold transition-all shadow-sm flex items-center gap-1.5 shrink-0" data-tab="overview">
+          <span>📊 Overview</span>
+        </button>
+        <button class="admin-nav-tab px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-all flex items-center gap-1.5 shrink-0" data-tab="courses">
+          <span>🎓 Course Studio</span>
+        </button>
+        <button class="admin-nav-tab px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-all flex items-center gap-1.5 shrink-0" data-tab="dispatches">
+          <span>📬 Customer Dispatches</span>
+        </button>
+        <button class="admin-nav-tab px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-all flex items-center gap-1.5 shrink-0" data-tab="settings">
+          <span>⚙️ Settings</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==============================================================
+         TAB 1: DASHBOARD OVERVIEW
+         ============================================================== -->
+    <section id="view-overview" class="admin-view space-y-8">
+
+      <!-- KPI Metrics Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <!-- Dispatches -->
+        <div class="p-6 rounded-3xl glass-panel border border-white/10 space-y-2 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Total Dispatches</span>
+            <span id="kpi-unread-badge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">0 New</span>
+          </div>
+          <div id="kpi-total-dispatches" class="text-3xl sm:text-4xl font-extrabold text-white font-mono">0</div>
+          <p class="text-xs text-slate-400">Inbound project inquiries &amp; client requests</p>
+        </div>
+
+        <!-- Course Modules -->
+        <div class="p-6 rounded-3xl glass-panel border border-white/10 space-y-2 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">LMS Modules</span>
+            <span class="text-xs font-mono text-emerald-400 font-bold">Active</span>
+          </div>
+          <div id="kpi-active-modules" class="text-3xl sm:text-4xl font-extrabold text-white font-mono">3</div>
+          <p class="text-xs text-slate-400"><span id="kpi-total-lessons" class="text-white font-bold">7</span> published video lessons</p>
+        </div>
+
+        <!-- Booked Consultations -->
+        <div class="p-6 rounded-3xl glass-panel border border-white/10 space-y-2 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Discovery Sessions</span>
+            <span class="text-xs font-mono text-sky-400 font-bold">1:1 Calls</span>
+          </div>
+          <div id="kpi-booked-calls" class="text-3xl sm:text-4xl font-extrabold text-white font-mono">0</div>
+          <p class="text-xs text-slate-400">15-minute consultations scheduled</p>
+        </div>
+
+        <!-- Pipeline Value -->
+        <div class="p-6 rounded-3xl glass-panel border border-white/10 space-y-2 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">Estimated Pipeline</span>
+            <span class="text-xs font-mono text-purple-300 font-bold">+38% MoM</span>
+          </div>
+          <div class="text-3xl sm:text-4xl font-extrabold text-white font-mono">$134,800</div>
+          <p class="text-xs text-slate-400">Advisory retainers &amp; project scope</p>
+        </div>
+      </div>
+
+      <!-- Quick Action Jump Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-3xl glass-panel border border-white/10 flex flex-col justify-between space-y-4">
+          <div class="space-y-1">
+            <span class="text-xs font-mono font-bold text-purple-400 uppercase">Curriculum Authoring</span>
+            <h3 class="text-lg font-bold text-white">+ Add New Course Module</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Expand your course with new video lectures, timecodes, and downloadable resource zip files.</p>
+          </div>
+          <button class="admin-nav-tab btn-primary py-2.5 px-4 text-xs font-bold w-full" data-tab="courses">
+            Launch Course Studio →
+          </button>
+        </div>
+
+        <div class="p-6 rounded-3xl glass-panel border border-white/10 flex flex-col justify-between space-y-4">
+          <div class="space-y-1">
+            <span class="text-xs font-mono font-bold text-sky-400 uppercase">Customer Inbox</span>
+            <h3 class="text-lg font-bold text-white">Review Customer Dispatches</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Respond to high-tier project inquiries, copy client emails, and track contact milestones.</p>
+          </div>
+          <button class="admin-nav-tab btn-secondary py-2.5 px-4 text-xs font-bold w-full" data-tab="dispatches">
+            Open Dispatches CRM →
+          </button>
+        </div>
+
+        <div class="p-6 rounded-3xl glass-panel border border-white/10 flex flex-col justify-between space-y-4">
+          <div class="space-y-1">
+            <span class="text-xs font-mono font-bold text-emerald-400 uppercase">Data Portability</span>
+            <h3 class="text-lg font-bold text-white">Export Dispatches (.CSV)</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">Download a structured spreadsheet containing every lead, budget bracket, and project brief.</p>
+          </div>
+          <button id="overview-export-btn" onclick="document.getElementById('export-dispatches-btn').click()" class="btn-secondary py-2.5 px-4 text-xs font-bold w-full">
+            Download CSV Export 📥
+          </button>
+        </div>
+      </div>
+
+      <!-- Recent Inbound Dispatches Feed -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 space-y-4">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div class="space-y-0.5">
+            <h3 class="text-lg font-bold text-white">Recent Inbound Dispatches</h3>
+            <p class="text-xs text-slate-400">Streamed in real-time from portfolio forms</p>
+          </div>
+          <button class="admin-nav-tab text-xs font-semibold text-purple-300 hover:text-white" data-tab="dispatches">
+            View All Dispatches →
+          </button>
+        </div>
+
+        <div id="overview-recent-dispatches" class="space-y-3">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==============================================================
+         TAB 2: COURSE STUDIO ("ADD MY NEW COURSES")
+         ============================================================== -->
+    <section id="view-courses" class="admin-view hidden space-y-8">
+
+      <!-- Course & Module Authoring Form -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-4">
+          <div class="space-y-0.5">
+            <h3 class="text-xl font-bold text-white">Course Studio &amp; Module Creator</h3>
+            <p class="text-xs text-slate-400">Author new modules and lessons. Changes publish immediately to <a href="course.html" target="_blank" class="text-purple-300 underline">course.html</a>.</p>
+          </div>
+          <a href="course.html" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold btn-primary">
+            <span>Open Student LMS ↗</span>
+          </a>
+        </div>
+
+        <form id="add-new-course-form" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Module Name -->
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Module Title / Category *</label>
+              <input 
+                id="new-module-title" 
+                type="text" 
+                required 
+                placeholder="e.g. Module 4: WebGL Post-Processing &amp; Canvas Shaders" 
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+              />
+              <p class="text-[11px] text-slate-500">Matches an existing module or creates a brand new one.</p>
+            </div>
+
+            <!-- Lesson Title -->
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Lesson Title *</label>
+              <input 
+                id="new-lesson-title" 
+                type="text" 
+                required 
+                placeholder="e.g. 4.1 Building GPU-Accelerated Fluid Shaders" 
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+              />
+            </div>
+
+            <!-- Duration & Video Title -->
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Video Duration (MM:SS)</label>
+              <input 
+                id="new-lesson-duration" 
+                type="text" 
+                placeholder="21:40" 
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium font-mono focus:outline-none focus:border-purple-400"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Video Lecture Header</label>
+              <input 
+                id="new-lesson-video-title" 
+                type="text" 
+                placeholder="e.g. Real-Time Shader Uniforms &amp; Spring Dynamics" 
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+              />
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="space-y-2">
+            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Lesson Curriculum Description &amp; Objectives *</label>
+            <textarea 
+              id="new-lesson-desc" 
+              required 
+              rows="3" 
+              placeholder="Outline what students will build, key architectural principles, performance benchmarks, and production-grade techniques covered in this lecture..."
+              class="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+            ></textarea>
+          </div>
+
+          <!-- Downloadable Resources -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Downloadable Resource Name</label>
+              <input 
+                id="new-resource-name" 
+                type="text" 
+                placeholder="e.g. Complete Fluid Shader Code Kit (.zip)" 
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium focus:outline-none focus:border-purple-400"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-xs font-bold text-slate-300 uppercase tracking-wider">Resource File Size</label>
+              <input 
+                id="new-resource-size" 
+                type="text" 
+                placeholder="e.g. 4.2 MB" 
+                class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-medium font-mono focus:outline-none focus:border-purple-400"
+              />
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-3 border-t border-white/5">
+            <button type="reset" class="px-5 py-2.5 rounded-full text-xs font-semibold text-slate-400 hover:text-white transition-colors">
+              Reset Form
+            </button>
+            <button type="submit" class="btn-primary py-2.5 px-6 text-sm font-bold shadow-lg">
+              <span>+ Save &amp; Publish to Student LMS</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Live Curriculum Manager -->
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10 space-y-4">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div class="space-y-0.5">
+            <h3 class="text-xl font-bold text-white">Live Curriculum Manager</h3>
+            <p class="text-xs text-slate-400">Active modules currently visible in the student learning environment</p>
+          </div>
+        </div>
+
+        <div id="curriculum-studio-list" class="space-y-4">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==============================================================
+         TAB 3: CUSTOMER DISPATCHES ("GET CUSTOMER DISPATCHES")
+         ============================================================== -->
+    <section id="view-dispatches" class="admin-view hidden space-y-6">
+
+      <!-- Filter & Search Toolbar -->
+      <div class="glass-panel p-4 sm:p-6 rounded-3xl border border-white/10 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <h3 class="text-xl font-bold text-white">Customer Dispatches CRM</h3>
+            <p class="text-xs text-slate-400">Streamed inquiries, 1:1 call bookings, and course waitlist submissions</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button id="export-dispatches-btn" class="px-4 py-2 rounded-full text-xs font-bold btn-primary shadow-sm flex items-center gap-1.5">
+              <span>Export CSV</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Pills & Search Input -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-2 border-t border-white/5">
+          <div class="flex flex-wrap items-center gap-1.5 text-xs font-semibold">
+            <button class="dispatch-filter-pill px-3.5 py-1.5 rounded-full bg-white text-black font-bold transition-all" data-filter="all">All</button>
+            <button class="dispatch-filter-pill px-3.5 py-1.5 rounded-full text-slate-400 hover:text-white transition-all" data-filter="inquiries">Project Inquiries</button>
+            <button class="dispatch-filter-pill px-3.5 py-1.5 rounded-full text-slate-400 hover:text-white transition-all" data-filter="calls">1:1 Calls</button>
+            <button class="dispatch-filter-pill px-3.5 py-1.5 rounded-full text-slate-400 hover:text-white transition-all" data-filter="waitlist">Course Waitlist</button>
+            <button class="dispatch-filter-pill px-3.5 py-1.5 rounded-full text-slate-400 hover:text-white transition-all" data-filter="unread">Unread Only</button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <div class="relative w-full sm:w-64">
+              <input 
+                id="dispatch-search-input" 
+                type="text" 
+                placeholder="Search name, email, budget..." 
+                class="w-full px-3.5 py-1.5 pl-8 rounded-full border border-white/10 bg-white/[0.04] text-white text-xs font-medium focus:outline-none focus:border-purple-400"
+              />
+              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <span id="filtered-dispatches-count" class="text-xs font-mono font-bold text-slate-400 shrink-0">0 Dispatches</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dispatches List -->
+      <div id="dispatches-list-container" class="space-y-3">
+        <!-- Rendered via JS -->
+      </div>
+
+    </section>
+
+    <!-- ==============================================================
+         TAB 4: SETTINGS & BACKUP
+         ============================================================== -->
+    <section id="view-settings" class="admin-view hidden space-y-6">
+
+      <!-- Change Master PIN -->
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-4 max-w-xl">
+        <div class="space-y-1">
+          <h3 class="text-lg font-bold text-white">Update Master Passkey</h3>
+          <p class="text-xs text-slate-400">Change the passkey used to unlock this Admin Command Center.</p>
+        </div>
+
+        <form id="change-pin-form" class="space-y-4 pt-2">
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-300">Current Passkey</label>
+            <input 
+              id="current-pin-input" 
+              type="password" 
+              required 
+              placeholder="••••••••" 
+              class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-mono focus:outline-none focus:border-purple-400"
+            />
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-300">New Passkey (min 4 characters)</label>
+            <input 
+              id="new-pin-input" 
+              type="password" 
+              required 
+              placeholder="••••••••" 
+              class="w-full px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-sm font-mono focus:outline-none focus:border-purple-400"
+            />
+          </div>
+
+          <button type="submit" class="btn-primary py-2.5 px-5 text-xs font-bold shadow-md">
+            Save New Passkey
+          </button>
+        </form>
+      </div>
+
+      <!-- Data Recovery & Maintenance -->
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-4 max-w-xl">
+        <div class="space-y-1">
+          <h3 class="text-lg font-bold text-white">Platform Data Recovery &amp; Seeding</h3>
+          <p class="text-xs text-slate-400">Populate realistic test dispatches or reset platform storage.</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <button id="seed-data-btn" class="btn-secondary py-2.5 px-4 text-xs font-semibold">
+            ✨ Seed Sample Client Dispatches
+          </button>
+          <button id="reset-data-btn" class="px-4 py-2.5 rounded-full text-xs font-semibold text-rose-400 hover:text-white hover:bg-rose-500/20 border border-rose-500/30 transition-colors">
+            🧹 Clear All Platform Data
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==============================================================
+       DISPATCH DETAIL MODAL
+       ============================================================== -->
+  <div id="dispatch-detail-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="modal-content rounded-3xl max-w-2xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto relative space-y-6">
+      <div class="flex items-center justify-between border-b border-theme pb-4">
+        <div>
+          <span id="detail-type-badge" class="text-xs font-mono font-bold text-purple-400">Project Inquiry</span>
+          <h3 id="detail-client-name" class="text-2xl font-bold text-white mt-1">Client Name</h3>
+        </div>
+        <button id="close-dispatch-detail-modal" class="w-8 h-8 rounded-full bg-white/10 border border-white/15 text-slate-400 hover:text-white flex items-center justify-center text-lg">✕</button>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-0.5">
+          <span class="text-[10px] font-mono font-bold text-slate-400 uppercase">Budget Bracket</span>
+          <div id="detail-budget-badge" class="text-sm font-bold text-white font-mono">$25k - $50k</div>
+        </div>
+        <div class="p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-0.5 sm:col-span-2">
+          <span class="text-[10px] font-mono font-bold text-slate-400 uppercase">Received At</span>
+          <div id="detail-timestamp" class="text-sm font-bold text-slate-300 font-mono">Today, 12:45 PM</div>
+        </div>
+      </div>
+
+      <div class="space-y-1.5">
+        <span class="text-xs font-mono font-bold text-slate-400 uppercase">Client Contact Email</span>
+        <div class="p-3 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between">
+          <code id="detail-client-email" class="text-sm font-mono text-white">client@company.com</code>
+        </div>
+      </div>
+
+      <div class="space-y-1.5">
+        <span class="text-xs font-mono font-bold text-slate-400 uppercase">Full Project Brief / Message</span>
+        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 text-sm text-slate-200 leading-relaxed font-medium">
+          <p id="detail-message-body" class="whitespace-pre-wrap"></p>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-white/10 flex items-center justify-between">
+        <span class="text-xs text-slate-500">Confidential client communication</span>
+        <a id="detail-reply-email-btn" href="#" class="btn-primary text-xs py-2 px-5">
+          <span>Reply via Email Client →</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast"></div>
+
+  <!-- Admin Controller Script -->
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

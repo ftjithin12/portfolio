@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About • Alexander Thorne | Design Engineer & SaaS Architect</title>
+  <meta name="description" content="Biography, engineering principles, and interactive stack of Alexander Thorne." />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Styles (Curated Black & White with Light Minimal RGB Theme) -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body class="selection:bg-white selection:text-black">
+
+  <!-- Top Scroll Progress Bar -->
+  <div id="scroll-progress-bar"></div>
+
+  <!-- Ambient Glow (Subtle Minimal RGB) -->
+  <div class="ambient-glow bg-sky-400/12 w-[500px] h-[500px] -top-32 -left-32"></div>
+  <div class="ambient-glow bg-purple-500/12 w-[600px] h-[600px] top-[40%] -right-40"></div>
+
+  <!-- Background Grid Overlay -->
+  <div class="bg-grid-overlay"></div>
+
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-4">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-5 py-3 rounded-full border border-theme bg-theme-nav backdrop-blur-xl shadow-xl glass-panel">
+      <a href="index.html" class="flex items-center gap-2.5 group">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-400 via-indigo-500 to-purple-500 p-[1.5px] group-hover:scale-105 transition-transform shadow-md shadow-white/10">
+          <div class="w-full h-full rounded-full bg-[#12151f] flex items-center justify-center">
+            <span class="text-xs font-bold text-white">✦</span>
+          </div>
+        </div>
+        <span class="font-bold text-sm tracking-tight text-white group-hover:opacity-80 transition-opacity">
+          ALEXANDER <span class="text-slate-400 font-mono text-xs">/ DE</span>
+        </span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-1 text-sm font-semibold text-theme-secondary">
+        <a href="index.html" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">Home</a>
+        <a href="about.html" class="px-3.5 py-1.5 rounded-full bg-white/[0.08] text-white font-bold transition-all">About</a>
+        <a href="works.html" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">Works</a>
+        <a href="course.html" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">My Course</a>
+        <a href="contact.html" class="px-3.5 py-1.5 rounded-full hover:text-white hover:bg-white/10 transition-all">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-2.5">
+        <a href="course.html" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/15 backdrop-blur-md transition-all">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Course Interface</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 pt-32 pb-24 px-4 sm:px-6 max-w-5xl mx-auto space-y-20">
+
+    <!-- Hero Title -->
+    <div class="text-center space-y-4 max-w-3xl mx-auto reveal-on-scroll">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-sky-400 bg-sky-500/10 border border-sky-500/20">
+        <span>Philosophy & Background</span>
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-extrabold text-theme-primary tracking-tight leading-tight">
+        Engineering interfaces that make complexity <span class="text-gradient">disappear.</span>
+      </h1>
+      <p class="text-theme-secondary text-base sm:text-lg leading-relaxed font-medium">
+        I’m Alexander, a Design Engineer based in San Francisco. I specialize in building next-generation SaaS web applications, Apple-inspired kinetic transitions, and high-performance design token architectures.
+      </p>
+    </div>
+
+    <!-- Apple-Style Text Reveal Strip -->
+    <div class="p-8 rounded-3xl glass-panel text-center reveal-on-scroll">
+      <p class="apple-scrub-text text-xl sm:text-2xl font-bold leading-relaxed text-theme-primary" data-highlight-words="tactile instantaneous emotional">
+        The difference between ordinary software and memorable software is motion. When an element responds with physical weight and instantaneous precision, users feel an emotional connection that raw static code cannot provide.
+      </p>
+    </div>
+
+    <!-- Career Timeline / Experience -->
+    <div class="space-y-8">
+      <h2 class="text-2xl font-bold text-theme-primary flex items-center gap-3 reveal-on-scroll">
+        <span class="text-sky-400">✦</span>
+        <span>Career Journey & Leadership</span>
+      </h2>
+
+      <div class="space-y-4">
+        <div class="glass-panel p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 reveal-on-scroll">
+          <div class="space-y-1">
+            <div class="flex items-center gap-3">
+              <span class="text-base font-bold text-theme-primary">Principal Design Engineer</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-sky-500/20 text-sky-400">Zenith Labs</span>
+            </div>
+            <p class="text-xs text-theme-secondary max-w-xl font-medium">
+              Led front-end motion architecture across 4 distributed teams. Engineered WebGL telemetry graphs serving 250,000+ live cluster instances with sub-50ms latency.
+            </p>
+          </div>
+          <span class="text-xs font-mono font-bold text-theme-muted shrink-0">2023 — PRESENT</span>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 reveal-on-scroll">
+          <div class="space-y-1">
+            <div class="flex items-center gap-3">
+              <span class="text-base font-bold text-theme-primary">Staff Design Systems Architect</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-purple-500/20 text-purple-400">Venture Studio</span>
+            </div>
+            <p class="text-xs text-theme-secondary max-w-xl font-medium">
+              Created unified component library adopted across 18 venture-backed startups. Reduced average frontend feature shipping cycles from 3 weeks to 4 days.
+            </p>
+          </div>
+          <span class="text-xs font-mono font-bold text-theme-muted shrink-0">2021 — 2023</span>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 reveal-on-scroll">
+          <div class="space-y-1">
+            <div class="flex items-center gap-3">
+              <span class="text-base font-bold text-theme-primary">Senior Motion Interaction Developer</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-indigo-500/20 text-indigo-400">Hyperion Creative</span>
+            </div>
+            <p class="text-xs text-theme-secondary max-w-xl font-medium">
+              Specialized in high-end product reveal sites, WebGL physics, and kinetic typography for top consumer electronics and tech enterprises.
+            </p>
+          </div>
+          <span class="text-xs font-mono font-bold text-theme-muted shrink-0">2019 — 2021</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Core Tenets Bento Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="glass-panel p-6 rounded-3xl space-y-3 reveal-on-scroll">
+        <div class="text-sky-400 text-xl font-mono font-bold">01 / Rigor</div>
+        <h3 class="text-lg font-bold text-theme-primary">Zero Decorative Bloat</h3>
+        <p class="text-xs text-theme-secondary leading-relaxed font-medium">
+          Every animation must serve an informational purpose: demonstrating hierarchy, communicating spatial transitions, or reinforcing immediate state feedback.
+        </p>
+      </div>
+
+      <div class="glass-panel p-6 rounded-3xl space-y-3 reveal-on-scroll">
+        <div class="text-purple-400 text-xl font-mono font-bold">02 / Frame Budget</div>
+        <h3 class="text-lg font-bold text-theme-primary">16.6ms Target Per Frame</h3>
+        <p class="text-xs text-theme-secondary leading-relaxed font-medium">
+          Never sacrifice frame rates for fancy visuals. We isolate repaints using compositor-only CSS transforms and offload heavy math to Web Workers.
+        </p>
+      </div>
+
+      <div class="glass-panel p-6 rounded-3xl space-y-3 reveal-on-scroll">
+        <div class="text-sky-400 text-xl font-mono font-bold">03 / Accessibility</div>
+        <h3 class="text-lg font-bold text-theme-primary">Universal Usability</h3>
+        <p class="text-xs text-theme-secondary leading-relaxed font-medium">
+          All interactive elements honor <code class="text-sky-400 font-mono">prefers-reduced-motion</code>, semantic screen readers, and full keyboard navigation.
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom Action CTA -->
+    <div class="glass-panel p-8 sm:p-12 rounded-3xl text-center space-y-6 reveal-on-scroll">
+      <h3 class="text-2xl sm:text-3xl font-bold text-theme-primary">Interested in collaborating or booking advisory?</h3>
+      <p class="text-theme-secondary text-sm max-w-md mx-auto font-medium">
+        I take on a select number of product architecture engagements and keynote motion contracts each quarter.
+      </p>
+      <div class="flex items-center justify-center gap-4">
+        <a href="contact.html" class="btn-primary"><span>Get In Touch</span></a>
+        <a href="works.html" class="btn-secondary"><span>Browse Works</span></a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-theme py-8 px-6 text-center text-xs text-theme-muted font-mono font-semibold flex flex-col sm:flex-row items-center justify-between max-w-5xl mx-auto gap-4">
+    <div>© 2026 Alexander Thorne • Handcrafted with Apple aesthetics &amp; SaaS precision</div>
+    <div>
+      <a href="admin.html" class="inline-flex items-center gap-1 text-slate-500 hover:text-white transition-colors">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+        <span>Admin Suite</span>
+      </a>
+    </div>
+  </footer>
+
+  <div id="toast"></div>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
