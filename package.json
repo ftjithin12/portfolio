@@ -1,4 +1,10 @@
 {
+  "name": "portfolio-saas-lms",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo Static build complete"
+  },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.2"
