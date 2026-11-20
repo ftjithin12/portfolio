@@ -1232,6 +1232,14 @@
         updateVisibilityUI(siteProfile.courses_visible);
       }
     }
+
+    // Analytics data sync
+    if (siteProfile.analytics_data && typeof siteProfile.analytics_data === 'object') {
+      localStorage.setItem('ft_jithin_analytics_data', JSON.stringify(siteProfile.analytics_data));
+      if (typeof reloadAdminAnalytics === 'function') {
+        reloadAdminAnalytics(siteProfile.analytics_data);
+      }
+    }
   }
 
   function initProfileForms() {
@@ -1607,6 +1615,8 @@
   // -------------------------------------------------------------
   // 4.7. LIVE STUDIO ANALYTICS (24-Hour Adaptive Daylight Gradient Engine)
   // -------------------------------------------------------------
+  let reloadAdminAnalytics = null;
+
   function initAdminLiveAnalytics() {
     const dashboardCard = document.getElementById('admin-analytics-dashboard');
     if (!dashboardCard) return;
@@ -1627,9 +1637,132 @@
     const barDetail = document.getElementById('admin-saas-bar-detail');
     const chartBars = document.querySelectorAll('.admin-saas-chart-bar');
     const barValLabels = document.querySelectorAll('.admin-saas-bar-val');
-    const dayColumns = document.querySelectorAll('[data-day]');
+    const dayColumns = document.querySelectorAll('.admin-day-col, [data-day]');
 
-    let activePreset = 'auto'; // 'auto', 'dawn', 'noon', 'dusk', 'night'
+    // Editor elements
+    const toggleEditBtn = document.getElementById('toggle-edit-analytics-btn');
+    const closeEditBtn = document.getElementById('close-edit-analytics-btn');
+    const editorPanel = document.getElementById('admin-analytics-editor-panel');
+    const saveCustomBtn = document.getElementById('save-analytics-custom-btn');
+    const resetDefaultsBtn = document.getElementById('reset-analytics-defaults-btn');
+
+    const editOverviewVal = document.getElementById('edit-analytics-overview-val');
+    const editOverviewBadge = document.getElementById('edit-analytics-overview-badge');
+    const editAnalyticsVal = document.getElementById('edit-analytics-analytics-val');
+    const editAnalyticsBadge = document.getElementById('edit-analytics-analytics-badge');
+    const editRetentionVal = document.getElementById('edit-analytics-retention-val');
+    const editRetentionBadge = document.getElementById('edit-analytics-retention-badge');
+    const editTrafficVal = document.getElementById('edit-analytics-traffic-val');
+    const editTrafficBadge = document.getElementById('edit-analytics-traffic-badge');
+
+    const STORAGE_ANALYTICS_KEY = 'ft_jithin_analytics_data';
+
+    const defaultDataSets = {
+      overview: {
+        title: 'Live Creative Output',
+        val: '$148,290',
+        badge: '+28.4% vs last mo',
+        peak: '17:00 - 21:00 IST',
+        bars: [45, 62, 55, 78, 90, 84, 98],
+        dailyFigures: [
+          'Mon: $18,450 (8 projects completed)',
+          'Tue: $24,200 (11 projects completed)',
+          'Wed: $21,100 (9 projects completed)',
+          'Thu: $29,800 (14 projects completed)',
+          'Fri: $36,400 (17 projects completed • Today Active)',
+          'Sat: $31,500 (13 projects completed)',
+          'Sun: $39,840 (Peak output • 19 projects completed)'
+        ]
+      },
+      analytics: {
+        title: 'Global Portfolio Impressions',
+        val: '1.42M views',
+        badge: '99.98% Engagement',
+        peak: '14:00 - 18:00 IST',
+        bars: [60, 40, 85, 92, 70, 88, 95],
+        dailyFigures: [
+          'Mon: 165K views across Behance & Reels',
+          'Tue: 110K views across YouTube & Web',
+          'Wed: 235K views across Portfolio',
+          'Thu: 260K views across Instagram',
+          'Fri: 195K views across Creative Net • Today Active',
+          'Sat: 242K views across Client Spotlights',
+          'Sun: 275K views (Peak Viral Motion Reach)'
+        ]
+      },
+      retention: {
+        title: 'Client Retention & Repeat Rate',
+        val: '94.6%',
+        badge: '98.5% Client Satisfaction',
+        peak: 'Continuous 24h',
+        bars: [80, 82, 85, 89, 91, 93, 96],
+        dailyFigures: [
+          'Mon: 91.2% client satisfaction score',
+          'Tue: 92.5% repeat commission rate',
+          'Wed: 93.8% milestone signoff rate',
+          'Thu: 94.6% contract renewal velocity',
+          'Fri: 95.8% five-star rating index • Today Active',
+          'Sat: 96.2% recommendation rate',
+          'Sun: 97.4% (Peak Brand Trust Index)'
+        ]
+      },
+      traffic: {
+        title: 'Realtime Active Visitors',
+        val: '18,420 visits',
+        badge: '+42.1% Today',
+        peak: 'Now (Evening Rush)',
+        bars: [50, 68, 72, 85, 94, 91, 99],
+        dailyFigures: [
+          'Mon: 2,140 unique visitors',
+          'Tue: 2,890 unique visitors',
+          'Wed: 3,050 unique visitors',
+          'Thu: 3,740 unique visitors',
+          'Fri: 4,120 unique visitors • Today Active',
+          'Sat: 3,980 unique visitors',
+          'Sun: 4,450 unique visitors (Live Peak)'
+        ]
+      }
+    };
+
+    let dataSets = JSON.parse(JSON.stringify(defaultDataSets));
+
+    function loadSavedAnalytics(custom) {
+      if (custom && typeof custom === 'object') {
+        dataSets = Object.assign({}, defaultDataSets, custom);
+      } else {
+        const saved = localStorage.getItem(STORAGE_ANALYTICS_KEY);
+        if (saved) {
+          try {
+            dataSets = Object.assign({}, defaultDataSets, JSON.parse(saved));
+          } catch (e) {}
+        }
+      }
+      populateEditorInputs();
+    }
+
+    function populateEditorInputs() {
+      if (editOverviewVal) editOverviewVal.value = dataSets.overview?.val || '$148,290';
+      if (editOverviewBadge) editOverviewBadge.value = dataSets.overview?.badge || '+28.4% vs last mo';
+      if (editAnalyticsVal) editAnalyticsVal.value = dataSets.analytics?.val || '1.42M views';
+      if (editAnalyticsBadge) editAnalyticsBadge.value = dataSets.analytics?.badge || '99.98% Engagement';
+      if (editRetentionVal) editRetentionVal.value = dataSets.retention?.val || '94.6%';
+      if (editRetentionBadge) editRetentionBadge.value = dataSets.retention?.badge || '98.5% Client Satisfaction';
+      if (editTrafficVal) editTrafficVal.value = dataSets.traffic?.val || '18,420 visits';
+      if (editTrafficBadge) editTrafficBadge.value = dataSets.traffic?.badge || '+42.1% Today';
+
+      const bars = dataSets.overview?.bars || [45, 62, 55, 78, 90, 84, 98];
+      bars.forEach((val, idx) => {
+        const input = document.getElementById(`edit-bar-${idx}`);
+        if (input) input.value = val;
+      });
+    }
+
+    reloadAdminAnalytics = function(custom) {
+      loadSavedAnalytics(custom);
+      renderMetrics(currentMode);
+    };
+
+    let activePreset = 'auto';
     let currentPhase = 'dusk';
 
     const daylightPhases = {
@@ -1686,22 +1819,55 @@
       dashboardCard.classList.remove('daylight-dawn', 'daylight-noon', 'daylight-dusk', 'daylight-night');
       dashboardCard.classList.add(config.class);
 
-      if (ambientGlow) {
-        ambientGlow.style.backgroundColor = config.glowColor;
-      }
+      if (ambientGlow) ambientGlow.style.backgroundColor = config.glowColor;
       if (phaseIcon) phaseIcon.textContent = config.icon;
-      if (phaseName) {
-        phaseName.textContent = (activePreset === 'auto' ? 'Auto: ' : '') + config.name;
-      }
+      if (phaseName) phaseName.textContent = (activePreset === 'auto' ? 'Auto: ' : '') + config.name;
       if (gradientLabel) gradientLabel.textContent = config.label;
       if (gradientSub) gradientSub.textContent = config.next;
 
-      // Sync public hero card if open in browser
       const publicHeroCard = document.getElementById('hero-saas-card');
       if (publicHeroCard) {
         publicHeroCard.classList.remove('daylight-dawn', 'daylight-noon', 'daylight-dusk', 'daylight-night');
         publicHeroCard.classList.add(config.class);
       }
+    }
+
+    // Dynamic Real-Time Day Highlighting (Today is Friday!)
+    function highlightActiveDayBar() {
+      const jsDay = new Date().getDay(); // 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+      const todayIndex = (jsDay + 6) % 7; // 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
+      const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+      dayColumns.forEach((col, idx) => {
+        const bar = col.querySelector('.admin-saas-chart-bar');
+        const label = col.querySelector('span:last-child');
+        const valSpan = col.querySelector('.admin-saas-bar-val');
+        const day = dayNames[idx] || col.getAttribute('data-day') || '';
+
+        if (idx === todayIndex) {
+          if (bar) {
+            bar.className = 'admin-saas-chart-bar w-full rounded-t-lg daylight-dynamic-bar transition-all duration-500';
+          }
+          if (label) {
+            label.className = 'text-[10px] font-mono text-purple-400 font-bold';
+            label.textContent = `${day} • Today ✦`;
+          }
+          if (valSpan) {
+            valSpan.className = 'admin-saas-bar-val text-[10px] font-mono font-bold text-white opacity-100 transition-opacity';
+          }
+        } else {
+          if (bar) {
+            bar.className = 'admin-saas-chart-bar w-full rounded-t-lg bg-white/15 hover:bg-white/25 transition-all duration-500';
+          }
+          if (label) {
+            label.className = 'text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors';
+            label.textContent = day;
+          }
+          if (valSpan) {
+            valSpan.className = 'admin-saas-bar-val text-[10px] font-mono font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity';
+          }
+        }
+      });
     }
 
     function updateDaylightEngine() {
@@ -1716,12 +1882,88 @@
           applyDaylightPhase(autoPhase);
         }
       }
+      highlightActiveDayBar();
     }
 
-    // Set initial phase
-    applyDaylightPhase(determineAutoPhase());
-    updateDaylightEngine();
-    setInterval(updateDaylightEngine, 1000);
+    // Toggle Editor Panel
+    if (toggleEditBtn && editorPanel) {
+      toggleEditBtn.addEventListener('click', () => {
+        const isHidden = editorPanel.classList.contains('hidden');
+        if (isHidden) {
+          editorPanel.classList.remove('hidden');
+          toggleEditBtn.classList.add('bg-purple-500', 'text-white');
+          populateEditorInputs();
+          editorPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          editorPanel.classList.add('hidden');
+          toggleEditBtn.classList.remove('bg-purple-500', 'text-white');
+        }
+      });
+    }
+
+    if (closeEditBtn && editorPanel) {
+      closeEditBtn.addEventListener('click', () => {
+        editorPanel.classList.add('hidden');
+        if (toggleEditBtn) toggleEditBtn.classList.remove('bg-purple-500', 'text-white');
+      });
+    }
+
+    // Save Custom Analytics
+    if (saveCustomBtn) {
+      saveCustomBtn.addEventListener('click', async () => {
+        const newBars = [];
+        for (let i = 0; i < 7; i++) {
+          const input = document.getElementById(`edit-bar-${i}`);
+          newBars.push(Math.min(100, Math.max(10, parseInt(input?.value) || 50)));
+        }
+
+        dataSets.overview.val = editOverviewVal?.value.trim() || dataSets.overview.val;
+        dataSets.overview.badge = editOverviewBadge?.value.trim() || dataSets.overview.badge;
+        dataSets.overview.bars = newBars;
+
+        dataSets.analytics.val = editAnalyticsVal?.value.trim() || dataSets.analytics.val;
+        dataSets.analytics.badge = editAnalyticsBadge?.value.trim() || dataSets.analytics.badge;
+
+        dataSets.retention.val = editRetentionVal?.value.trim() || dataSets.retention.val;
+        dataSets.retention.badge = editRetentionBadge?.value.trim() || dataSets.retention.badge;
+
+        dataSets.traffic.val = editTrafficVal?.value.trim() || dataSets.traffic.val;
+        dataSets.traffic.badge = editTrafficBadge?.value.trim() || dataSets.traffic.badge;
+
+        localStorage.setItem(STORAGE_ANALYTICS_KEY, JSON.stringify(dataSets));
+
+        if (typeof window.saveSiteProfile === 'function') {
+          try {
+            await window.saveSiteProfile({ analytics_data: dataSets });
+          } catch (e) {
+            console.warn('Analytics profile sync note:', e);
+          }
+        }
+
+        renderMetrics(currentMode);
+        highlightActiveDayBar();
+        showToast('Live analytics data saved & published to studio & website!', '💾');
+      });
+    }
+
+    // Reset Defaults
+    if (resetDefaultsBtn) {
+      resetDefaultsBtn.addEventListener('click', async () => {
+        dataSets = JSON.parse(JSON.stringify(defaultDataSets));
+        localStorage.removeItem(STORAGE_ANALYTICS_KEY);
+        populateEditorInputs();
+
+        if (typeof window.saveSiteProfile === 'function') {
+          try {
+            await window.saveSiteProfile({ analytics_data: defaultDataSets });
+          } catch (e) {}
+        }
+
+        renderMetrics(currentMode);
+        highlightActiveDayBar();
+        showToast('Analytics restored to standard defaults', '↺');
+      });
+    }
 
     // Preset button switcher
     presetBtns.forEach(btn => {
@@ -1746,74 +1988,6 @@
       });
     });
 
-    // Metric Data Sets
-    const dataSets = {
-      overview: {
-        title: 'Live Creative Output',
-        val: '$148,290',
-        badge: '+28.4% vs last mo',
-        peak: '17:00 - 21:00 IST',
-        bars: [45, 62, 55, 78, 90, 84, 98],
-        dailyFigures: [
-          'Mon: $18,450 (8 projects completed)',
-          'Tue: $24,200 (11 projects completed)',
-          'Wed: $21,100 (9 projects completed)',
-          'Thu: $29,800 (14 projects completed)',
-          'Fri: $36,400 (17 projects completed)',
-          'Sat: $31,500 (13 projects completed)',
-          'Sun: $39,840 (Peak output • 19 projects completed)'
-        ]
-      },
-      analytics: {
-        title: 'Global Portfolio Impressions',
-        val: '1.42M views',
-        badge: '99.98% Engagement',
-        peak: '14:00 - 18:00 IST',
-        bars: [60, 40, 85, 92, 70, 88, 95],
-        dailyFigures: [
-          'Mon: 165K views across Behance & Reels',
-          'Tue: 110K views across YouTube & Web',
-          'Wed: 235K views across Portfolio',
-          'Thu: 260K views across Instagram',
-          'Fri: 195K views across Creative Net',
-          'Sat: 242K views across Client Spotlights',
-          'Sun: 275K views (Peak Viral Motion Reach)'
-        ]
-      },
-      retention: {
-        title: 'Client Retention & Repeat Rate',
-        val: '94.6%',
-        badge: '98.5% Client Satisfaction',
-        peak: 'Continuous 24h',
-        bars: [80, 82, 85, 89, 91, 93, 96],
-        dailyFigures: [
-          'Mon: 91.2% client satisfaction score',
-          'Tue: 92.5% repeat commission rate',
-          'Wed: 93.8% milestone signoff rate',
-          'Thu: 94.6% contract renewal velocity',
-          'Fri: 95.8% five-star rating index',
-          'Sat: 96.2% recommendation rate',
-          'Sun: 97.4% (Peak Brand Trust Index)'
-        ]
-      },
-      traffic: {
-        title: 'Realtime Active Visitors',
-        val: '18,420 visits',
-        badge: '+42.1% Today',
-        peak: 'Now (Evening Rush)',
-        bars: [50, 68, 72, 85, 94, 91, 99],
-        dailyFigures: [
-          'Mon: 2,140 unique visitors',
-          'Tue: 2,890 unique visitors',
-          'Wed: 3,050 unique visitors',
-          'Thu: 3,740 unique visitors',
-          'Fri: 4,120 unique visitors',
-          'Sat: 3,980 unique visitors',
-          'Sun: 4,450 unique visitors (Live Peak)'
-        ]
-      }
-    };
-
     let currentMode = 'overview';
 
     function renderMetrics(mode) {
@@ -1833,8 +2007,12 @@
         }
       });
 
+      const jsDay = new Date().getDay();
+      const todayIndex = (jsDay + 6) % 7;
+      const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
       if (barDetail) {
-        barDetail.innerHTML = `Today's Projected Velocity: <span class="text-white font-bold font-mono">${escapeHtml(data.dailyFigures[6])}</span>`;
+        barDetail.innerHTML = `Today's Velocity (${dayNames[todayIndex]}): <span class="text-white font-bold font-mono">${escapeHtml(data.dailyFigures[todayIndex] || data.dailyFigures[4] || '')}</span>`;
       }
     }
 
@@ -1866,6 +2044,14 @@
       });
     });
 
+    // Initialize dataset & highlights
+    loadSavedAnalytics();
+    applyDaylightPhase(determineAutoPhase());
+    updateDaylightEngine();
+    highlightActiveDayBar();
+    renderMetrics('overview');
+    setInterval(updateDaylightEngine, 1000);
+
     // Realtime pulse simulation
     setInterval(() => {
       if (currentMode === 'traffic' && metricVal) {
@@ -1873,8 +2059,6 @@
         metricVal.textContent = `${base.toLocaleString()} visits`;
       }
     }, 18000);
-
-    renderMetrics('overview');
   }
 
   // -------------------------------------------------------------

@@ -169,6 +169,8 @@
   // -------------------------------------------------------------
   // 6. INTERACTIVE ANALYTICS DASHBOARD WIDGET (Hero Section)
   // -------------------------------------------------------------
+  let applyCustomHeroAnalytics = null;
+
   function initAnalyticsWidget() {
     const tabs = document.querySelectorAll('.saas-tab-btn');
     const valueDisplay = document.getElementById('saas-metric-val');
@@ -196,7 +198,41 @@
     applyDaylightHeroPhase();
     setInterval(applyDaylightHeroPhase, 60000);
 
-    const dataSets = {
+    // Dynamic Real-Time Day Highlighting (Today is Friday!)
+    function highlightTodayBar() {
+      const jsDay = new Date().getDay(); // 0=Sun, 1=Mon, ..., 5=Fri, 6=Sat
+      const todayIndex = (jsDay + 6) % 7; // 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
+      const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const dayColumns = document.querySelectorAll('.hero-day-col, #hero-saas-card .flex-1');
+
+      dayColumns.forEach((col, idx) => {
+        const bar = col.querySelector('.saas-chart-bar');
+        const label = col.querySelector('span');
+        const day = dayNames[idx] || '';
+
+        if (idx === todayIndex) {
+          if (bar) {
+            bar.classList.add('daylight-dynamic-bar');
+            bar.classList.remove('bg-slate-200');
+          }
+          if (label) {
+            label.className = 'text-[10px] font-mono text-purple-600 font-bold';
+            label.textContent = `${day} • Today`;
+          }
+        } else {
+          if (bar) {
+            bar.classList.remove('daylight-dynamic-bar');
+            bar.classList.add('bg-slate-200');
+          }
+          if (label) {
+            label.className = 'text-[10px] font-mono font-bold text-slate-500';
+            label.textContent = day;
+          }
+        }
+      });
+    }
+
+    let dataSets = {
       overview: {
         val: '$148,290',
         badge: '+28.4% vs last mo',
@@ -214,6 +250,42 @@
       }
     };
 
+    function loadCustomData(custom) {
+      if (custom && typeof custom === 'object') {
+        dataSets = Object.assign({}, dataSets, custom);
+      } else {
+        const saved = localStorage.getItem('ft_jithin_analytics_data');
+        if (saved) {
+          try {
+            dataSets = Object.assign({}, dataSets, JSON.parse(saved));
+          } catch (e) {}
+        }
+      }
+    }
+
+    applyCustomHeroAnalytics = function(custom) {
+      loadCustomData(custom);
+      renderHeroMetrics(activeMode);
+    };
+
+    loadCustomData();
+
+    let activeMode = 'overview';
+
+    function renderHeroMetrics(mode) {
+      activeMode = mode;
+      const data = dataSets[mode] || dataSets.overview;
+
+      if (valueDisplay) valueDisplay.innerText = data.val;
+      if (badgeStatus) badgeStatus.innerText = data.badge;
+
+      chartBars.forEach((bar, idx) => {
+        const heightPercent = data.bars ? data.bars[idx] : 50;
+        bar.style.height = `${heightPercent}%`;
+      });
+      highlightTodayBar();
+    }
+
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         tabs.forEach(t => {
@@ -224,16 +296,18 @@
         tab.classList.remove('text-theme-muted');
 
         const mode = tab.getAttribute('data-mode') || 'overview';
-        const data = dataSets[mode] || dataSets.overview;
-
-        if (valueDisplay) valueDisplay.innerText = data.val;
-        if (badgeStatus) badgeStatus.innerText = data.badge;
-
-        chartBars.forEach((bar, idx) => {
-          const heightPercent = data.bars[idx] || 50;
-          bar.style.height = `${heightPercent}%`;
-        });
+        renderHeroMetrics(mode);
       });
+    });
+
+    renderHeroMetrics('overview');
+    highlightTodayBar();
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'ft_jithin_analytics_data') {
+        loadCustomData();
+        renderHeroMetrics(activeMode);
+      }
     });
   }
 
@@ -296,6 +370,14 @@
         localStorage.setItem('ft_jithin_courses_visible', profile.courses_visible ? 'true' : 'false');
         if (typeof applyCoursesVisibility === 'function') {
           applyCoursesVisibility();
+        }
+      }
+
+      // Sync custom analytics metrics from cloud profile
+      if (profile.analytics_data && typeof profile.analytics_data === 'object') {
+        localStorage.setItem('ft_jithin_analytics_data', JSON.stringify(profile.analytics_data));
+        if (typeof applyCustomHeroAnalytics === 'function') {
+          applyCustomHeroAnalytics(profile.analytics_data);
         }
       }
     } catch (err) {

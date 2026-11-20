@@ -280,6 +280,11 @@
               <button class="admin-saas-tab-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-all" data-mode="retention">Retention</button>
               <button class="admin-saas-tab-btn px-3 py-1 rounded-lg text-slate-400 hover:text-white transition-all" data-mode="traffic">Live Traffic</button>
             </div>
+
+            <!-- Edit Analytics Data Button -->
+            <button id="toggle-edit-analytics-btn" type="button" class="px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm">
+              <span>✏️ Edit Data</span>
+            </button>
           </div>
         </div>
 
@@ -354,32 +359,151 @@
                 <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors">Thu</span>
               </div>
 
-              <!-- Friday -->
-              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer" data-day="Fri" data-index="4">
-                <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">90%</span>
-                <div class="admin-saas-chart-bar w-full rounded-t-lg bg-white/15 hover:bg-white/25 transition-all duration-500" style="height: 90%;"></div>
-                <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors">Fri</span>
+              <!-- Friday (Active Day: TODAY Friday ✦) -->
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer admin-day-col" data-day="Fri" data-index="4">
+                <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-white opacity-100 transition-opacity">90%</span>
+                <div id="admin-saas-active-bar" class="admin-saas-chart-bar w-full rounded-t-lg daylight-dynamic-bar transition-all duration-500" style="height: 90%;"></div>
+                <span id="admin-saas-day-label-4" class="text-[10px] font-mono text-purple-400 font-bold">Fri • Today ✦</span>
               </div>
 
               <!-- Saturday -->
-              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer" data-day="Sat" data-index="5">
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer admin-day-col" data-day="Sat" data-index="5">
                 <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">84%</span>
                 <div class="admin-saas-chart-bar w-full rounded-t-lg bg-white/15 hover:bg-white/25 transition-all duration-500" style="height: 84%;"></div>
-                <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors">Sat</span>
+                <span id="admin-saas-day-label-5" class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors">Sat</span>
               </div>
 
-              <!-- Sunday (Active / Peak Day with Daylight Changing Gradient) -->
-              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer" data-day="Sun" data-index="6">
-                <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-white opacity-100 transition-opacity">98%</span>
-                <div id="admin-saas-active-bar" class="admin-saas-chart-bar w-full rounded-t-lg daylight-dynamic-bar transition-all duration-500" style="height: 98%;"></div>
-                <span id="admin-saas-active-bar-label" class="text-[10px] font-mono text-purple-400 font-bold">Sun ✦</span>
+              <!-- Sunday -->
+              <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group cursor-pointer admin-day-col" data-day="Sun" data-index="6">
+                <span class="admin-saas-bar-val text-[10px] font-mono font-bold text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">98%</span>
+                <div class="admin-saas-chart-bar w-full rounded-t-lg bg-white/15 hover:bg-white/25 transition-all duration-500" style="height: 98%;"></div>
+                <span id="admin-saas-day-label-6" class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-white transition-colors">Sun</span>
               </div>
             </div>
 
             <!-- Bar Click Feedback Detail Pill -->
             <div id="admin-saas-bar-detail" class="text-right text-[11px] font-mono text-slate-400 pt-2 font-semibold">
-              Today's Projected Velocity: <span class="text-white font-bold font-mono">Peak Performance (+28.4%)</span>
+              Today's Projected Velocity: <span class="text-white font-bold font-mono">Friday Performance (Today Active ✦)</span>
             </div>
+          </div>
+        </div>
+
+        <!-- ==============================================================
+             ANALYTICS CUSTOMIZER & EDITOR PANEL (Fully Editable from Admin)
+             ============================================================== -->
+        <div id="admin-analytics-editor-panel" class="hidden mt-6 pt-6 border-t border-white/10 space-y-6">
+          <div class="flex items-center justify-between">
+            <div class="space-y-0.5">
+              <h4 class="text-sm font-bold text-white flex items-center gap-2">
+                <span>✏️ Live Studio Analytics Customizer</span>
+                <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Live Sync</span>
+              </h4>
+              <p class="text-xs text-slate-400">Edit values, growth percentages, and daily velocity bars. Changes persist and sync live to website.</p>
+            </div>
+            <button id="close-edit-analytics-btn" type="button" class="text-slate-400 hover:text-white text-xs font-bold px-2.5 py-1 rounded-lg bg-white/5">✕ Close</button>
+          </div>
+
+          <!-- Section 1: Metric Values for each mode -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Mode 1: Overview -->
+            <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+              <span class="text-[10px] font-mono font-bold text-sky-400 uppercase">1. Overview Metric</span>
+              <div class="space-y-1">
+                <label class="block text-[11px] text-slate-400">Main Value</label>
+                <input id="edit-analytics-overview-val" type="text" value="$148,290" class="w-full px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-[11px] text-slate-400">Trend Badge</label>
+                <input id="edit-analytics-overview-badge" type="text" value="+28.4% vs last mo" class="w-full px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-emerald-300 text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+            </div>
+
+            <!-- Mode 2: Impressions -->
+            <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+              <span class="text-[10px] font-mono font-bold text-purple-400 uppercase">2. Impressions Metric</span>
+              <div class="space-y-1">
+                <label class="block text-[11px] text-slate-400">Main Value</label>
+                <input id="edit-analytics-analytics-val" type="text" value="1.42M views" class="w-full px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-[11px] text-slate-400">Engagement Badge</label>
+                <input id="edit-analytics-analytics-badge" type="text" value="99.98% Engagement" class="w-full px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-purple-300 text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+            </div>
+
+            <!-- Mode 3: Retention -->
+            <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+              <span class="text-[10px] font-mono font-bold text-pink-400 uppercase">3. Retention Metric</span>
+              <div class="space-y-1">
+                <label class="block text-[11px] text-slate-400">Main Value</label>
+                <input id="edit-analytics-retention-val" type="text" value="94.6%" class="w-full px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-[11px] text-slate-400">Satisfaction Badge</label>
+                <input id="edit-analytics-retention-badge" type="text" value="98.5% Client Satisfaction" class="w-full px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-pink-300 text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+            </div>
+
+            <!-- Mode 4: Traffic -->
+            <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+              <span class="text-[10px] font-mono font-bold text-emerald-400 uppercase">4. Live Traffic Metric</span>
+              <div class="space-y-1">
+                <label class="block text-[11px] text-slate-400">Main Value</label>
+                <input id="edit-analytics-traffic-val" type="text" value="18,420 visits" class="w-full px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-white text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+              <div class="space-y-1">
+                <label class="block text-[11px] text-slate-400">Growth Badge</label>
+                <input id="edit-analytics-traffic-badge" type="text" value="+42.1% Today" class="w-full px-3 py-1.5 rounded-xl border border-white/10 bg-white/[0.04] text-emerald-300 text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: 7-Day Velocity Bar Percentages (Mon - Sun) -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">7-Day Bar Percentages (%)</label>
+              <span class="text-[10px] font-mono text-purple-300">Today: Friday (Index 4 Active)</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+              <div class="space-y-1 text-center p-2 rounded-xl bg-white/[0.02] border border-white/5">
+                <span class="text-[10px] font-mono font-bold text-slate-400">Mon</span>
+                <input id="edit-bar-0" type="number" min="10" max="100" value="45" class="w-full text-center px-2 py-1 rounded-lg border border-white/10 bg-white/[0.04] text-white text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+              <div class="space-y-1 text-center p-2 rounded-xl bg-white/[0.02] border border-white/5">
+                <span class="text-[10px] font-mono font-bold text-slate-400">Tue</span>
+                <input id="edit-bar-1" type="number" min="10" max="100" value="62" class="w-full text-center px-2 py-1 rounded-lg border border-white/10 bg-white/[0.04] text-white text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+              <div class="space-y-1 text-center p-2 rounded-xl bg-white/[0.02] border border-white/5">
+                <span class="text-[10px] font-mono font-bold text-slate-400">Wed</span>
+                <input id="edit-bar-2" type="number" min="10" max="100" value="55" class="w-full text-center px-2 py-1 rounded-lg border border-white/10 bg-white/[0.04] text-white text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+              <div class="space-y-1 text-center p-2 rounded-xl bg-white/[0.02] border border-white/5">
+                <span class="text-[10px] font-mono font-bold text-slate-400">Thu</span>
+                <input id="edit-bar-3" type="number" min="10" max="100" value="78" class="w-full text-center px-2 py-1 rounded-lg border border-white/10 bg-white/[0.04] text-white text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+              <div class="space-y-1 text-center p-2 rounded-xl bg-purple-500/10 border border-purple-500/30">
+                <span class="text-[10px] font-mono font-bold text-purple-300">Fri (Today ★)</span>
+                <input id="edit-bar-4" type="number" min="10" max="100" value="90" class="w-full text-center px-2 py-1 rounded-lg border border-purple-400/40 bg-purple-500/20 text-white text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+              <div class="space-y-1 text-center p-2 rounded-xl bg-white/[0.02] border border-white/5">
+                <span class="text-[10px] font-mono font-bold text-slate-400">Sat</span>
+                <input id="edit-bar-5" type="number" min="10" max="100" value="84" class="w-full text-center px-2 py-1 rounded-lg border border-white/10 bg-white/[0.04] text-white text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+              <div class="space-y-1 text-center p-2 rounded-xl bg-white/[0.02] border border-white/5">
+                <span class="text-[10px] font-mono font-bold text-slate-400">Sun</span>
+                <input id="edit-bar-6" type="number" min="10" max="100" value="98" class="w-full text-center px-2 py-1 rounded-lg border border-white/10 bg-white/[0.04] text-white text-xs font-mono font-bold focus:outline-none focus:border-purple-400" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex items-center justify-end gap-3 pt-2">
+            <button id="reset-analytics-defaults-btn" type="button" class="btn-secondary px-4 py-2 text-xs font-bold">
+              ↺ Reset to Defaults
+            </button>
+            <button id="save-analytics-custom-btn" type="button" class="btn-primary px-5 py-2 text-xs font-bold shadow-lg flex items-center gap-2">
+              <span>💾 Save &amp; Publish Analytics</span>
+            </button>
           </div>
         </div>
       </div>
